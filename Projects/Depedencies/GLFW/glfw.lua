@@ -3,6 +3,7 @@ project "GLFW"
     kind "StaticLib"
     language "C"
     enablepch "Off"
+    pic "On"
 
     files { "force_cmake_build.c" }
 

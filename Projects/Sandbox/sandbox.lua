@@ -11,7 +11,11 @@ project "Sandbox"
 
     includedirs {
         "src/",
-        "%{_WORKING_DIR}/Projects/Aristotle3D/src/include/"
+        "%{wks.location}/Projects/Aristotle3D/include/"
+    }
+
+    dependson {
+        "Aristotle3D"
     }
 
     links {
@@ -21,10 +25,4 @@ project "Sandbox"
     filter "system:linux"
         linkoptions {
             "-Wl,-rpath,'$$ORIGIN'"
-        }
-
-    filter "system:windows"
-
-        defines {
-            "ARS3D_IMPORT_DLL"
         }

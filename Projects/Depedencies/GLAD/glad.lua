@@ -2,6 +2,7 @@ project "GLAD"
     language "C"
     cdialect "C99"
     kind "StaticLib"
+    pic "On"
 
     files {
         "src/**.c",

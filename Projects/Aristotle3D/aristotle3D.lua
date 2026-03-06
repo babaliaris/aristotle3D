@@ -9,10 +9,13 @@ project "Aristotle3D"
     }
 
     includedirs {
-        "include/"
+        "include/",
+        "%{wks.location}/Projects/Depedencies/GLAD/include",
+        "%{wks.location}/external/glfw/include"
     }
 
     dependson {
+        "GLAD",
         "GLFW"
     }
 

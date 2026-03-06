@@ -4,7 +4,9 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/Projects/Aristotle3D/src/include"
+                "${workspaceFolder}/Projects/Aristotle3D/include",
+                "${workspaceFolder}/Projects/Depedencies/GLAD/include",
+                "${workspaceFolder}/external/glfw/include"
             ],
             "defines": [
                 "ARS3D_LINUX"
@@ -18,7 +20,9 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/Projects/Aristotle3D/src/include"
+                "${workspaceFolder}/Projects/Aristotle3D/include",
+                "${workspaceFolder}/Projects/Depedencies/GLAD/include",
+                "${workspaceFolder}/external/glfw/include"
             ],
             "defines": [
                 "ARS3D_WINDOWS",

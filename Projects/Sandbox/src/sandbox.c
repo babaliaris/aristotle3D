@@ -1,7 +1,9 @@
-#include <stdio.h>
+#define ARS3D_ENTRY_POINT
 #include <aristotle3D/aristotle3D.h>
 
-int main()
+Ars3DApp * ars3DUserEntryPoint()
 {
-    return ars3d_GLFW_TEST();
+    Ars3DApp *app = ars3DCreateApp("SANDBOX", 512, 512);
+
+    return app;
 }

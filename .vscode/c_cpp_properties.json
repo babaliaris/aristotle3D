@@ -9,7 +9,9 @@
                 "${workspaceFolder}/external/glfw/include"
             ],
             "defines": [
-                "ARS3D_LINUX"
+                "ARS3D_LINUX",
+                "ARS3D_ENTRY_POINT",
+                "ARS3D_X64"
             ],
             "compilerPath": "/usr/bin/clang",
             "cStandard": "c99",
@@ -26,6 +28,8 @@
             ],
             "defines": [
                 "ARS3D_WINDOWS",
+                "ARS3D_ENTRY_POINT",
+                "ARS3D_X64",
                 "_DEBUG",
                 "UNICODE",
                 "_UNICODE",

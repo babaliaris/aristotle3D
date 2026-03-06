@@ -27,6 +27,16 @@ workspace "Aristotle3D-Workspace"
     -- Good to have options.
     startproject "Sandbox"
 
+    -- --------|All Systems & Configurations|------- --
+    filter "platforms:x64"
+        defines {
+            "ARS3D_X64"
+        }
+
+    filter {} -- Clear all filters
+    -- --------|All Systems & Configurations|------- --
+
+
     -- ----------|All Platforms & Systems|---------- --
     -- DEBUG
     filter "configurations:Debug"
@@ -51,6 +61,7 @@ workspace "Aristotle3D-Workspace"
 
     filter {} -- Clear all filters
     -- ----------|All Platforms & Systems|---------- --
+
 
     -- ------|System Specific Configurations|------- --
     -- LINUX

@@ -1,0 +1,37 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/Projects/Aristotle3D/src/include"
+            ],
+            "defines": [
+                "ARS3D_LINUX"
+            ],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c99",
+            "intelliSenseMode": "linux-clang-x64"
+        },
+
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/Projects/Aristotle3D/src/include"
+            ],
+            "defines": [
+                "ARS3D_WINDOWS",
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE",
+                "ARS3D_IMPORT_DLL"
+            ],
+            "windowsSdkVersion": "10.0.19041.0",
+            "compilerPath": "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.34.31933/bin/Hostx64/x64/cl.exe",
+            "cStandard": "c99",
+            "intelliSenseMode": "windows-msvc-x64"
+        }
+    ],
+    "version": 4
+}

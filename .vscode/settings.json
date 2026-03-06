@@ -1,0 +1,28 @@
+{
+    "Lua.diagnostics.globals": [
+        "workspace",
+        "platforms",
+        "configurations",
+        "objdir",
+        "targetdir",
+        "filter",
+        "symbols",
+        "defines",
+        "systemversion",
+        "staticruntime",
+        "runtime",
+        "project",
+        "language",
+        "cdialect",
+        "kind",
+        "files",
+        "includedirs",
+        "links",
+        "include",
+        "linkoptions",
+        "warnings",
+        "startproject",
+        "targetname",
+        "group"
+    ]
+}

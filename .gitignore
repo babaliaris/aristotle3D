@@ -1,0 +1,6 @@
+# Directories
+build/
+obj/
+
+# Files
+Makefile

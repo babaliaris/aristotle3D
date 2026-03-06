@@ -73,6 +73,7 @@ workspace "Aristotle3D-Workspace"
 
     -- ++++++++++++++++++++|Include Projects|++++++++++++++++++++ --
     group "Depedencies"
+        include "Projects/Depedencies/GLAD/glad.lua"
     group ""
 
     include "Projects/Aristotle3D/aristotle3D.lua"

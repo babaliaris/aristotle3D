@@ -12,6 +12,10 @@ project "Aristotle3D"
         "src/include/"
     }
 
+    links {
+        "GLAD"
+    }
+
     filter "system:linux"
         links {
             "GL",       -- OpenGL

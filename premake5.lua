@@ -1,3 +1,7 @@
+_ARS3D_TARGET_DIR   = "%{wks.location}/build/%{cfg.shortname}"
+_ARS3D_OBJECT_DIR   = "%{wks.location}/obj/%{cfg.shortname}-%{prj.name}"
+_ARS3D_EXTERNAL_DIR = "%{wks.location}/external"
+
 workspace "Aristotle3D-Workspace"
 
     -- *****************|Global Configurations|****************** --
@@ -7,33 +11,39 @@ workspace "Aristotle3D-Workspace"
     }
 
     configurations {
-        "debug", "profiling", "release"
+        "Debug", "Profiling", "Release"
     }
 
-    objdir "obj/%{cfg.shortname}-%{prj.name}"
-    targetdir "build/%{cfg.shortname}"
+    -- Set build and object directories.
+    targetdir (_ARS3D_TARGET_DIR)
+    objdir (_ARS3D_OBJECT_DIR)
 
+    -- Append this to all projects, so they can find custom build libs.
+    libdirs (_ARS3D_TARGET_DIR)
+
+    -- Global Compilation Options
     warnings "Extra" -- -Wall & -Wextra (GCC/Clang) or /W4 (MSVC)
 
+    -- Good to have options.
     startproject "Sandbox"
 
     -- ----------|All Platforms & Systems|---------- --
     -- DEBUG
-    filter "configurations:debug"
+    filter "configurations:Debug"
         symbols "on"
         defines {
             "ARS3D_DEBUG"
         }
     
     -- PROFILING
-    filter "configurations:profiling"
+    filter "configurations:Profiling"
         symbols "on"
         defines {
             "ARS3D_PROFILING"
         }
 
     -- RELEASE
-    filter "configurations:release"
+    filter "configurations:Release"
         symbols "off"
         defines {
             "ARS3D_RELEASE"
@@ -58,11 +68,11 @@ workspace "Aristotle3D-Workspace"
         staticruntime "off"    -- (Dynamic Link /MD) - Shared Libs
 
     -- WINDOWS + DEBUG
-    filter { "system:windows", "configurations:debug" }
+    filter { "system:windows", "configurations:Debug" }
         runtime "Debug"
 
     -- WINDOWS + RELEASE/PROFILING
-    filter { "system:windows", "configurations:release or configurations:profiling" }
+    filter { "system:windows", "configurations:Release or configurations:Profiling" }
         runtime "Release"
 
     filter {} -- Clear all filters
@@ -74,6 +84,7 @@ workspace "Aristotle3D-Workspace"
     -- ++++++++++++++++++++|Include Projects|++++++++++++++++++++ --
     group "Depedencies"
         include "Projects/Depedencies/GLAD/glad.lua"
+        include "Projects/Depedencies/GLFW/glfw.lua"
     group ""
 
     include "Projects/Aristotle3D/aristotle3D.lua"

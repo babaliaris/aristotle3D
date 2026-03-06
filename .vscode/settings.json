@@ -23,6 +23,15 @@
         "warnings",
         "startproject",
         "targetname",
-        "group"
+        "group",
+        "prebuildcommands",
+        "cleancommands",
+        "postbuildcommands",
+        "buildcommands",
+        "dependson",
+        "buildoutputs",
+        "flags",
+        "enablepch",
+        "libdirs"
     ]
 }

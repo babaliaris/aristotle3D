@@ -9,11 +9,16 @@ project "Aristotle3D"
     }
 
     includedirs {
-        "src/include/"
+        "include/"
+    }
+
+    dependson {
+        "GLFW"
     }
 
     links {
-        "GLAD"
+        "GLAD",
+        "glfw3" -- NO GLFW (Project name), because this is the fake CMAKE wrapper
     }
 
     filter "system:linux"

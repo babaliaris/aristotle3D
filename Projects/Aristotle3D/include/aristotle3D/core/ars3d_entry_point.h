@@ -8,7 +8,7 @@
     #if defined(ARS3D_LINUX)
     int main(ars3d_int argc, ars3d_char **argv)
     {
-        // Get the app instance by calling User's Entry Point.
+        // Get the app instance by calling the User's App Provider.
         Ars3DApp *app = ars3dUserAppProvider();
 
         // BootUp the engine and return to the OS once finished.

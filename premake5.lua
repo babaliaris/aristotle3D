@@ -100,4 +100,5 @@ workspace "Aristotle3D-Workspace"
 
     include "Projects/Aristotle3D/aristotle3D.lua"
     include "Projects/Sandbox/sandbox.lua"
+    include "Projects/UnitTests/unit-tests.lua"
     -- ++++++++++++++++++++|Include Projects|++++++++++++++++++++ --

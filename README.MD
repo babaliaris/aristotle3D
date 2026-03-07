@@ -16,3 +16,16 @@ _______________
 "The whole is something over and above its parts, and not just the sum of them all." — Aristotle
 
 Aristotle3D is a modern C99/OpenGL 3.3 -> (configurable) framework built from the ground up for the Aristotle University of Thessaloniki Graphics (any) curriculum.
+
+## Cloning
+
+```bash
+git clone --recursive https://github.com/your-username/Aristotle3D.git
+```
+
+## Updating
+
+```bash
+git pull origin main
+git submodule update --init --recursive
+```

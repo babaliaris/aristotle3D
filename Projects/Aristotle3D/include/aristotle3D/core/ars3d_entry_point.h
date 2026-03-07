@@ -8,13 +8,11 @@
     #if defined(ARS3D_LINUX)
     int main(ars3d_int argc, ars3d_char **argv)
     {
-        Ars3DApp *app = ars3DUserEntryPoint();
+        // Get the app instance by calling User's Entry Point.
+        Ars3DApp *app = ars3dUserAppProvider();
 
-        ars3d_int exit_value = ars3DMainLoop(app);
-
-        ars3DDestroyApp(app);
-
-        return exit_value;
+        // BootUp the engine and return to the OS once finished.
+        return __ars3dBootUp__(app);
     }
 
     #elif defined(ARS3D_WINDOWS)

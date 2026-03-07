@@ -15,32 +15,32 @@ ars3d_int ars3dPrintf(const ars3d_char* p_fmt, ...)
 
 
 
-ars3d_void *ars3DMalloc(ars3d_size p_size)
+ars3d_void *ars3dMalloc(ars3d_size p_size)
 {
     if (p_size == 0) return ARS3D_NULL;
     
     return malloc(p_size);
 }
 
-ars3d_void ars3DFree(ars3d_void *p_ptr)
+ars3d_void ars3dFree(ars3d_void *p_ptr)
 {
     free(p_ptr);
 }
 
 
-ars3d_void *ars3DMemCopy(ars3d_void *p_dest, const ars3d_void *p_src, ars3d_size p_size)
+ars3d_void *ars3dMemCopy(ars3d_void *p_dest, const ars3d_void *p_src, ars3d_size p_size)
 {
     return memcpy(p_dest, p_src, p_size);
 }
 
 
-ars3d_char *ars3DStrCopy(ars3d_char *p_dest, const ars3d_char *p_src)
+ars3d_char *ars3dStrCopy(ars3d_char *p_dest, const ars3d_char *p_src)
 {
     return strcpy(p_dest, p_src);
 }
 
 
-ars3d_size ars3DStrLen(const ars3d_char *p_src)
+ars3d_size ars3dStrLen(const ars3d_char *p_src)
 {
     return strlen(p_src);
 }

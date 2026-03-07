@@ -10,6 +10,7 @@
             ],
             "defines": [
                 "ARS3D_LINUX",
+                "ARS3D_DEBUG",
                 "ARS3D_ENTRY_POINT",
                 "ARS3D_X64"
             ],
@@ -28,6 +29,7 @@
             ],
             "defines": [
                 "ARS3D_WINDOWS",
+                "ARS3D_DEBUG",
                 "ARS3D_ENTRY_POINT",
                 "ARS3D_X64",
                 "_DEBUG",

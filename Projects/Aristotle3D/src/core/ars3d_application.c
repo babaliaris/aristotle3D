@@ -1,4 +1,5 @@
 #include <aristotle3D/core/ars3d_application.h>
+#include <aristotle3D/core/ars3d_debug.h>
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 
@@ -11,26 +12,28 @@ typedef struct Ars3DApp
 } Ars3DApp;
 
 
-Ars3DApp *ars3DCreateApp(
+
+
+Ars3DApp *ars3dCreateApp(
     const ars3d_char *  p_window_title,
     ars3d_int           p_window_width,
     ars3d_int           p_window_height
 )
 {
-    Ars3DApp *new_app = (Ars3DApp *)ars3DMalloc(ARS3D_SIZEOF(Ars3DApp));
+    Ars3DApp *new_app = (Ars3DApp *)ars3dMalloc(ARS3D_SIZEOF(Ars3DApp));
 
     if (!new_app) return ARS3D_NULL;
 
-    if (ars3DStrLen(p_window_title) > ARS3D_APP_MAX_STRING - 1)
+    if (ars3dStrLen(p_window_title) > ARS3D_APP_MAX_STRING - 1)
     {
         ars3dPrintf("[Ars3DApp WARN]: window_title is more than %d characters, truncating...\n", ARS3D_APP_MAX_STRING - 1);
-        ars3DMemCopy(new_app->m_window_title, p_window_title, ARS3D_APP_MAX_STRING - 1);
+        ars3dMemCopy(new_app->m_window_title, p_window_title, ARS3D_APP_MAX_STRING - 1);
         new_app->m_window_title[ARS3D_APP_MAX_STRING - 1] = '\0';
     }
 
     else
     {
-        ars3DStrCopy(new_app->m_window_title, p_window_title);
+        ars3dStrCopy(new_app->m_window_title, p_window_title);
     }
 
     new_app->m_window_width     = p_window_width;
@@ -39,15 +42,31 @@ Ars3DApp *ars3DCreateApp(
     return new_app;
 }
 
-ars3d_void ars3DDestroyApp(Ars3DApp *p_app)
+
+
+
+ars3d_void __ars3dDestroyApp__(Ars3DApp *p_app)
 {
     if (!p_app) return;
 
-    ars3DFree(p_app);
+    ARS3D_INFO("Destroying the Application...");
+
+    ars3dFree(p_app);
 }
 
 
-ars3d_int ars3DMainLoop(Ars3DApp *p_app)
+
+
+ars3d_void __ars3dInitSubSystems__(Ars3DApp *p_app)
+{
+    ARS3D_INFO("Initializing Subsystems...");
+    ars3dInitDebugConsole();
+}
+
+
+
+
+ars3d_int __ars3dMainLoop__(Ars3DApp *p_app)
 {
     GLFWwindow* window;
 
@@ -78,7 +97,7 @@ ars3d_int ars3DMainLoop(Ars3DApp *p_app)
         return -1;
     }
 
-    ars3dPrintf("OpenGL Version: %s\n", glGetString(GL_VERSION));
+    ARS3D_INFO("OpenGL Version: %s", glGetString(GL_VERSION));
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -96,4 +115,24 @@ ars3d_int ars3DMainLoop(Ars3DApp *p_app)
     glfwTerminate();
 
     return 0;
+}
+
+
+ars3d_int __ars3dBootUp__(Ars3DApp *p_app)
+{
+    ARS3D_INFO("Booting up Aristotle3D...");
+
+    // Initialize the SubSystems of the engine.
+    __ars3dInitSubSystems__(p_app);
+
+    // Call the user's entry point.
+    ars3dUserEntryPoint(p_app);
+
+    // Start the main Loop.
+    ars3d_int exit_value = __ars3dMainLoop__(p_app);
+
+    // Destroy the APP.
+    __ars3dDestroyApp__(p_app);
+
+    return exit_value;
 }

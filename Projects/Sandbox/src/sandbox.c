@@ -1,9 +1,13 @@
 #define ARS3D_ENTRY_POINT
 #include <aristotle3D/aristotle3D.h>
 
-Ars3DApp * ars3DUserEntryPoint()
+ars3d_void ars3dUserEntryPoint(Ars3DApp *p_app)
 {
-    Ars3DApp *app = ars3DCreateApp("SANDBOX", 512, 512);
+    //ars3dDebugTestMacros();
+    ARS3D_ASSERT_SOFT(1 == 2, "%s", "1 is not equal to 2");
+}
 
-    return app;
+Ars3DApp * ars3dUserAppProvider()
+{
+    return ars3dCreateApp("SANDBOX", 512, 512);
 }

@@ -79,7 +79,7 @@ ARS3D_API ars3d_int ars3dPrintf(const ars3d_char* p_fmt, ...);
  * 
  * @returns The starting address in the virtual memory.
  */
-ARS3D_API ars3d_void *ars3DMalloc(ars3d_size p_size);
+ARS3D_API ars3d_void *ars3dMalloc(ars3d_size p_size);
 
 
 /**
@@ -87,7 +87,7 @@ ARS3D_API ars3d_void *ars3DMalloc(ars3d_size p_size);
  * 
  * @param p_ptr The memory address of the block.
  */
-ARS3D_API ars3d_void ars3DFree(ars3d_void *p_ptr);
+ARS3D_API ars3d_void ars3dFree(ars3d_void *p_ptr);
 
 
 /**
@@ -101,7 +101,7 @@ ARS3D_API ars3d_void ars3DFree(ars3d_void *p_ptr);
  * 
  * @returns The destrination memory address, same as p_dest.
  */
-ARS3D_API ars3d_void *ars3DMemCopy(ars3d_void *p_dest, const ars3d_void *p_src, ars3d_size p_size);
+ARS3D_API ars3d_void *ars3dMemCopy(ars3d_void *p_dest, const ars3d_void *p_src, ars3d_size p_size);
 
 
 
@@ -116,7 +116,7 @@ ARS3D_API ars3d_void *ars3DMemCopy(ars3d_void *p_dest, const ars3d_void *p_src, 
  * 
  * @returns The destrination memory address, same as p_dest.
  */
-ARS3D_API ars3d_char *ars3DStrCopy(ars3d_char *p_dest, const ars3d_char *p_src);
+ARS3D_API ars3d_char *ars3dStrCopy(ars3d_char *p_dest, const ars3d_char *p_src);
 
 
 
@@ -127,6 +127,6 @@ ARS3D_API ars3d_char *ars3DStrCopy(ars3d_char *p_dest, const ars3d_char *p_src);
  * 
  * @returns The length of the string.
  */
-ARS3D_API ars3d_size ars3DStrLen(const ars3d_char *p_src);
+ARS3D_API ars3d_size ars3dStrLen(const ars3d_char *p_src);
 
 #endif

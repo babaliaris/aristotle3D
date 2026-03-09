@@ -3,6 +3,9 @@
 #include <aristotle3D/core/ars3d_stdio.h>
 
 
+typedef struct Ars3DApp Ars3DApp;
+
+
 /**
  * @file
  * @brief Debug functionalities for Aristotle3D
@@ -41,12 +44,18 @@
 
 /**
  * @brief Initializes the Debug Console
+ * 
+ * This function SHOULD stay indepedent from the engine
+ * framework.
  */
 ARS3D_API ars3d_void ars3dInitDebugConsole(ars3d_void);
 
 
 /**
  * @brief A helper function to print debug messages.
+ * 
+ *  * This function SHOULD stay indepedent from the engine
+ * framework.
  * 
  * @param p_file The file name __FILE__
  * @param p_line The line in the file __LINE__
@@ -74,7 +83,52 @@ ARS3D_API ars3d_void __ars3dColorfulDebugHelper__(
 ARS3D_API ars3d_void ars3dDebugTestMacros(ars3d_void);
 
 
+
+/**
+ * @brief A helper function to handle a hard assertion.
+ * 
+ * @param p_file The file name __FILE__
+ * @param p_line The line in the file __LINE__
+ * @param p_color The ansi color code string
+ * @param p_fmt The printf formatted string.
+ */
+ARS3D_API ars3d_void __ars3dHardAssertDebugHelper__(
+    const ars3d_char*   p_agent,
+    const ars3d_char*   p_reason,
+    const ars3d_char*   p_file,
+    ars3d_int           p_line,
+    const ars3d_char*   p_color,
+    const ars3d_char*   p_fmt,
+    ...
+);
+
+
+
+
 #if defined(ARS3D_DEBUG)
+
+    #if defined(ARS3D_WINDOWS)
+        // Visual Studio
+        #define ARS3D_BREAK() __debugbreak()
+
+    #elif defined(ARS3D_LINUX)
+        // GCC/Clang (VS Code/GDB)
+        #include <signal.h>
+        #if defined(SIGTRAP)
+            #define ARS3D_BREAK() raise(SIGTRAP)
+        #else
+            #define ARS3D_BREAK() __builtin_trap()
+        #endif
+    #else
+        // Fail-safe other platforms
+        #define ARS3D_BREAK()
+    #endif
+
+    /**
+     * @name Engine Logging Macros
+     * Macros for logging and debuggin.
+     * @{
+     */
 
     #define ARS3D_TRACE(fmt, ...)\
     __ars3dColorfulDebugHelper__("Aristotle3D", "TRACE", __FILE__, __LINE__, ARS3D_COLOR_R_WHITE, fmt, ##__VA_ARGS__)
@@ -114,7 +168,7 @@ ARS3D_API ars3d_void ars3dDebugTestMacros(ars3d_void);
         if (!(cond))\
         {\
             __ars3dColorfulDebugHelper__(\
-                "Aristotle3D", "ASSERT", __FILE__, __LINE__, ARS3D_COLOR_B_RED, \
+                "Aristotle3D", "SOFT ASSERT", __FILE__, __LINE__, ARS3D_COLOR_B_RED, \
                 "Condition failed: [" #cond "] " __VA_ARGS__\
             );\
         }\
@@ -126,14 +180,43 @@ ARS3D_API ars3d_void ars3dDebugTestMacros(ars3d_void);
         if (!(cond))\
         {\
             __ars3dColorfulDebugHelper__(\
-                "Aristotle3D", "ASSERT", __FILE__, __LINE__, ARS3D_COLOR_B_RED, \
+                "User", "SOFT ASSERT", __FILE__, __LINE__, ARS3D_COLOR_B_RED, \
                 "Condition failed: [" #cond "] " __VA_ARGS__\
             );\
         }\
     } while (0)
 
 
+    #define ARS3D_ASSERT(cond, ...)\
+    do\
+    {\
+        if (!(cond))\
+        {\
+            __ars3dHardAssertDebugHelper__(\
+                "Aristotle3D", "ASSERT", __FILE__, __LINE__, ARS3D_COLOR_B_RED, \
+                "Condition failed: [" #cond "] " __VA_ARGS__\
+            );\
+        }\
+    } while (0)
+
+    #define ARS3D_USER_ASSERT(cond, ...)\
+    do\
+    {\
+        if (!(cond))\
+        {\
+            __ars3dHardAssertDebugHelper__(\
+                "User", "ASSERT", __FILE__, __LINE__, ARS3D_COLOR_B_RED, \
+                "Condition failed: [" #cond "] " __VA_ARGS__\
+            );\
+        }\
+    } while (0)
+
+    //@}
+
+
 #else
+    #define ARS3D_BREAK()
+
     #define ARS3D_TRACE(fmt, ...)
     #define ARS3D_INFO(fmt, ...)
     #define ARS3D_WARN(fmt, ...)
@@ -150,6 +233,8 @@ ARS3D_API ars3d_void ars3dDebugTestMacros(ars3d_void);
 
     #define ARS3D_ASSERT_SOFT(cond, ...)
     #define ARS3D_USER_ASSERT_SOFT(cond, ...)
+    #define ARS3D_ASSERT(cond, ...)
+    #define ARS3D_USER_ASSERT(cond, ...)
 #endif
 
 

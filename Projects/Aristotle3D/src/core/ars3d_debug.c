@@ -1,4 +1,5 @@
 #include <aristotle3D/core/ars3d_debug.h>
+#include <aristotle3D/core/ars3d_application.h>
 
 #if defined(ARS3D_WINDOWS)
     #include <windows.h>
@@ -62,6 +63,39 @@ ars3d_void __ars3dColorfulDebugHelper__(
 
     ars3dPrintf(ARS3D_COLOR_RESET "\n");
 }
+
+
+
+ars3d_void __ars3dHardAssertDebugHelper__(
+    const ars3d_char*   p_agent,
+    const ars3d_char*   p_reason,
+    const ars3d_char*   p_file,
+    ars3d_int           p_line,
+    const ars3d_char*   p_color,
+    const ars3d_char*   p_fmt,
+    ...
+)
+{
+    ars3dPrintf(
+        ARS3D_COLOR_R_CYAN "[%s:%s:%d] {%s} " ARS3D_COLOR_RESET,
+        p_agent, ars3dGetFileName(p_file), p_line, p_reason);
+
+
+    ars3dPrintf("%s", p_color);
+    
+    va_list args;
+    va_start(args, p_fmt);
+    vprintf(p_fmt, args);
+    va_end(args);
+
+
+    ars3dPrintf(ARS3D_COLOR_RESET "\n");
+
+    __ars3dDestroyApp__(ars3dGetAppInstance());
+
+    ars3dExit(1);
+}
+
 
 
 

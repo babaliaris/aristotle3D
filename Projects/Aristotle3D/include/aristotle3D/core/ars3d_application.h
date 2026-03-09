@@ -64,6 +64,19 @@ ARS3D_API Ars3DApp *ars3dCreateApp(
 
 
 
+
+/**
+ * @brief Destroys the entire application.
+ * 
+ * USER MUST NOT USE THIS FUNCION.It is called automatically
+ * by Aristotle3D wherever it is needed.
+ * 
+ * @param p_app The memory address of the application.
+ */
+ARS3D_API ars3d_void __ars3dDestroyApp__(Ars3DApp *p_app);
+
+
+
 /**
  * @brief Boot up the Aristotle3D engine.
  * 
@@ -73,5 +86,14 @@ ARS3D_API Ars3DApp *ars3dCreateApp(
  * @param p_app The memory address of the application.
  */
 ARS3D_API ars3d_int __ars3dBootUp__(Ars3DApp *p_app);
+
+
+
+/**
+ * @brief Get the App singletone instance.
+ * 
+ * @returns The app instance. 
+ */
+ARS3D_API Ars3DApp *ars3dGetAppInstance(ars3d_void);
 
 #endif

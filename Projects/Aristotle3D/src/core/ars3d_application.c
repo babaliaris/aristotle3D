@@ -4,6 +4,9 @@
 #include <GLFW/glfw3.h>
 
 
+static Ars3DApp* STATIC_APP_INSTANCE = ARS3D_NULL;
+
+
 typedef struct Ars3DApp
 {
     ars3d_char          m_window_title[ARS3D_APP_MAX_STRING];
@@ -20,17 +23,31 @@ Ars3DApp *ars3dCreateApp(
     ars3d_int           p_window_height
 )
 {
+    // Singletone pattern.
+    if (STATIC_APP_INSTANCE != ARS3D_NULL)
+    {
+        ARS3D_WARN("ars3dCreateApp called while an instance already exists!");
+        return STATIC_APP_INSTANCE;
+    }
+
     Ars3DApp *new_app = (Ars3DApp *)ars3dMalloc(ARS3D_SIZEOF(Ars3DApp));
 
-    if (!new_app) return ARS3D_NULL;
+    // Not enough memory.
+    if (!new_app)
+    {
+        ARS3D_WARN("Not enough memory");
+        return ARS3D_NULL;
+    }
 
+    // String truncation.
     if (ars3dStrLen(p_window_title) > ARS3D_APP_MAX_STRING - 1)
     {
-        ars3dPrintf("[Ars3DApp WARN]: window_title is more than %d characters, truncating...\n", ARS3D_APP_MAX_STRING - 1);
+        ARS3D_WARN("[Ars3DApp WARN]: window_title is more than %d characters, truncating...\n", ARS3D_APP_MAX_STRING - 1);
         ars3dMemCopy(new_app->m_window_title, p_window_title, ARS3D_APP_MAX_STRING - 1);
         new_app->m_window_title[ARS3D_APP_MAX_STRING - 1] = '\0';
     }
 
+    //Copy the full string.
     else
     {
         ars3dStrCopy(new_app->m_window_title, p_window_title);
@@ -38,6 +55,9 @@ Ars3DApp *ars3dCreateApp(
 
     new_app->m_window_width     = p_window_width;
     new_app->m_window_height    = p_window_height;
+
+
+    STATIC_APP_INSTANCE = new_app;
 
     return new_app;
 }
@@ -47,11 +67,17 @@ Ars3DApp *ars3dCreateApp(
 
 ars3d_void __ars3dDestroyApp__(Ars3DApp *p_app)
 {
-    if (!p_app) return;
+    if (!p_app)
+    {
+        ARS3D_WARN("p_app provided with a NULL value");
+        return;
+    }
 
     ARS3D_INFO("Destroying the Application...");
 
     ars3dFree(p_app);
+
+    STATIC_APP_INSTANCE = ARS3D_NULL;
 }
 
 
@@ -135,4 +161,11 @@ ars3d_int __ars3dBootUp__(Ars3DApp *p_app)
     __ars3dDestroyApp__(p_app);
 
     return exit_value;
+}
+
+
+
+Ars3DApp *ars3dGetAppInstance(ars3d_void)
+{
+    return STATIC_APP_INSTANCE;
 }

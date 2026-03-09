@@ -90,6 +90,15 @@ ARS3D_API ars3d_void *ars3dMalloc(ars3d_size p_size);
 ARS3D_API ars3d_void ars3dFree(ars3d_void *p_ptr);
 
 
+
+/**
+ * @brief Exit the process.
+ * 
+ * @param p_exit_code The exit code to be returned to the OS.
+ */
+ARS3D_API ars3d_void ars3dExit(ars3d_int p_exit_code);
+
+
 /**
  * @brief Copy byte by byte a memory buffer to another.
  * 

@@ -7,5 +7,5 @@ ars3d_void ars3dUserEntryPoint(Ars3DApp *p_app)
 
 Ars3DApp * ars3dUserAppProvider()
 {
-    return ars3dCreateApp("SANDBOX", 512, 512);
+    return ars3dCreateApp(ars3dUserEntryPoint, "SANDBOX", 512, 512);
 }

@@ -40,7 +40,7 @@ Ars3DApp * ars3dUserAppProvider();
  * 
  * @returns The memory address of the newly created application.
  */
-ars3d_void ars3dUserEntryPoint(Ars3DApp *p_app);
+typedef ars3d_void (*Ars3DUserEntryPointFN)(Ars3DApp *p_app);
 
 
 
@@ -57,6 +57,7 @@ ars3d_void ars3dUserEntryPoint(Ars3DApp *p_app);
  * @return The memory address of the newly created application.
  */
 ARS3D_API Ars3DApp *ars3dCreateApp(
+    Ars3DUserEntryPointFN p_userEntry,
     const ars3d_char *  p_window_title,
     ars3d_int           p_window_width,
     ars3d_int           p_window_height

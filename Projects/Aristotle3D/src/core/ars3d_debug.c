@@ -26,7 +26,7 @@ ars3d_void ars3dInitDebugConsole(ars3d_void)
 {
     #if defined(ARS3D_WINDOWS)
         HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-        if (hOut == INVALID_HANDLE_HANDLE) return;
+        if (hOut == INVALID_HANDLE_VALUE) return;
 
         DWORD dwMode = 0;
         if (!GetConsoleMode(hOut, &dwMode)) return;

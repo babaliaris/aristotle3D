@@ -16,11 +16,13 @@
     }
 
     #elif defined(ARS3D_WINDOWS)
-    #include <windows.h>
-
-    int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, int nCmdShow)
+    int main(ars3d_int argc, ars3d_char** argv)
     {
-        return ars3d_GLFW_TEST();
+        // Get the app instance by calling the User's App Provider.
+        Ars3DApp* app = ars3dUserAppProvider();
+
+        // BootUp the engine and return to the OS once finished.
+        return __ars3dBootUp__(app);
     }
     #endif
 

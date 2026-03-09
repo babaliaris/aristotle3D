@@ -9,6 +9,7 @@ static Ars3DApp* STATIC_APP_INSTANCE = ARS3D_NULL;
 
 typedef struct Ars3DApp
 {
+    Ars3DUserEntryPointFN m_userEntry;
     ars3d_char          m_window_title[ARS3D_APP_MAX_STRING];
     ars3d_int           m_window_width;
     ars3d_int           m_window_height;
@@ -18,6 +19,7 @@ typedef struct Ars3DApp
 
 
 Ars3DApp *ars3dCreateApp(
+    Ars3DUserEntryPointFN p_userEntry,
     const ars3d_char *  p_window_title,
     ars3d_int           p_window_width,
     ars3d_int           p_window_height
@@ -53,6 +55,7 @@ Ars3DApp *ars3dCreateApp(
         ars3dStrCopy(new_app->m_window_title, p_window_title);
     }
 
+    new_app->m_userEntry        = p_userEntry;
     new_app->m_window_width     = p_window_width;
     new_app->m_window_height    = p_window_height;
 
@@ -152,7 +155,7 @@ ars3d_int __ars3dBootUp__(Ars3DApp *p_app)
     __ars3dInitSubSystems__(p_app);
 
     // Call the user's entry point.
-    ars3dUserEntryPoint(p_app);
+    p_app->m_userEntry(p_app);
 
     // Start the main Loop.
     ars3d_int exit_value = __ars3dMainLoop__(p_app);

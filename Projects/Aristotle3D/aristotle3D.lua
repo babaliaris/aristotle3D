@@ -5,7 +5,8 @@ project "Aristotle3D"
 
     files {
         "src/**.c",
-        "src/**.h"
+        "src/**.h",
+        "include/**.h"
     }
 
     includedirs {

@@ -32,10 +32,15 @@ project "GLFW"
         local cmakeOut = _ARS3D_OBJECT_DIR .. "/src/%{cfg.buildcfg}/glfw3.lib"
         local target   = _ARS3D_TARGET_DIR .. "/glfw3.lib"
 
+        local winCmakeOut  = cmakeOut:gsub("/", "\\")
+        local winTarget    = target:gsub("/", "\\")
+        local winTargetDir = _ARS3D_TARGET_DIR:gsub("/", "\\")
+
         buildcommands {
-            "{MKDIR} " .. _ARS3D_OBJECT_DIR,
+            '{MKDIR} "' .. _ARS3D_OBJECT_DIR .. '"',
+            '{MKDIR} "' .. winTargetDir .. '"',
             'cmake -S "' .. src_dir .. '" -B "' .. _ARS3D_OBJECT_DIR .. '" -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF -DGLFW_BUILD_DOCS=OFF',
             'cmake --build "' .. _ARS3D_OBJECT_DIR .. '" --config %{cfg.buildcfg}',
-            '{COPY} "' .. cmakeOut .. '" "' .. target .. '"'
+            'copy /Y "' .. winCmakeOut .. '" "' .. winTarget .. '"'
         }
         buildoutputs { target }

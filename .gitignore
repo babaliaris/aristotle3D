@@ -4,3 +4,10 @@ obj/
 
 # Files
 Makefile
+
+# Visual Studio
+*.sln
+*.slnx
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user

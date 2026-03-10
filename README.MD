@@ -20,7 +20,7 @@ Aristotle3D is a modern C99/OpenGL 3.3 -> (configurable) framework built from th
 ## Cloning
 
 ```bash
-git clone --recursive https://github.com/your-username/Aristotle3D.git
+git clone --recursive https://github.com/babaliaris/aristotle3D.git
 ```
 
 ## Updating

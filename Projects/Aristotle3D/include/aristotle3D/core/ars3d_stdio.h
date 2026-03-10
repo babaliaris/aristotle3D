@@ -138,4 +138,18 @@ ARS3D_API ars3d_char *ars3dStrCopy(ars3d_char *p_dest, const ars3d_char *p_src);
  */
 ARS3D_API ars3d_size ars3dStrLen(const ars3d_char *p_src);
 
+
+
+/**
+ * @brief Compares two strings.
+ * 
+ * Compares two strings and returns an integer.
+ * 
+ * @param p_str1 The first string.
+ * @param p_str2 The second string.
+ * 
+ * @returns negative if p_str1 < p_str2, 0 if p_str1 = p_str2 and positive if p_str1 > p_str2.
+ */
+ARS3D_API ars3d_int ars3dStrCmp(const ars3d_char *p_str1, const ars3d_char *p_str2);
+
 #endif

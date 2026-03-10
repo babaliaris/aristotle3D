@@ -60,8 +60,8 @@ ARS3D_API ars3d_size ars3dLenDynamicStr(Ars3DDynamicStr *p_str);
  * @param p_str1 The first string.
  * @param p_str2 The second string.
  * 
- * @returns 1 if p_str1 equals
+ * @returns < 0 if p_str1 < p_str2, 0 if p_str1 = p_str2 and > 0 if p_str1 > p_str2.
  */
-ARS3D_API ars3d_uchar ars3dCompareDynamicStr(Ars3DDynamicStr *p_str1, Ars3DDynamicStr *p_str2);
+ARS3D_API ars3d_int ars3dCompareDynamicStr(Ars3DDynamicStr *p_str1, Ars3DDynamicStr *p_str2);
 
 #endif

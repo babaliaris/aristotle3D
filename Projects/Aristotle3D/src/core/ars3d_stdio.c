@@ -64,3 +64,11 @@ ars3d_size ars3dStrLen(const ars3d_char *p_src)
         return strlen(p_src);
     #endif
 }
+
+
+ars3d_int ars3dStrCmp(const ars3d_char *p_str1, const ars3d_char *p_str2)
+{
+    #if defined (ARS3D_X64)
+        return strcmp(p_str1, p_str2);
+    #endif
+}

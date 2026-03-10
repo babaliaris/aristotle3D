@@ -192,7 +192,7 @@ ars3d_void *ars3dListGetAt(Ars3DList *p_list, ars3d_size p_index)
 }
 
 
-ars3d_void ars3dListLoopThrough(Ars3DList *p_list, Ars3DListUserCallbackFN p_userCB, ars3d_void *p_context, ars3d_uchar p_reversed)
+ars3d_void ars3dListLoopThrough(Ars3DList *p_list, Ars3DListUserLoopThroughFN p_userCB, ars3d_void *p_context, ars3d_uchar p_reversed)
 {
     if (!p_list || !p_userCB)
     {

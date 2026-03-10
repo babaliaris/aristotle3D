@@ -14,6 +14,8 @@ typedef struct Ars3DUnitTestingApp
     ars3d_size          m_total_run;
     ars3d_size          m_total_skipped;
     ars3d_size          m_failed_tests;
+    ars3d_int           m_argc;
+    ars3d_char **       m_argv;
     Ars3DUnitTest *     m_tests[ARS3D_UNIT_TESTING_MAX_TESTS];
 } Ars3DUnitTestingApp;
 
@@ -43,7 +45,7 @@ ars3d_void ars3dDestroyUnitTestingApp(Ars3DUnitTestingApp *p_app)
     if (!p_app) return;
 
     // Free all the test objects.
-    for (int i = 0; i < p_app->m_total_tests; i++)
+    for (ars3d_size i = 0; i < p_app->m_total_tests; i++)
     {
         if (p_app->m_tests[i]) ars3dFree(p_app->m_tests[i]);
     }
@@ -114,8 +116,11 @@ ars3d_void ars3dUniTesingEntryPoint(Ars3DUnitTestingApp *p_app, ars3d_int argc, 
         return;
     }
 
+    p_app->m_argc = argc;
+    p_app->m_argv = argv;
+
     // Loop through all the tests.
-    for (int i = 0; i < p_app->m_total_tests; i++)
+    for (ars3d_size i = 0; i < p_app->m_total_tests; i++)
     {
         // Call the test.
         p_app->m_tests[i]->m_unitTest( p_app->m_tests[i] );

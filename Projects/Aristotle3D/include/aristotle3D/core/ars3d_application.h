@@ -9,8 +9,6 @@
  * This is where everything starts.
  */
 
-#define ARS3D_APP_MAX_STRING 64
-
 
 typedef struct Ars3DApp Ars3DApp;
 
@@ -85,8 +83,10 @@ ARS3D_API ars3d_void __ars3dDestroyApp__(Ars3DApp *p_app);
  * by Aristotle3D entry point.
  * 
  * @param p_app The memory address of the application.
+ * @param argc The comman line paramateres amount.
+ * @param argv The command line parameters.
  */
-ARS3D_API ars3d_int __ars3dBootUp__(Ars3DApp *p_app);
+ARS3D_API ars3d_int __ars3dBootUp__(Ars3DApp *p_app, ars3d_int argc, ars3d_char **argv);
 
 
 

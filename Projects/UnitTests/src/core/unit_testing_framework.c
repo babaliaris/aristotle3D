@@ -3,7 +3,7 @@
 
 // Define them to satisfy Aristotle3D. Since we do not
 // #define ARS3D_ENTRY_POINT anywhere, these do no matter.
-ars3d_void ars3dUserEntryPoint(Ars3DApp *p_app){}
+ars3d_void ars3dUserEntryPoint(Ars3DApp *p_app){(void)(p_app);}
 Ars3DApp * ars3dUserAppProvider(){return ARS3D_NULL;}
 
 

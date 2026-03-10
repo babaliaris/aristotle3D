@@ -3,6 +3,7 @@
 
 ars3d_void ars3dUserEntryPoint(Ars3DApp *p_app)
 {
+    ARS3D_UNUSED(p_app);
 }
 
 Ars3DApp * ars3dUserAppProvider()

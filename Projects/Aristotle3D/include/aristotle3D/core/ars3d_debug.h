@@ -125,6 +125,11 @@ ARS3D_API ars3d_void __ars3dHardAssertDebugHelper__(
     #endif
 
     /**
+     * Suppress unused warnings.
+     */
+    #define ARS3D_UNUSED(x) (void)(x)
+
+    /**
      * @name Engine Logging Macros
      * Macros for logging and debuggin.
      * @{
@@ -216,6 +221,7 @@ ARS3D_API ars3d_void __ars3dHardAssertDebugHelper__(
 
 #else
     #define ARS3D_BREAK()
+    #define ARS3D_UNUSED(x)
 
     #define ARS3D_TRACE(fmt, ...)
     #define ARS3D_INFO(fmt, ...)

@@ -12,6 +12,7 @@
 
 
 typedef struct Ars3DApp Ars3DApp;
+typedef struct Ars3DWindow Ars3DWindow;
 
 
 /**
@@ -93,7 +94,8 @@ ARS3D_API ars3d_void ars3dAppAttachLayer(
     Ars3DLayerOnAttachFN    p_onAttach,
     Ars3DLayerOnDetachFN    p_onDetach,
     Ars3DLayerOnStartFN     p_onStart,
-    Ars3DLayerOnUpdateFN    p_onUpdate
+    Ars3DLayerOnUpdateFN    p_onUpdate,
+    Ars3DLayerOnEventFN     p_onEvent
 );
 
 
@@ -112,6 +114,29 @@ ARS3D_API ars3d_void ars3dAppAttachLayer(
  * @param p_user_ctx The user's context object.
  */
 ARS3D_API ars3d_void ars3dAppDetatchLayer(Ars3DApp *p_app, ars3d_void *p_user_ctx);
+
+
+
+/**
+ * @brief Get the window object.
+ * 
+ * @param p_app The app instance.
+ * 
+ * @returns The window object.
+ */
+ARS3D_API Ars3DWindow *ars3dAppGetWindow(Ars3DApp *p_app);
+
+
+/**
+ * @brief Fires the event to all the layers in reverse order.
+ * 
+ * This function is meant to be called by the engine, no the user.
+ * 
+ * @param p_app The App instance.
+ * @param p_event The event instance.
+ * @param p_event_type The event type enum value.
+ */
+ARS3D_API ars3d_void __ars3dAppFireEvent__(Ars3DApp *p_app, ars3d_void *p_event, ars3d_int p_event_type);
 
 
 

@@ -24,6 +24,8 @@ static const ars3d_char* ars3dGetFileName(const ars3d_char* p_path)
 
 ars3d_void ars3dInitDebugConsole(ars3d_void)
 {
+    ARS3D_INFO("Initializing the Debug Console System");
+
     #if defined(ARS3D_WINDOWS)
         HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
         if (hOut == INVALID_HANDLE_VALUE) return;

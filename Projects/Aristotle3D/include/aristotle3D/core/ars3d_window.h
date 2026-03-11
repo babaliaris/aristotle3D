@@ -50,4 +50,56 @@ ARS3D_API ars3d_void ars3dWindowUpdate(Ars3DWindow *p_window);
  */
 ARS3D_API ars3d_int ars3dWindowShouldClose(Ars3DWindow *p_window);
 
+
+/**
+ * @brief Get the native window (OS level).
+ * 
+ * @param p_window The window instance.
+ * 
+ * @returns The instance of the native window object.
+ */
+ARS3D_API ars3d_void *ars3dWindowGetNativeWindow(Ars3DWindow *p_window);
+
+
+
+/**
+ * @brief Get the keyboard key.
+ * 
+ * @param p_event The event instance.
+ * 
+ * @returns The key code that has been pressed.
+ */
+ARS3D_API ars3d_int ars3dEventGetKeyboardKey(ars3d_void *p_event);
+
+
+
+/**
+ * @brief Get the mouse button.
+ * 
+ * @param p_event The event instance.
+ * 
+ * @returns The mouse button code that has been pressed.
+ */
+ARS3D_API ars3d_int ars3dEventGetMouseButton(ars3d_void *p_event);
+
+
+/**
+ * @brief Get the mouse position.
+ * 
+ * @param p_event The event instance.
+ * @param p_x The user's memory address to store the x position.
+ * @param p_y The user's memory address to store the y position.
+ */
+ARS3D_API ars3d_void ars3dEventGetMousePos(ars3d_void *p_event, ars3d_double *p_x, ars3d_double *p_y);
+
+
+/**
+ * @brief Get the window size.
+ * 
+ * @param p_event The event instance.
+ * @param p_width The user's memory address to store the width.
+ * @param p_height The user's memory address to store the height.
+ */
+ARS3D_API ars3d_void ars3dEventGetWindowSize(ars3d_void *p_event, ars3d_int *p_width, ars3d_int *p_height);
+
 #endif

@@ -209,7 +209,8 @@ ars3d_void ars3dAppAttachLayer(
     Ars3DLayerOnAttachFN    p_onAttach,
     Ars3DLayerOnDetachFN    p_onDetach,
     Ars3DLayerOnStartFN     p_onStart,
-    Ars3DLayerOnUpdateFN    p_onUpdate
+    Ars3DLayerOnUpdateFN    p_onUpdate,
+    Ars3DLayerOnEventFN     p_onEvent
 )
 {
     if (!p_app || !p_user_ctx)
@@ -223,7 +224,8 @@ ars3d_void ars3dAppAttachLayer(
         p_onAttach,
         p_onDetach,
         p_onStart,
-        p_onUpdate
+        p_onUpdate,
+        p_onEvent
     );
 
     if (!new_layer) return;
@@ -262,4 +264,49 @@ ars3d_void ars3dAppDetatchLayer(Ars3DApp *p_app, ars3d_void *p_user_ctx)
     __ars3dLayerCallCB__(layer, ARS3D_LAYER_CB_ON_DETATCH);
 
     __ars3dLayerDestroy__(&layer);
+}
+
+
+Ars3DWindow *ars3dAppGetWindow(Ars3DApp *p_app)
+{
+    return p_app->m_window;
+}
+
+
+
+typedef struct EventContext
+{
+    ars3d_void *m_event;
+    ars3d_int   m_event_type;
+} EventContext;
+
+
+
+ars3d_uchar eventsReversedLoopCB(ars3d_void *p_data, ars3d_void *p_context)
+{
+    Ars3DLayer *layer = (Ars3DLayer *)p_data;
+    EventContext *ctx = (EventContext *)p_context;
+
+    ars3d_uchar handled = __ars3dLayerCallEventCB__(layer, ctx->m_event, ctx->m_event_type);
+
+    if (handled) return 1; // Stop the loop.
+
+    return 0; //Continue looping.
+}
+
+
+ars3d_void __ars3dAppFireEvent__(Ars3DApp *p_app, ars3d_void *p_event, ars3d_int p_event_type)
+{
+    if (!p_app)
+    {
+        ARS3D_WARN("Required params are not provided");
+        return;
+    }
+
+    EventContext ctx;
+    ctx.m_event         = p_event;
+    ctx.m_event_type    = p_event_type;
+
+    // Loop though each layer in reverse.
+    ars3dListLoopThrough(p_app->m_layers, eventsReversedLoopCB, (ars3d_void *)&ctx, 1);
 }

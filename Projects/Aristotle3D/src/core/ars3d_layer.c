@@ -10,6 +10,7 @@ typedef struct Ars3DLayer
     Ars3DLayerOnDetachFN    m_onDetach;
     Ars3DLayerOnStartFN     m_onStart;
     Ars3DLayerOnUpdateFN    m_onUpdate;
+    Ars3DLayerOnEventFN     m_onEvent;
 } Ars3DLayer;
 
 Ars3DLayer *__ars3dLayerCreate__(
@@ -17,7 +18,8 @@ Ars3DLayer *__ars3dLayerCreate__(
     Ars3DLayerOnAttachFN    p_onAttach,
     Ars3DLayerOnDetachFN    p_onDetach,
     Ars3DLayerOnStartFN     p_onStart,
-    Ars3DLayerOnUpdateFN    p_onUpdate
+    Ars3DLayerOnUpdateFN    p_onUpdate,
+    Ars3DLayerOnEventFN     p_onEvent
 )
 {
     if (!p_user_ctx)
@@ -40,6 +42,7 @@ Ars3DLayer *__ars3dLayerCreate__(
     new_layer->m_onDetach   = p_onDetach;
     new_layer->m_onStart    = p_onStart;
     new_layer->m_onUpdate   = p_onUpdate;
+    new_layer->m_onEvent    = p_onEvent;
 
     return new_layer;
 }
@@ -101,7 +104,29 @@ ars3d_void __ars3dLayerCallCB__(Ars3DLayer *p_layer, ars3d_int p_cb_option)
 }
 
 
+
+ARS3D_API ars3d_uchar __ars3dLayerCallEventCB__(Ars3DLayer *p_layer, ars3d_void *p_event, ars3d_int p_event_type)
+{
+    if (!p_layer)
+    {
+        ARS3D_WARN("Required parameters are not provided");
+        return 0;
+    }
+
+    if (p_layer->m_onEvent)
+        return p_layer->m_onEvent(p_layer->m_user_ctx, p_event, p_event_type);
+
+    return 0;
+}
+
+
 ars3d_void *__ars3dLayerGetUserCtx__(Ars3DLayer *p_layer)
 {
+    if (!p_layer)
+    {
+        ARS3D_WARN("Required parameters are not provided");
+        return ARS3D_NULL;
+    }
+
     return p_layer->m_user_ctx;
 }

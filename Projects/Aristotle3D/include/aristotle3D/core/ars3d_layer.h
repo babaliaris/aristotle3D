@@ -6,6 +6,7 @@
 #define ARS3D_LAYER_CB_ON_DETATCH 1
 #define ARS3D_LAYER_CB_ON_START 2
 #define ARS3D_LAYER_CB_ON_UPDATE 3
+#define ARS3D_LAYER_CB_ON_EVENT 4
 
 typedef struct Ars3DApp Ars3DApp;
 typedef struct Ars3DLayer Ars3DLayer;
@@ -52,6 +53,20 @@ typedef ars3d_void (*Ars3DLayerOnUpdateFN)(ars3d_void *p_user_ctx);
 
 
 
+/**
+ * @brief On Event callback function signature.
+ * 
+ * This is called automatically by the Aristotle3D engine
+ * every time an event is fired.
+ * 
+ * @param p_user_ctx The user's context object.
+ * 
+ * @returns 0 if the event HAS NOT been handled, true otherwise.
+ */
+typedef ars3d_uchar (*Ars3DLayerOnEventFN)(ars3d_void *p_user_ctx, ars3d_void *p_event, ars3d_int p_event_type);
+
+
+
 
 /**
  * @brief Create a new Layer Object.
@@ -72,7 +87,8 @@ ARS3D_API Ars3DLayer *__ars3dLayerCreate__(
     Ars3DLayerOnAttachFN    p_onAttach,
     Ars3DLayerOnDetachFN    p_onDetach,
     Ars3DLayerOnStartFN     p_onStart,
-    Ars3DLayerOnUpdateFN    p_onUpdate
+    Ars3DLayerOnUpdateFN    p_onUpdate,
+    Ars3DLayerOnEventFN     p_onEvent
 );
 
 
@@ -97,6 +113,22 @@ ARS3D_API ars3d_void __ars3dLayerDestroy__(Ars3DLayer **p_layer);
  * @param p_cb_option The enum options (which callback to call).
  */
 ARS3D_API ars3d_void __ars3dLayerCallCB__(Ars3DLayer *p_layer, ars3d_int p_cb_option);
+
+
+
+/**
+ * @brief Call a layer event callback function.
+ * 
+ * This is meant to be used by the Aristotle3D engine
+ * and NOT by the user!!!
+ * 
+ * @param p_layer The layer instance.
+ * @param p_event The event instance.
+ * @param p_event_type The event type enum number.
+ * 
+ * @returns 0 if the event HAS NOT been handled, true otherwise.
+ */
+ARS3D_API ars3d_uchar __ars3dLayerCallEventCB__(Ars3DLayer *p_layer, ars3d_void *p_event, ars3d_int p_event_type);
 
 
 

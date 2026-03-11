@@ -14,7 +14,7 @@ typedef struct Ars3DWindow Ars3DWindow;
  * 
  * @returns The newly created window instance.
  */
-ARS3D_API Ars3DWindow *ars3dCreateWindow(const ars3d_char *p_title, ars3d_int p_width, ars3d_int p_height);
+ARS3D_API Ars3DWindow *ars3dWindowCreate(const ars3d_char *p_title, ars3d_int p_width, ars3d_int p_height);
 
 
 
@@ -26,7 +26,7 @@ ARS3D_API Ars3DWindow *ars3dCreateWindow(const ars3d_char *p_title, ars3d_int p_
  * 
  * @param p_window The user's placeholder memory address.
  */
-ARS3D_API ars3d_void ars3dDestroyWindow(Ars3DWindow **p_window);
+ARS3D_API ars3d_void ars3dWindowDestroy(Ars3DWindow **p_window);
 
 
 
@@ -37,7 +37,7 @@ ARS3D_API ars3d_void ars3dDestroyWindow(Ars3DWindow **p_window);
  * 
  * @param p_window The window instance.
  */
-ARS3D_API ars3d_void ars3dUpdateWindow(Ars3DWindow *p_window);
+ARS3D_API ars3d_void ars3dWindowUpdate(Ars3DWindow *p_window);
 
 
 
@@ -48,6 +48,6 @@ ARS3D_API ars3d_void ars3dUpdateWindow(Ars3DWindow *p_window);
  * 
  * @returns 0 if the close event is NOT triggered, true otherwise.
  */
-ARS3D_API ars3d_int ars3dShouldCloseWindow(Ars3DWindow *p_window);
+ARS3D_API ars3d_int ars3dWindowShouldClose(Ars3DWindow *p_window);
 
 #endif

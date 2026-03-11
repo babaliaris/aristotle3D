@@ -13,7 +13,7 @@ typedef struct Ars3DWindow
 } Ars3DWindow;
 
 
-Ars3DWindow *ars3dCreateWindow(const ars3d_char *p_title, ars3d_int p_width, ars3d_int p_height)
+Ars3DWindow *ars3dWindowCreate(const ars3d_char *p_title, ars3d_int p_width, ars3d_int p_height)
 {
     // Try to initialize GLFW.
     if (!glfwInit())
@@ -81,7 +81,7 @@ Ars3DWindow *ars3dCreateWindow(const ars3d_char *p_title, ars3d_int p_width, ars
 
 
 
-ars3d_void ars3dDestroyWindow(Ars3DWindow **p_window)
+ars3d_void ars3dWindowDestroy(Ars3DWindow **p_window)
 {
     if (!p_window || !(*p_window))
     {
@@ -102,7 +102,7 @@ ars3d_void ars3dDestroyWindow(Ars3DWindow **p_window)
 
 
 
-ars3d_void ars3dUpdateWindow(Ars3DWindow *p_window)
+ars3d_void ars3dWindowUpdate(Ars3DWindow *p_window)
 {
     if (!p_window)
     {
@@ -118,7 +118,7 @@ ars3d_void ars3dUpdateWindow(Ars3DWindow *p_window)
 }
 
 
-ars3d_int ars3dShouldCloseWindow(Ars3DWindow *p_window)
+ars3d_int ars3dWindowShouldClose(Ars3DWindow *p_window)
 {
     if (!p_window)
     {

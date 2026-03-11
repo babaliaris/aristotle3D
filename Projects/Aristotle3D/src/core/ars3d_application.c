@@ -46,7 +46,7 @@ Ars3DApp *ars3dAppCreate(
     }
 
     // Create the Window.
-    Ars3DWindow *new_window = ars3dCreateWindow(p_window_title, p_window_width, p_window_height);
+    Ars3DWindow *new_window = ars3dWindowCreate(p_window_title, p_window_width, p_window_height);
 
     // Not enough memory.
     if (!new_window)
@@ -63,7 +63,7 @@ Ars3DApp *ars3dAppCreate(
     if (!new_layers_list)
     {
         ARS3D_WARN("Not enough memory");
-        ars3dDestroyWindow(&new_window);
+        ars3dWindowDestroy(&new_window);
         ars3dFree(new_app);
         return ARS3D_NULL;
     }
@@ -105,7 +105,7 @@ ars3d_void __ars3dAppDestroy__(Ars3DApp *p_app)
     ars3dListDestroy(&p_app->m_layers, layersDestructorCB);
 
     // Destroy the window.
-    ars3dDestroyWindow(&p_app->m_window);
+    ars3dWindowDestroy(&p_app->m_window);
 
     ARS3D_INFO("Destroying the Application...");
     ars3dFree(p_app);
@@ -146,7 +146,7 @@ ars3d_uchar loopThroughLayersCB(ars3d_void *p_data, ars3d_void *p_context)
 
 ars3d_int __ars3dMainLoop__(Ars3DApp *p_app)
 {
-    while ( !ars3dShouldCloseWindow(p_app->m_window) )
+    while ( !ars3dWindowShouldClose(p_app->m_window) )
     {
         glClear(GL_COLOR_BUFFER_BIT);
 
@@ -158,7 +158,7 @@ ars3d_int __ars3dMainLoop__(Ars3DApp *p_app)
             0
         );
 
-        ars3dUpdateWindow(p_app->m_window);
+        ars3dWindowUpdate(p_app->m_window);
     }
 
     return 0;

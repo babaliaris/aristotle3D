@@ -91,7 +91,7 @@ ars3d_void __ars3dHardAssertDebugHelper__(
 
     ars3dPrintf(ARS3D_COLOR_RESET "\n");
 
-    __ars3dDestroyApp__(ars3dGetAppInstance());
+    __ars3dAppDestroy__(ars3dAppGet());
 
     ars3dExit(1);
 }

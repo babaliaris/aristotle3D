@@ -55,7 +55,7 @@ typedef ars3d_void (*Ars3DUserEntryPointFN)(Ars3DApp *p_app);
  * 
  * @return The memory address of the newly created application.
  */
-ARS3D_API Ars3DApp *ars3dCreateApp(
+ARS3D_API Ars3DApp *ars3dAppCreate(
     Ars3DUserEntryPointFN   p_userEntry,
     const ars3d_char *      p_window_title,
     ars3d_int               p_window_width,
@@ -68,7 +68,7 @@ ARS3D_API Ars3DApp *ars3dCreateApp(
  * 
  * @returns The app instance. 
  */
-ARS3D_API Ars3DApp *ars3dGetAppInstance(ars3d_void);
+ARS3D_API Ars3DApp *ars3dAppGet(ars3d_void);
 
 
 
@@ -124,7 +124,7 @@ ARS3D_API ars3d_void ars3dAppDetatchLayer(Ars3DApp *p_app, ars3d_void *p_user_ct
  * 
  * @param p_app The memory address of the application.
  */
-ARS3D_API ars3d_void __ars3dDestroyApp__(Ars3DApp *p_app);
+ARS3D_API ars3d_void __ars3dAppDestroy__(Ars3DApp *p_app);
 
 
 
@@ -138,6 +138,6 @@ ARS3D_API ars3d_void __ars3dDestroyApp__(Ars3DApp *p_app);
  * @param argc The comman line paramateres amount.
  * @param argv The command line parameters.
  */
-ARS3D_API ars3d_int __ars3dBootUp__(Ars3DApp *p_app, ars3d_int argc, ars3d_char **argv);
+ARS3D_API ars3d_int __ars3dAppBootUp__(Ars3DApp *p_app, ars3d_int argc, ars3d_char **argv);
 
 #endif

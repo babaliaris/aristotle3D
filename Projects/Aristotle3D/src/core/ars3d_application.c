@@ -21,7 +21,7 @@ typedef struct Ars3DApp
 
 
 
-Ars3DApp *ars3dCreateApp(
+Ars3DApp *ars3dAppCreate(
     Ars3DUserEntryPointFN p_userEntry,
     const ars3d_char *  p_window_title,
     ars3d_int           p_window_width,
@@ -92,7 +92,7 @@ ars3d_void layersDestructorCB(ars3d_void *p_data)
 }
 
 
-ars3d_void __ars3dDestroyApp__(Ars3DApp *p_app)
+ars3d_void __ars3dAppDestroy__(Ars3DApp *p_app)
 {
     if (!p_app)
     {
@@ -165,7 +165,7 @@ ars3d_int __ars3dMainLoop__(Ars3DApp *p_app)
 }
 
 
-ars3d_int __ars3dBootUp__(Ars3DApp *p_app, ars3d_int argc, ars3d_char **argv)
+ars3d_int __ars3dAppBootUp__(Ars3DApp *p_app, ars3d_int argc, ars3d_char **argv)
 {
     if (!p_app)
     {
@@ -189,14 +189,14 @@ ars3d_int __ars3dBootUp__(Ars3DApp *p_app, ars3d_int argc, ars3d_char **argv)
     ars3d_int exit_value = __ars3dMainLoop__(p_app);
 
     // Destroy the APP.
-    __ars3dDestroyApp__(p_app);
+    __ars3dAppDestroy__(p_app);
 
     return exit_value;
 }
 
 
 
-Ars3DApp *ars3dGetAppInstance(ars3d_void)
+Ars3DApp *ars3dAppGet(ars3d_void)
 {
     return STATIC_APP_INSTANCE;
 }

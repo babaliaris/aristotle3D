@@ -12,7 +12,7 @@
         Ars3DApp *app = ars3dUserAppProvider();
 
         // BootUp the engine and return to the OS once finished.
-        return __ars3dBootUp__(app, argc, argv);
+        return __ars3dAppBootUp__(app, argc, argv);
     }
 
     #elif defined(ARS3D_WINDOWS)
@@ -22,7 +22,7 @@
         Ars3DApp* app = ars3dUserAppProvider();
 
         // BootUp the engine and return to the OS once finished.
-        return __ars3dBootUp__(app, argc, argv);
+        return __ars3dAppBootUp__(app, argc, argv);
     }
     #endif
 

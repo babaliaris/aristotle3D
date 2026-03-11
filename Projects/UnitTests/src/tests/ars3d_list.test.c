@@ -16,7 +16,7 @@ ars3d_void listDestructor(ars3d_void *p_data)
 }
 
 
-ars3d_uchar listCmp(ars3d_void *p_data, ars3d_void *p_cmp_data)
+ars3d_uchar listCmpEqual(ars3d_void *p_data, ars3d_void *p_cmp_data)
 {
     const ars3d_int *data = (ars3d_int *)p_data;
     const ars3d_int *comp = (ars3d_int *)p_cmp_data;
@@ -57,12 +57,10 @@ ARS3D_DECLARE_UNIT_TEST(LinkedList, populate_and_destruct)
 {
     Ars3DList *new_list = ars3dListCreate();
 
-    ars3d_int *data = ARS3D_NULL;
-
     for (ars3d_int i = 0; i < 10; i++)
     {
-        data    = (ars3d_int *)ars3dMalloc( ARS3D_SIZEOF(ars3d_int) );
-        *data   = i;
+        ars3d_int *data = (ars3d_int *)ars3dMalloc( ARS3D_SIZEOF(ars3d_int) );
+        *data           = i;
         ars3dListAppend(new_list, (ars3d_void *)data);
     }
 
@@ -70,7 +68,7 @@ ARS3D_DECLARE_UNIT_TEST(LinkedList, populate_and_destruct)
 
     for (ars3d_int i = 0; i < 10; i++)
     {
-        data = (ars3d_int *)ars3dListGetAt(new_list, i);
+        ars3d_int *data = (ars3d_int *)ars3dListGetAt(new_list, i);
         ARS3D_UNIT_TEST_ASSERT(*data == i);
     }
 
@@ -82,24 +80,18 @@ ARS3D_DECLARE_UNIT_TEST(LinkedList, find_item)
 {
     Ars3DList *new_list = ars3dListCreate();
 
-    ars3d_int *data = ARS3D_NULL;
-
     for (ars3d_int i = 0; i < 10; i++)
     {
-        data    = (ars3d_int *)ars3dMalloc( ARS3D_SIZEOF(ars3d_int) );
-        *data   = i;
+        ars3d_int *data = (ars3d_int *)ars3dMalloc( ARS3D_SIZEOF(ars3d_int) );
+        *data           = i;
         ars3dListAppend(new_list, (ars3d_void *)data);
     }
 
     ARS3D_UNIT_TEST_ASSERT(ars3dListGetSize(new_list) == 10, "The list size should be 10");
 
-
     for (ars3d_int i = 0; i < 10; i++)
     {
-        *data = i;
-
-        data = (ars3d_int *)ars3dListFind(new_list, listCmp, (ars3d_void *)data);
-
+        ars3d_int *data = (ars3d_int *)ars3dListFind(new_list, listCmpEqual, (ars3d_void *)&i);
         ARS3D_UNIT_TEST_ASSERT(*data == i);
     }
 
@@ -110,7 +102,6 @@ ARS3D_DECLARE_UNIT_TEST(LinkedList, find_item)
 ARS3D_DECLARE_UNIT_TEST(LinkedList, loop_through)
 {
     Ars3DList *new_list = ars3dListCreate();
-    ars3d_int *data     = ARS3D_NULL;
 
     ListContext ctx;
     ctx.m_sum           = 0;
@@ -119,8 +110,8 @@ ARS3D_DECLARE_UNIT_TEST(LinkedList, loop_through)
 
     for (ars3d_int i = 0; i < 10; i++)
     {
-        data    = (ars3d_int *)ars3dMalloc( ARS3D_SIZEOF(ars3d_int) );
-        *data   = i;
+        ars3d_int *data = (ars3d_int *)ars3dMalloc( ARS3D_SIZEOF(ars3d_int) );
+        *data           = i;
         ars3dListAppend(new_list, (ars3d_void *)data);
     }
 
@@ -140,3 +131,42 @@ ARS3D_DECLARE_UNIT_TEST(LinkedList, loop_through)
 
     ars3dListDestroy(&new_list, listDestructor);
 }
+
+
+ARS3D_DECLARE_UNIT_TEST(LinkedList, remove_element)
+{
+    Ars3DList *new_list = ars3dListCreate();
+
+    // Create the list {0, 1, 2}
+    for (ars3d_int i = 0; i < 3; i++)
+    {
+        ars3d_int *data = (ars3d_int *)ars3dMalloc( ARS3D_SIZEOF(ars3d_int) );
+        *data           = i;
+        ars3dListAppend(new_list, (ars3d_void *)data);
+    }
+
+    // Remove element 1 (Remove the intermidiate first)
+    ars3d_int value = 1;
+    ars3d_int *data = (ars3d_int *)ars3dListRemove(new_list, listCmpEqual, (ars3d_void *)&value);
+    ARS3D_UNIT_TEST_ASSERT(*data == 1);
+    ars3dFree(data);
+
+    // Remove element 0 (Remove the head)
+    value = 0;
+    data  = (ars3d_int *)ars3dListRemove(new_list, listCmpEqual, (ars3d_void *)&value);
+    ARS3D_UNIT_TEST_ASSERT(*data == 0);
+    ars3dFree(data);
+
+    // Remove element 2 (remove the tail which is equal to head at this point)
+    value = 2;
+    data  = (ars3d_int *)ars3dListRemove(new_list, listCmpEqual, (ars3d_void *)&value);
+    ARS3D_UNIT_TEST_ASSERT(*data == 2);
+    ars3dFree(data);
+
+    ARS3D_UNIT_TEST_ASSERT(ars3dListGetSize(new_list) == 0, "List should be empty at this point");
+
+    // If everything removed, listDestructor will not be called.
+    // Otherise it might crash or something.
+    ars3dListDestroy(&new_list, listDestructor);
+}
+

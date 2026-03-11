@@ -208,3 +208,84 @@ ars3d_void ars3dListLoopThrough(Ars3DList *p_list, Ars3DListUserLoopThroughFN p_
         current = p_reversed == 0 ? current->m_next : current->m_prev;
     }
 }
+
+
+ars3d_void *ars3dListRemove(Ars3DList *p_list, Ars3DListUserCmpFN p_compareCB, ars3d_void *p_cmp_data)
+{
+    if (!p_list || !p_compareCB)
+    {
+        ARS3D_WARN("Required parameters are NULL");
+        return ARS3D_NULL;
+    }
+
+    Ars3DListNode *current  = p_list->m_head; // If NULL, the list is empty.
+    ars3d_void *data        = ARS3D_NULL;
+
+    // Find the element and the data.
+    while (current)
+    {
+        // Use the compare callback.
+        if ( p_compareCB(current->m_data, p_cmp_data) )
+        {
+            data = current->m_data;
+            break;
+        }
+
+        current = current->m_next;
+    }
+
+
+    //If not found, then return.
+    if (!current) return ARS3D_NULL;
+
+
+    // current is the head.
+    if (current == p_list->m_head)
+    {
+        ARS3D_ASSERT(current->m_prev == ARS3D_NULL, "If current == head, the previous element SHOULD be NULL.");
+
+        // Has next.
+        if (p_list->m_head->m_next)
+        {
+            p_list->m_head = p_list->m_head->m_next;
+            p_list->m_head->m_prev = ARS3D_NULL;
+        }
+
+        // This is the only element in the list.
+        // This also covers if current = tail = head
+        else
+        {
+            ARS3D_ASSERT(p_list->m_size == 1, "If head->next is NULL, the list should have ONE element.");
+            ARS3D_ASSERT(p_list->m_head == p_list->m_tail, "If the list has one element, head should EQUAL tail.");
+            p_list->m_head = ARS3D_NULL;
+            p_list->m_tail = ARS3D_NULL;
+        }
+    }
+
+    // current is the tail.
+    else if (current == p_list->m_tail && current != p_list->m_head)
+    {
+        ARS3D_ASSERT(p_list->m_tail->m_prev, "Since cuurent = tail and its not the head, previous element MUST exists.");
+        ARS3D_ASSERT(p_list->m_tail->m_next == ARS3D_NULL, "Since cuurent = tail the next element should be NULL.");
+
+        p_list->m_tail          = p_list->m_tail->m_prev;
+        p_list->m_tail->m_next  = ARS3D_NULL;
+    }
+
+    // Intermidiate element.
+    else
+    {
+        ARS3D_ASSERT(current->m_next, "Since it is an intermidate node, next element should be defined");
+        ARS3D_ASSERT(current->m_prev, "Since it is an intermidate node, prev element should be defined");
+        current->m_prev->m_next = current->m_next;
+        current->m_next->m_prev = current->m_prev;
+    }
+
+    // Decrease the size of the list.
+    p_list->m_size--;
+
+    // Free the current node.
+    ars3dFree(current);
+
+    return data;
+}

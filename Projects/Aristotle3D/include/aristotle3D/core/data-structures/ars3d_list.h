@@ -137,4 +137,22 @@ ARS3D_API ars3d_void *ars3dListGetAt(Ars3DList *p_list, ars3d_size p_index);
 ARS3D_API ars3d_void ars3dListLoopThrough(Ars3DList *p_list, Ars3DListUserLoopThroughFN p_userCB, ars3d_void *p_context, ars3d_uchar p_reversed);
 
 
+
+
+/**
+ * @brief Find an element in the list [ O(n) ].
+ * 
+ * This function will return the data of the found element and REMOVE it from the list.
+ * The found element is being determined by the return value
+ * of the Ars3DListUserCmpFN callback.
+ * 
+ * @param p_list The list instance.
+ * @param p_compareCB The user's Ars3DListUserCmpFN function callback.
+ * @param p_cmp_data The extra data to be passed from the user to the Ars3DListUserCmpFN callback.
+ * 
+ * @returns The data of the removed element.
+ */
+ARS3D_API ars3d_void *ars3dListRemove(Ars3DList *p_list, Ars3DListUserCmpFN p_compareCB, ars3d_void *p_cmp_data);
+
+
 #endif

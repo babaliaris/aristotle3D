@@ -10,6 +10,7 @@ ARS3D_DECLARE_UNIT_TEST(LinkedList, create_and_destroy);
 ARS3D_DECLARE_UNIT_TEST(LinkedList, populate_and_destruct);
 ARS3D_DECLARE_UNIT_TEST(LinkedList, find_item);
 ARS3D_DECLARE_UNIT_TEST(LinkedList, loop_through);
+ARS3D_DECLARE_UNIT_TEST(LinkedList, remove_element);
 
 ars3d_int main(ars3d_int argc, ars3d_char **argv)
 {
@@ -25,6 +26,7 @@ ars3d_int main(ars3d_int argc, ars3d_char **argv)
     ARS3D_REGISTER_UNIT_TEST(app, LinkedList, populate_and_destruct);
     ARS3D_REGISTER_UNIT_TEST(app, LinkedList, find_item);
     ARS3D_REGISTER_UNIT_TEST(app, LinkedList, loop_through);
+    ARS3D_REGISTER_UNIT_TEST(app, LinkedList, remove_element);
 
     ars3dUniTesingEntryPoint(app, argc, argv);
 

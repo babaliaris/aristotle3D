@@ -3,7 +3,9 @@
 #include <aristotle3D/core/ars3d_api.h>
 #include <aristotle3D/core/ars3d_stdio.h>
 #include <aristotle3D/core/ars3d_debug.h>
+#include <aristotle3D/core/data-structures/ars3d_list.h>
 #include <aristotle3D/core/ars3d_application.h>
+#include <aristotle3D/core/ars3d_window.h>
 
 #include <aristotle3D/core/ars3d_entry_point.h>
 

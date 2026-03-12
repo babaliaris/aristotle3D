@@ -58,6 +58,18 @@ ARS3D_API ars3d_void ars3dWindowPollEvents();
 ARS3D_API ars3d_void *ars3dWindowGetNativeWindow(Ars3DWindow *p_window);
 
 
+/**
+ * @brief Set the graphics viewport (drawing area).
+ * 
+ * @param p_window The window instance.
+ * @param p_x The x position of the viewport window.
+ * @param p_y The y position of the viewport window.
+ * @param p_width The width of the viewport.
+ * @param p_height The height of the viewport.
+ */
+ARS3D_API ars3d_void ars3dWindowSetViewport(ars3d_int p_x, ars3d_int p_y, ars3d_int p_width, ars3d_int p_height);
+
+
 
 /**
  * @brief Get the keyboard key.

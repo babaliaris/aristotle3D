@@ -166,7 +166,15 @@ ars3d_void *ars3dWindowGetNativeWindow(Ars3DWindow *p_window)
         ARS3D_WARN("Required parameters are not provided");
         return ARS3D_NULL;
     }
+
     return (ars3d_void *)p_window->m_glfw_window;
+}
+
+
+
+ars3d_void ars3dWindowSetViewport(ars3d_int p_x, ars3d_int p_y, ars3d_int p_width, ars3d_int p_height)
+{
+    glViewport(p_x, p_y, p_width, p_height);
 }
 
 

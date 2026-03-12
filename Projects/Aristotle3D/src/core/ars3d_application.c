@@ -327,8 +327,6 @@ ars3d_char **ars3dAppGetProcessArgv(Ars3DApp *p_app)
 
 static ars3d_void applicationEventHanlder(Ars3DApp *p_app, ars3d_void *p_event, ars3d_int p_event_type)
 {
-    ARS3D_UNUSED(p_event);
-
     switch (p_event_type)
     {
         case ARS3D_EVENT_TYPE_WINDOW_CLOSED:
@@ -342,6 +340,14 @@ static ars3d_void applicationEventHanlder(Ars3DApp *p_app, ars3d_void *p_event, 
         case ARS3D_EVENT_TYPE_WINDOW_RESTORED:
             p_app->m_status = APPLICATION_STATUS_RUNNING;
             break;
+
+        case ARS3D_EVENT_TYPE_WINDOW_RESIZED:
+        {
+            ars3d_int width, height;
+            ars3dEventGetWindowSize(p_event, &width, &height);
+            ars3dWindowSetViewport(0, 0, width, height);
+            break;
+        }
 
         default:
             break;

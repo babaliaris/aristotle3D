@@ -52,6 +52,7 @@
     typedef char            ars3d_char;
     typedef unsigned char   ars3d_uchar;
     typedef int             ars3d_int;
+    typedef unsigned int    ars3d_uint;
     typedef float           ars3d_float;
     typedef double          ars3d_double;
     typedef size_t          ars3d_size;

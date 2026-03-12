@@ -7,6 +7,7 @@
 #include <aristotle3D/core/ars3d_events.h>
 #include <aristotle3D/core/ars3d_application.h>
 #include <aristotle3D/core/ars3d_window.h>
+#include <aristotle3D/core/opengl/ars3d_opengl.h>
 
 #include <aristotle3D/core/ars3d_entry_point.h>
 

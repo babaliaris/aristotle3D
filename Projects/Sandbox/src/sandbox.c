@@ -2,6 +2,7 @@
 #include <aristotle3D/aristotle3D.h>
 
 #include "layers/events-test.layer.h"
+#include "layers/render-triangle-test.layer.h"
 
 
 
@@ -18,6 +19,18 @@ ars3d_void ars3dUserEntryPoint(Ars3DApp *p_app)
         onEventsTestLayerStart,
         onEventsTestLayerUpdate,
         onEventsTestLayerEvent
+    );
+    ars3dAppDetatchLayer(p_app, new_events_test_layer);
+
+    RenderTriangleTestLayer *triangle_layer = (RenderTriangleTestLayer *)ars3dMalloc( ARS3D_SIZEOF(RenderTriangleTestLayer) );
+    ars3dAppAttachLayer(
+        p_app,
+        (ars3d_void *)triangle_layer,
+        onRenderTriangleTestLayerAttach,
+        onRenderTriangleTestLayerDetatch,
+        onRenderTriangleTestLayerStart,
+        onRenderTriangleTestLayerUpdate,
+        onRenderTriangleTestLayerEvent
     );
 }
 

@@ -1,6 +1,7 @@
 #include <aristotle3D/core/ars3d_window.h>
 #include <aristotle3D/core/ars3d_string.h>
 #include <aristotle3D/core/ars3d_debug.h>
+#include <aristotle3D/core/opengl/ars3d_opengl_debugger.h>
 #include <aristotle3D/core/ars3d_events.h>
 #include <aristotle3D/core/ars3d_application.h>
 #include <glad/gl.h>
@@ -88,7 +89,7 @@ Ars3DWindow *ars3dWindowCreate(const ars3d_char *p_title, ars3d_int p_width, ars
     // -------------Show some OpenGL Info------------- //
 
     // Set the gl viewport.
-    glViewport(0, 0, p_width, p_height);
+    ARS3D_OPENGL(glViewport(0, 0, p_width, p_height));
 
     // Create the Aristotle Window.
     Ars3DWindow *new_window = (Ars3DWindow *)ars3dMalloc( ARS3D_SIZEOF(Ars3DWindow) );
@@ -112,6 +113,10 @@ Ars3DWindow *ars3dWindowCreate(const ars3d_char *p_title, ars3d_int p_width, ars
         new_window->m_title = ARS3D_NULL;
 
 
+    // Set the new window instance as the GLFW User Pointer.
+    glfwSetWindowUserPointer(glfw_window, (ars3d_void *)new_window);
+
+    // Regester events.
     registerEventCallbacks(glfw_window);
 
     return new_window;
@@ -174,7 +179,21 @@ ars3d_void *ars3dWindowGetNativeWindow(Ars3DWindow *p_window)
 
 ars3d_void ars3dWindowSetViewport(ars3d_int p_x, ars3d_int p_y, ars3d_int p_width, ars3d_int p_height)
 {
-    glViewport(p_x, p_y, p_width, p_height);
+    ARS3D_OPENGL(glViewport(p_x, p_y, p_width, p_height));
+}
+
+
+
+ars3d_void ars3dWindowGetSize(Ars3DWindow *p_window, ars3d_int *p_width, ars3d_int *p_height)
+{
+    if (!p_window)
+    {
+        ARS3D_WARN("Required parameters are not provided");
+        return;
+    }
+
+    if (p_width) *p_width   = p_window->m_width;
+    if (p_height) *p_height = p_window->m_height;
 }
 
 
@@ -380,7 +399,9 @@ ars3d_void windowCloseCB(GLFWwindow* window)
 
 ars3d_void windowResizeCB(GLFWwindow* window, ars3d_int width, ars3d_int height)
 {
-    ARS3D_UNUSED(window);
+    Ars3DWindow *ars3d_window   = (Ars3DWindow *)glfwGetWindowUserPointer(window);
+    ars3d_window->m_width       = width;
+    ars3d_window->m_height      = height;
 
     Ars3DApp *app = ars3dAppGet();
 

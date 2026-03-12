@@ -72,6 +72,17 @@ ARS3D_API ars3d_void ars3dWindowSetViewport(ars3d_int p_x, ars3d_int p_y, ars3d_
 
 
 /**
+ * @brief Get the window Size.
+ * 
+ * @param p_window The window instance.
+ * @param p_width The user's memory address to store the width.
+ * @param p_height The user's memory address to store the height.
+ */
+ARS3D_API ars3d_void ars3dWindowGetSize(Ars3DWindow *p_window, ars3d_int *p_width, ars3d_int *p_height);
+
+
+
+/**
  * @brief Get the keyboard key.
  * 
  * @param p_event The event instance.

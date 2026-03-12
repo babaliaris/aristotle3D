@@ -389,12 +389,21 @@ ars3d_void __ars3dAppFireEvent__(Ars3DApp *p_app, ars3d_void *p_event, ars3d_int
     ctx.m_event         = p_event;
     ctx.m_event_type    = p_event_type;
 
+    // Send all events EXCEPT Window Closed to the application handler.
+    switch (p_event_type)
+    {
+        case ARS3D_EVENT_TYPE_WINDOW_CLOSED:
+            break;
+
+        default:
+            applicationEventHanlder(p_app, p_event, p_event_type);
+            break;
+    }
+
     // Loop though each layer in reverse.
     // Pass the event to the layer system.
     ars3dListLoopThrough(p_app->m_layers, eventsReversedLoopCB, (ars3d_void *)&ctx, 1);
 
-    // Fire the event to the application event handler.
-    // CALL this after the layers has received the event.
-    // so they can handle the WINDOW CLOSE event if they have to.
-    applicationEventHanlder(p_app, p_event, p_event_type);
+    // Send the WINDOW CLOSED event to the application handler, AFTER layers have recieved it.
+    if (p_event_type == ARS3D_EVENT_TYPE_WINDOW_CLOSED) applicationEventHanlder(p_app, p_event, p_event_type);
 }

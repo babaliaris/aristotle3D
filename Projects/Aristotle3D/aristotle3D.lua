@@ -12,7 +12,8 @@ project "Aristotle3D"
     includedirs {
         "include/",
         "%{wks.location}/Projects/Depedencies/GLAD/include",
-        "%{wks.location}/external/glfw/include"
+        "%{wks.location}/external/glfw/include",
+        "%{wks.location}/external/cglm/include"
     }
 
     dependson {

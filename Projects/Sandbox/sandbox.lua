@@ -11,7 +11,8 @@ project "Sandbox"
 
     includedirs {
         "src/",
-        "%{wks.location}/Projects/Aristotle3D/include/"
+        "%{wks.location}/Projects/Aristotle3D/include/",
+        "%{wks.location}/external/cglm/include"
     }
 
     dependson {
@@ -25,4 +26,8 @@ project "Sandbox"
     filter "system:linux"
         linkoptions {
             "-Wl,-rpath,'$$ORIGIN'"
+        }
+
+        links {
+            "m"
         }

@@ -229,3 +229,24 @@ Ars3DShader *createShaderProgram(
 
     return new_shader;
 }
+
+
+ars3d_void ars3dShaderUniformMat4(Ars3DShader *p_shader, const ars3d_char *p_name, mat4s *p_mat4)
+{
+    if (!p_shader)
+    {
+        ARS3D_WARN("Required parameters are NULL");
+        return;
+    }
+
+    ARS3D_OPENGL(GLint loc = glGetUniformLocation(p_shader->m_program, p_name));
+
+    if (loc == -1)
+    {
+        ARS3D_WARN("[SHADER: %s] Uniform %s location was not found.", ars3dGetCStr(p_shader->m_name), p_name);
+        return;
+    }
+
+    ARS3D_OPENGL(glUniformMatrix4fv(loc, 1, GL_FALSE, &p_mat4->raw[0][0]));
+}
+

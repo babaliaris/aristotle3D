@@ -6,7 +6,8 @@
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/Projects/Aristotle3D/include",
                 "${workspaceFolder}/Projects/Depedencies/GLAD/include",
-                "${workspaceFolder}/external/glfw/include"
+                "${workspaceFolder}/external/glfw/include",
+                "${workspaceFolder}/external/cglm/include"
             ],
             "defines": [
                 "ARS3D_LINUX",
@@ -25,7 +26,8 @@
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/Projects/Aristotle3D/include",
                 "${workspaceFolder}/Projects/Depedencies/GLAD/include",
-                "${workspaceFolder}/external/glfw/include"
+                "${workspaceFolder}/external/glfw/include",
+                "${workspaceFolder}/external/cglm/include"
             ],
             "defines": [
                 "ARS3D_WINDOWS",

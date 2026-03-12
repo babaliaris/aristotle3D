@@ -1,5 +1,6 @@
 #include "render-triangle-test.layer.h"
 
+
 ars3d_void onRenderTriangleTestLayerAttach(ars3d_void *p_ctx)
 {
     RenderTriangleTestLayer *ctx = (RenderTriangleTestLayer *)p_ctx;
@@ -31,11 +32,12 @@ ars3d_void onRenderTriangleTestLayerAttach(ars3d_void *p_ctx)
     "#version 330 core\n"
     "layout (location = 0) in vec3 aPos;"
     "layout (location = 1) in vec3 aColor;"
+    "uniform mat4 u_model, u_view, u_proj;"
     "out vec3 passColor;"
     "void main()"
     "{"
         "passColor      = aColor;"
-        "gl_Position    = vec4(aPos.x, aPos.y, aPos.z, 1.0);"
+        "gl_Position    = u_proj * u_view * u_model * vec4(aPos, 1.0);"
     "}";
 
 
@@ -70,8 +72,20 @@ ars3d_void onRenderTriangleTestLayerDetatch(ars3d_void *p_ctx)
 
 ars3d_void onRenderTriangleTestLayerStart(ars3d_void *p_ctx)
 {
-    ARS3D_UNUSED(p_ctx);
-    ARS3D_INFO("onRenderTriangleTestLayerStart()");
+    RenderTriangleTestLayer *ctx = (RenderTriangleTestLayer *)p_ctx;
+
+    ars3d_int window_width, window_height;
+    ars3dWindowGetSize(ars3dAppGetWindow(ars3dAppGet()), &window_width, &window_height);
+
+    ctx->m_model        = glms_mat4_identity();
+    ctx->m_view         = glms_translate(glms_mat4_identity(), (vec3s){{0.0f, 0.0f, -3.0f}});
+    ctx->m_projection   = glms_perspective(glm_rad(45.0f), (float)window_width / (float)window_height, 0.1f, 100.0f);
+
+    ars3dShaderBind(ctx->m_shader);
+    ars3dShaderUniformMat4(ctx->m_shader, "u_model", &ctx->m_model);
+    ars3dShaderUniformMat4(ctx->m_shader, "u_view", &ctx->m_view);
+    ars3dShaderUniformMat4(ctx->m_shader, "u_proj", &ctx->m_projection);
+    ars3dShaderUnbind();
 }
 
 ars3d_void onRenderTriangleTestLayerUpdate(ars3d_void *p_ctx)
@@ -85,8 +99,24 @@ ars3d_void onRenderTriangleTestLayerUpdate(ars3d_void *p_ctx)
 
 ars3d_uchar onRenderTriangleTestLayerEvent(ars3d_void *p_ctx, ars3d_void *p_event, ars3d_int p_event_type)
 {
-    ARS3D_UNUSED(p_ctx);
-    ARS3D_UNUSED(p_event);
-    ARS3D_UNUSED(p_event_type);
+    RenderTriangleTestLayer *ctx = (RenderTriangleTestLayer *)p_ctx;
+
+    switch (p_event_type)
+    {
+        case ARS3D_EVENT_TYPE_WINDOW_RESIZED:
+        {
+            ars3d_int width, height;
+            ars3dEventGetWindowSize(p_event, &width, &height);
+            ctx->m_projection = glms_perspective(glm_rad(45.0f), (float)width / (float)height, 0.1f, 100.0f);
+            ars3dShaderBind(ctx->m_shader);
+            ars3dShaderUniformMat4(ctx->m_shader, "u_proj", &ctx->m_projection);
+            ars3dShaderUnbind();
+            break;
+        }
+        
+        default:
+            break;
+    }
+
     return 0;
 }

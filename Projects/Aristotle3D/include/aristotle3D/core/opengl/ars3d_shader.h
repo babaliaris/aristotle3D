@@ -1,6 +1,7 @@
 #ifndef ARS3D_SHADER_H
 #define ARS3D_SHADER_H
 #include <aristotle3D/core/ars3d_stdio.h>
+#include <cglm/struct.h>
 
 typedef struct Ars3DShader Ars3DShader;
 
@@ -17,5 +18,7 @@ ARS3D_API ars3d_void ars3dShaderDestroy(Ars3DShader **p_shader);
 ARS3D_API ars3d_void ars3dShaderBind(Ars3DShader *p_shader);
 
 ARS3D_API ars3d_void ars3dShaderUnbind();
+
+ARS3D_API ars3d_void ars3dShaderUniformMat4(Ars3DShader *p_shader, const ars3d_char *p_name, mat4s *p_mat4);
 
 #endif

@@ -175,7 +175,7 @@ ars3d_int ars3dEventGetKeyboardKey(ars3d_void *p_event)
     if (!p_event)
     {
         ARS3D_WARN("Required parameters are not provided");
-        return ARS3D_KEY_UNKNOWN;
+        return ARS3D_EVENT_KEY_UNKNOWN;
     }
 
     Ars3DKeyboardEvent *event = (Ars3DKeyboardEvent *)p_event;
@@ -195,7 +195,7 @@ ars3d_int ars3dEventGetMouseButton(ars3d_void *p_event)
     if (!p_event)
     {
         ARS3D_WARN("Required parameters are not provided");
-        return ARS3D_KEY_UNKNOWN;
+        return ARS3D_EVENT_KEY_UNKNOWN;
     }
 
     Ars3DMouseButtonEvent *event = (Ars3DMouseButtonEvent *)p_event;

@@ -123,6 +123,9 @@ ars3d_uchar compileShader(GLuint p_shader, const char *p_type_name, const GLchar
         p_type_name
     );
 
+    ARS3D_UNUSED(p_type_name);
+    ARS3D_UNUSED(p_shader_name);
+
     return 1;
 }
 

@@ -6,3 +6,9 @@ ars3d_void ars3dRenderTriangles(ars3d_int p_vertex_count)
 {
     ARS3D_OPENGL(glDrawArrays(GL_TRIANGLES, 0, p_vertex_count));
 }
+
+
+ars3d_void ars3dRenderPoints(ars3d_int p_vertex_count)
+{
+    ARS3D_OPENGL(glDrawArrays(GL_POINTS, 0, p_vertex_count));
+}

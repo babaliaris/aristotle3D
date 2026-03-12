@@ -4,4 +4,6 @@
 
 ARS3D_API ars3d_void ars3dRenderTriangles(ars3d_int p_vertex_count);
 
+ARS3D_API ars3d_void ars3dRenderPoints(ars3d_int p_vertex_count);
+
 #endif

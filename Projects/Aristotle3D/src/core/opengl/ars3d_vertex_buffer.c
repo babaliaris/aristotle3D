@@ -1,5 +1,6 @@
 #include <aristotle3D/core/opengl/ars3d_vertex_buffer.h>
 #include <aristotle3D/core/ars3d_debug.h>
+#include <aristotle3D/core/opengl/ars3d_opengl_debugger.h>
 #include <glad/gl.h>
 
 typedef struct Ars3DVertexBuffer
@@ -18,7 +19,7 @@ Ars3DVertexBuffer *ars3dVertexBufferCreate()
         return ARS3D_NULL;
     }
 
-    glGenBuffers(1, &new_vbo->m_vbo);
+    ARS3D_OPENGL(glGenBuffers(1, &new_vbo->m_vbo));
 
     return new_vbo;
 }
@@ -32,7 +33,7 @@ ars3d_void ars3dVertexBufferDestroy(Ars3DVertexBuffer **p_vbo)
         return;
     }
 
-    glDeleteBuffers(1, &(*p_vbo)->m_vbo);
+    ARS3D_OPENGL(glDeleteBuffers(1, &(*p_vbo)->m_vbo));
 
     ars3dFree(*p_vbo);
 
@@ -48,13 +49,13 @@ ars3d_void ars3dVertexBufferBind(Ars3DVertexBuffer *p_vbo)
         return;
     }
 
-    glBindBuffer(GL_ARRAY_BUFFER, p_vbo->m_vbo);
+    ARS3D_OPENGL(glBindBuffer(GL_ARRAY_BUFFER, p_vbo->m_vbo));
 }
 
 
 ars3d_void ars3dVertexBufferUnbind()
 {
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    ARS3D_OPENGL(glBindBuffer(GL_ARRAY_BUFFER, 0));
 }
 
 
@@ -111,5 +112,5 @@ ars3d_void ars3dVertexBufferData(Ars3DVertexBuffer *p_vbo, ars3d_size p_size, ar
             break;
     }
 
-    glBufferData(GL_ARRAY_BUFFER, p_size, p_data, draw_hint);
+    ARS3D_OPENGL(glBufferData(GL_ARRAY_BUFFER, p_size, p_data, draw_hint));
 }

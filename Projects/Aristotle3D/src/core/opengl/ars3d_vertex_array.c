@@ -1,5 +1,6 @@
 #include <aristotle3D/core/opengl/ars3d_vertex_array.h>
 #include <aristotle3D/core/ars3d_debug.h>
+#include <aristotle3D/core/opengl/ars3d_opengl_debugger.h>
 #include <glad/gl.h>
 
 typedef struct Ars3DVertexArray
@@ -17,7 +18,7 @@ Ars3DVertexArray *ars3dVertexArrayCreate()
         return ARS3D_NULL;
     }
     
-    glGenVertexArrays(1, &new_vao->m_vao);
+    ARS3D_OPENGL(glGenVertexArrays(1, &new_vao->m_vao));
 
     return new_vao;
 }
@@ -31,7 +32,7 @@ ars3d_void ars3dVertexArrayDestroy(Ars3DVertexArray **p_vao)
         return;
     }
 
-    glDeleteVertexArrays(1, &(*p_vao)->m_vao);
+    ARS3D_OPENGL(glDeleteVertexArrays(1, &(*p_vao)->m_vao));
 
     ars3dFree(*p_vao);
 
@@ -47,11 +48,11 @@ ars3d_void ars3dVertexArrayBind(Ars3DVertexArray *p_vao)
         return;
     }
 
-    glBindVertexArray(p_vao->m_vao);
+    ARS3D_OPENGL(glBindVertexArray(p_vao->m_vao));
 }
 
 
 ars3d_void ars3dVertexArrayUnbind()
 {
-    glBindVertexArray(0);
+    ARS3D_OPENGL(glBindVertexArray(0));
 }

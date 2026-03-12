@@ -1,5 +1,6 @@
 #include <aristotle3D/core/opengl/ars3d_shader.h>
 #include <aristotle3D/core/ars3d_debug.h>
+#include <aristotle3D/core/opengl/ars3d_opengl_debugger.h>
 #include <aristotle3D/core/ars3d_string.h>
 #include <glad/gl.h>
 
@@ -56,7 +57,7 @@ ARS3D_API ars3d_void ars3dShaderDestroy(Ars3DShader **p_shader)
 
     ars3dDestroyDynamicStr(&(*p_shader)->m_name);
 
-    glDeleteProgram((*p_shader)->m_program);
+    ARS3D_OPENGL(glDeleteProgram((*p_shader)->m_program));
 
     ars3dFree(*p_shader);
 
@@ -72,13 +73,13 @@ ARS3D_API ars3d_void ars3dShaderBind(Ars3DShader *p_shader)
         return;
     }
 
-    glUseProgram(p_shader->m_program);
+    ARS3D_OPENGL(glUseProgram(p_shader->m_program));
 }
 
 
 ARS3D_API ars3d_void ars3dShaderUnbind()
 {
-    glUseProgram(0);
+    ARS3D_OPENGL(glUseProgram(0));
 }
 
 
@@ -87,15 +88,15 @@ ars3d_uchar compileShader(GLuint p_shader, const char *p_type_name, const GLchar
 {
     const GLchar *src = p_src;
 
-    glShaderSource(p_shader, 1, &src, ARS3D_NULL);
+    ARS3D_OPENGL(glShaderSource(p_shader, 1, &src, ARS3D_NULL));
 
-    glCompileShader(p_shader);
+    ARS3D_OPENGL(glCompileShader(p_shader));
 
     GLint compile_status;
     GLsizei info_length;
 
-    glGetShaderiv(p_shader, GL_COMPILE_STATUS, &compile_status);
-    glGetShaderiv(p_shader, GL_INFO_LOG_LENGTH, &info_length);
+    ARS3D_OPENGL(glGetShaderiv(p_shader, GL_COMPILE_STATUS, &compile_status));
+    ARS3D_OPENGL(glGetShaderiv(p_shader, GL_INFO_LOG_LENGTH, &info_length));
 
     if (!compile_status)
     {
@@ -103,7 +104,7 @@ ars3d_uchar compileShader(GLuint p_shader, const char *p_type_name, const GLchar
 
         ars3d_char *info = (ars3d_char *)ars3dMalloc( ARS3D_SIZEOF(ars3d_char) * info_length);
 
-        glGetShaderInfoLog(p_shader, info_length, ARS3D_NULL, info);
+        ARS3D_OPENGL(glGetShaderInfoLog(p_shader, info_length, ARS3D_NULL, info));
 
         ARS3D_ERROR(
             "[Shader Compilation:%s] %s compilation failed because: %s",
@@ -143,12 +144,12 @@ Ars3DShader *createShaderProgram(
 
     // Initialize the instance.
     new_shader->m_name      = ars3dCreateDynamicStr(p_name);
-    new_shader->m_program   = glCreateProgram();
+    ARS3D_OPENGL(new_shader->m_program   = glCreateProgram());
 
     // Create the shaders.
-    GLuint vertex_shader    = p_vertex_src   ? glCreateShader(GL_VERTEX_SHADER)   : 0;
-    GLuint geometry_shader  = p_geometry_src ? glCreateShader(GL_GEOMETRY_SHADER) : 0;
-    GLuint fragment_shader  = p_fragment_src ? glCreateShader(GL_FRAGMENT_SHADER) : 0;
+    ARS3D_OPENGL(GLuint vertex_shader    = p_vertex_src   ? glCreateShader(GL_VERTEX_SHADER)   : 0);
+    ARS3D_OPENGL(GLuint geometry_shader  = p_geometry_src ? glCreateShader(GL_GEOMETRY_SHADER) : 0);
+    ARS3D_OPENGL(GLuint fragment_shader  = p_fragment_src ? glCreateShader(GL_FRAGMENT_SHADER) : 0);
 
     // Compile the shaders and attach them to the program.
     ars3d_uchar compilation_success = 0;
@@ -156,19 +157,19 @@ Ars3DShader *createShaderProgram(
     if (vertex_shader)
     {
         compilation_success = compileShader(vertex_shader, CONVERT_ENUM_TO_STR(GL_VERTEX_SHADER), p_vertex_src, p_name);
-        glAttachShader(new_shader->m_program, vertex_shader);
+        ARS3D_OPENGL(glAttachShader(new_shader->m_program, vertex_shader));
     }
 
     if (geometry_shader)
     {
         compilation_success = compileShader(geometry_shader, CONVERT_ENUM_TO_STR(GL_GEOMETRY_SHADER), p_geometry_src, p_name);
-        glAttachShader(new_shader->m_program, geometry_shader);
+        ARS3D_OPENGL(glAttachShader(new_shader->m_program, geometry_shader));
     }
 
     if (fragment_shader)
     {
         compilation_success = compileShader(fragment_shader, CONVERT_ENUM_TO_STR(GL_FRAGMENT_SHADER), p_fragment_src, p_name);
-        glAttachShader(new_shader->m_program, fragment_shader);
+        ARS3D_OPENGL(glAttachShader(new_shader->m_program, fragment_shader));
     }
 
     // A shader FAILED to COMPILE.
@@ -176,26 +177,26 @@ Ars3DShader *createShaderProgram(
     if (!compilation_success)
     {
         ars3dShaderDestroy(&new_shader);
-        glDeleteShader(vertex_shader);
-        glDeleteShader(geometry_shader);
-        glDeleteShader(fragment_shader);
+        ARS3D_OPENGL(glDeleteShader(vertex_shader));
+        ARS3D_OPENGL(glDeleteShader(geometry_shader));
+        ARS3D_OPENGL(glDeleteShader(fragment_shader));
         return ARS3D_NULL;
     }
 
     //Link the program
-    glLinkProgram(new_shader->m_program);
+    ARS3D_OPENGL(glLinkProgram(new_shader->m_program));
 
     // Delete the shaders.
-    glDeleteShader(vertex_shader);
-    glDeleteShader(geometry_shader);
-    glDeleteShader(fragment_shader);
+    ARS3D_OPENGL(glDeleteShader(vertex_shader));
+    ARS3D_OPENGL(glDeleteShader(geometry_shader));
+    ARS3D_OPENGL(glDeleteShader(fragment_shader));
 
     // --------------------Check Linkage Status-------------------- //
     GLint   link_status;
     GLsizei info_length;
 
-    glGetProgramiv(new_shader->m_program, GL_LINK_STATUS, &link_status);
-    glGetProgramiv(new_shader->m_program, GL_INFO_LOG_LENGTH, &info_length);
+    ARS3D_OPENGL(glGetProgramiv(new_shader->m_program, GL_LINK_STATUS, &link_status));
+    ARS3D_OPENGL(glGetProgramiv(new_shader->m_program, GL_INFO_LOG_LENGTH, &info_length));
 
     if (!link_status)
     {
@@ -203,7 +204,7 @@ Ars3DShader *createShaderProgram(
 
         ars3d_char *info = (ars3d_char *)ars3dMalloc( ARS3D_SIZEOF(ars3d_char) * info_length);
 
-        glGetProgramInfoLog(new_shader->m_program, info_length, ARS3D_NULL, info);
+        ARS3D_OPENGL(glGetProgramInfoLog(new_shader->m_program, info_length, ARS3D_NULL, info));
 
         ARS3D_ERROR(
             "[Program Linkage:%s] Program linkage failed because: %s",

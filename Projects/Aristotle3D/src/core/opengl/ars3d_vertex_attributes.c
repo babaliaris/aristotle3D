@@ -1,5 +1,6 @@
 #include <aristotle3D/core/opengl/ars3d_vertex_attributes.h>
 #include <aristotle3D/core/ars3d_debug.h>
+#include <aristotle3D/core/opengl/ars3d_opengl_debugger.h>
 #include <aristotle3D/core/ars3d_string.h>
 #include <aristotle3D/core/data-structures/ars3d_list.h>
 #include <glad/gl.h>
@@ -91,7 +92,7 @@ ars3d_uchar atrribBindLoopThrough(ars3d_void *p_data, ars3d_void *p_context)
     ARS3D_ASSERT(attribute->m_type == ARS3D_VERTEX_ATTRIB_TYPE);
     ARS3D_ASSERT(attributes->m_type == ARS3D_VERTEX_ATTRIBUTES_TYPE);
 
-    glVertexAttribPointer(
+    ARS3D_OPENGL(glVertexAttribPointer(
         attribute->m_index,
         attribute->m_count,
         attribute->m_size_type,
@@ -99,7 +100,7 @@ ars3d_uchar atrribBindLoopThrough(ars3d_void *p_data, ars3d_void *p_context)
         attributes->m_stride,
         (const ars3d_void *)attribute->m_offset);
 
-    glEnableVertexAttribArray(attribute->m_index);
+    ARS3D_OPENGL(glEnableVertexAttribArray(attribute->m_index)));
 
     return 0; //Loop through the entire list.
 }
@@ -125,7 +126,7 @@ ars3d_uchar atrribUnBindLoopThrough(ars3d_void *p_data, ars3d_void *p_context)
 
     ARS3D_ASSERT(attribute->m_type == ARS3D_VERTEX_ATTRIB_TYPE);
 
-    glDisableVertexAttribArray(attribute->m_index);
+    ARS3D_OPENGL(glDisableVertexAttribArray(attribute->m_index));
 
     return 0; //Loop through the entire list.
 }

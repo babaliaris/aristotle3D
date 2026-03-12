@@ -1,5 +1,6 @@
 #include <aristotle3D/core/ars3d_application.h>
 #include <aristotle3D/core/ars3d_debug.h>
+#include <aristotle3D/core/opengl/ars3d_opengl_debugger.h>
 #include <aristotle3D/core/data-structures/ars3d_list.h>
 #include <glad/gl.h>
 #include <aristotle3D/core/ars3d_window.h>

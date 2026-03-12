@@ -127,6 +127,28 @@ ARS3D_API ars3d_void ars3dAppDetatchLayer(Ars3DApp *p_app, ars3d_void *p_user_ct
 ARS3D_API Ars3DWindow *ars3dAppGetWindow(Ars3DApp *p_app);
 
 
+
+/**
+ * @brief Get the process arguments counter.
+ * 
+ * @param p_app The app instance.
+ * 
+ * @returns An integer representing the amount of arguments passed in the process.
+ */
+ARS3D_API ars3d_int ars3dAppGetProcessArgc(Ars3DApp *p_app);
+
+
+
+/**
+ * @brief Get the process arguments.
+ * 
+ * @param p_app The app instance.
+ * 
+ * @returns The arguments list memory address.
+ */
+ARS3D_API ars3d_char **ars3dAppGetProcessArgv(Ars3DApp *p_app);
+
+
 /**
  * @brief Fires the event to all the layers in reverse order.
  * 

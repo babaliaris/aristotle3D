@@ -287,8 +287,41 @@ ars3d_void ars3dAppDetatchLayer(Ars3DApp *p_app, ars3d_void *p_user_ctx)
 
 Ars3DWindow *ars3dAppGetWindow(Ars3DApp *p_app)
 {
+    if (!p_app)
+    {
+        ARS3D_WARN("Required params are not provided");
+        return ARS3D_NULL;
+    }
+
     return p_app->m_window;
 }
+
+
+ars3d_int ars3dAppGetProcessArgc(Ars3DApp *p_app)
+{
+    if (!p_app)
+    {
+        ARS3D_WARN("Required params are not provided");
+        return -1;
+    }
+
+    return p_app->m_argc;
+}
+
+
+ars3d_char **ars3dAppGetProcessArgv(Ars3DApp *p_app)
+{
+    if (!p_app)
+    {
+        ARS3D_WARN("Required params are not provided");
+        return ARS3D_NULL;
+    }
+
+    return p_app->m_argv;
+}
+
+
+
 
 
 

@@ -4,6 +4,11 @@
 #include <aristotle3D/core/data-structures/ars3d_list.h>
 #include <glad/gl.h>
 #include <aristotle3D/core/ars3d_window.h>
+#include <aristotle3D/core/ars3d_events.h>
+
+
+#define APPLICATION_STATUS_RUNNING  0
+#define APPLICATION_STATUS_PAUSED   1
 
 
 static Ars3DApp* STATIC_APP_INSTANCE = ARS3D_NULL;
@@ -16,6 +21,8 @@ typedef struct Ars3DApp
     ars3d_int               m_argc;
     ars3d_char **           m_argv;
     Ars3DList *             m_layers;
+    ars3d_int               m_exit;
+    ars3d_int               m_status;
 
 } Ars3DApp;
 
@@ -73,6 +80,8 @@ Ars3DApp *ars3dAppCreate(
     new_app->m_userEntry    = p_userEntry;
     new_app->m_window       = new_window;
     new_app->m_layers       = new_layers_list;
+    new_app->m_exit         = 0;
+    new_app->m_status       = APPLICATION_STATUS_RUNNING;
 
     // Intialize the global static instance.
     STATIC_APP_INSTANCE = new_app;
@@ -83,7 +92,7 @@ Ars3DApp *ars3dAppCreate(
 
 
 
-ars3d_void layersDestructorCB(ars3d_void *p_data)
+static ars3d_void layersDestructorCB(ars3d_void *p_data)
 {
     Ars3DLayer *layer = (Ars3DLayer *)p_data;
 
@@ -131,7 +140,7 @@ ars3d_void __ars3dInitSubSystems__(Ars3DApp *p_app)
 
 
 
-ars3d_uchar loopThroughLayersCB(ars3d_void *p_data, ars3d_void *p_context)
+static ars3d_uchar loopThroughLayersCB(ars3d_void *p_data, ars3d_void *p_context)
 {
     ARS3D_UNUSED(p_context);
     Ars3DLayer *layer = (Ars3DLayer *)p_data;
@@ -145,21 +154,29 @@ ars3d_uchar loopThroughLayersCB(ars3d_void *p_data, ars3d_void *p_context)
 
 
 
-ars3d_int __ars3dMainLoop__(Ars3DApp *p_app)
+static ars3d_int __ars3dMainLoop__(Ars3DApp *p_app)
 {
-    while ( !ars3dWindowShouldClose(p_app->m_window) )
+    while ( !p_app->m_exit )
     {
-        glClear(GL_COLOR_BUFFER_BIT);
 
-        // Loop through each layer.
-        ars3dListLoopThrough(
-            p_app->m_layers,
-            loopThroughLayersCB,
-            ARS3D_NULL,
-            0
-        );
+        // Render happens inside here!!!
+        if (p_app->m_status == APPLICATION_STATUS_RUNNING)
+        {
+            glClear(GL_COLOR_BUFFER_BIT);
 
-        ars3dWindowUpdate(p_app->m_window);
+            // Loop through each layer.
+            ars3dListLoopThrough(
+                p_app->m_layers,
+                loopThroughLayersCB,
+                ARS3D_NULL,
+                0
+            );
+
+            ars3dWindowSwapBuffers(p_app->m_window);
+        }
+
+        // Poll the events.
+        ars3dWindowPollEvents();
     }
 
     return 0;
@@ -238,7 +255,7 @@ ars3d_void ars3dAppAttachLayer(
 
 
 
-ars3d_uchar layerCompareEqualCB(ars3d_void *p_data, ars3d_void *p_cmp_data)
+static ars3d_uchar layerCompareEqualCB(ars3d_void *p_data, ars3d_void *p_cmp_data)
 {
     Ars3DLayer *layer = (Ars3DLayer *)p_data;
 
@@ -275,6 +292,31 @@ Ars3DWindow *ars3dAppGetWindow(Ars3DApp *p_app)
 
 
 
+static ars3d_void applicationEventHanlder(Ars3DApp *p_app, ars3d_void *p_event, ars3d_int p_event_type)
+{
+    ARS3D_UNUSED(p_event);
+
+    switch (p_event_type)
+    {
+        case ARS3D_EVENT_TYPE_WINDOW_CLOSED:
+            p_app->m_exit = 1;
+            break;
+
+        case ARS3D_EVENT_TYPE_WINDOW_MINIMIZED:
+            p_app->m_status = APPLICATION_STATUS_PAUSED;
+            break;
+
+        case ARS3D_EVENT_TYPE_WINDOW_RESTORED:
+            p_app->m_status = APPLICATION_STATUS_RUNNING;
+            break;
+
+        default:
+            break;
+    }
+}
+
+
+
 typedef struct EventContext
 {
     ars3d_void *m_event;
@@ -283,7 +325,7 @@ typedef struct EventContext
 
 
 
-ars3d_uchar eventsReversedLoopCB(ars3d_void *p_data, ars3d_void *p_context)
+static ars3d_uchar eventsReversedLoopCB(ars3d_void *p_data, ars3d_void *p_context)
 {
     Ars3DLayer *layer = (Ars3DLayer *)p_data;
     EventContext *ctx = (EventContext *)p_context;
@@ -309,5 +351,11 @@ ars3d_void __ars3dAppFireEvent__(Ars3DApp *p_app, ars3d_void *p_event, ars3d_int
     ctx.m_event_type    = p_event_type;
 
     // Loop though each layer in reverse.
+    // Pass the event to the layer system.
     ars3dListLoopThrough(p_app->m_layers, eventsReversedLoopCB, (ars3d_void *)&ctx, 1);
+
+    // Fire the event to the application event handler.
+    // CALL this after the layers has received the event.
+    // so they can handle the WINDOW CLOSE event if they have to.
+    applicationEventHanlder(p_app, p_event, p_event_type);
 }

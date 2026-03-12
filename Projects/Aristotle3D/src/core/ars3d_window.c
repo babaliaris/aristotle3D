@@ -140,7 +140,7 @@ ars3d_void ars3dWindowDestroy(Ars3DWindow **p_window)
 
 
 
-ars3d_void ars3dWindowUpdate(Ars3DWindow *p_window)
+ars3d_void ars3dWindowSwapBuffers(Ars3DWindow *p_window)
 {
     if (!p_window)
     {
@@ -148,24 +148,15 @@ ars3d_void ars3dWindowUpdate(Ars3DWindow *p_window)
         return;
     }
 
-    /* Swap front and back buffers */
     glfwSwapBuffers(p_window->m_glfw_window);
+}
 
-    /* Poll for and process events */
+
+ars3d_void ars3dWindowPollEvents()
+{
     glfwPollEvents();
 }
 
-
-ars3d_int ars3dWindowShouldClose(Ars3DWindow *p_window)
-{
-    if (!p_window)
-    {
-        ARS3D_WARN("You called a fuction with a NULL value on a required parameter");
-        return 1;
-    }
-
-    return glfwWindowShouldClose(p_window->m_glfw_window);
-}
 
 
 ars3d_void *ars3dWindowGetNativeWindow(Ars3DWindow *p_window)

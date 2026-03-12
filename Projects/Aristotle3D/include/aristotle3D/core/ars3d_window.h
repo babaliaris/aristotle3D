@@ -31,24 +31,21 @@ ARS3D_API ars3d_void ars3dWindowDestroy(Ars3DWindow **p_window);
 
 
 /**
- * @brief Update a window.
+ * @brief Swap the render buffers.
  * 
- * Swaps the buffers (double buffering) and polls the events.
+ * Swaps the buffers (double buffering).
  * 
  * @param p_window The window instance.
  */
-ARS3D_API ars3d_void ars3dWindowUpdate(Ars3DWindow *p_window);
+ARS3D_API ars3d_void ars3dWindowSwapBuffers(Ars3DWindow *p_window);
 
 
 
 /**
- * @brief Check's if the window should close (User event).
- * 
- * @param p_window The window instance.
- * 
- * @returns 0 if the close event is NOT triggered, true otherwise.
+ * @brief Poll the events.
  */
-ARS3D_API ars3d_int ars3dWindowShouldClose(Ars3DWindow *p_window);
+ARS3D_API ars3d_void ars3dWindowPollEvents();
+
 
 
 /**

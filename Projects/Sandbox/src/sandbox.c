@@ -4,6 +4,7 @@
 
 #include "layers/events-test.layer.h"
 #include "layers/render-triangle-test.layer.h"
+#include "layers/barnsley.h"
 
 ars3d_void ars3dUserEntryPoint(Ars3DApp *p_app)
 {
@@ -52,6 +53,22 @@ ars3d_void ars3dUserEntryPoint(Ars3DApp *p_app)
                     onRenderTriangleTestLayerUpdate,
                     onRenderTriangleTestLayerEvent
                 );
+        }
+
+        // LAYER: Barnsley.
+        else if ( ars3dStrCmp(argv[1], SANDBOX_RUN_LAYER_BARNSLEY) == 0  )
+        {
+                BarnsleyLayer *barnsley_layer = (BarnsleyLayer *)ars3dMalloc( ARS3D_SIZEOF(BarnsleyLayer) );
+                ars3dAppAttachLayer(
+                    p_app,
+                    (ars3d_void *)barnsley_layer,
+                    onBarnsleyLayerAttach,
+                    onBarnsleyLayerDetatch,
+                    onBarnsleyLayerStart,
+                    onBarnsleyLayerUpdate,
+                    onBarnsleyLayerEvent
+                );
+                
         }
 
         else

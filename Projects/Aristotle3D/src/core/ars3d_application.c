@@ -156,13 +156,19 @@ static ars3d_uchar loopThroughLayersCB(ars3d_void *p_data, ars3d_void *p_context
 
 static ars3d_int __ars3dMainLoop__(Ars3DApp *p_app)
 {
+    if (!p_app)
+    {
+        ARS3D_WARN("Required params are not provided");
+        return -1;
+    }
+
+
     while ( !p_app->m_exit )
     {
-
         // Render happens inside here!!!
         if (p_app->m_status == APPLICATION_STATUS_RUNNING)
         {
-            glClear(GL_COLOR_BUFFER_BIT);
+            ars3dWindowCleanBuffers();
 
             // Loop through each layer.
             ars3dListLoopThrough(

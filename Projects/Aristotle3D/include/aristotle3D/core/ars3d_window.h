@@ -47,6 +47,12 @@ ARS3D_API ars3d_void ars3dWindowSwapBuffers(Ars3DWindow *p_window);
 ARS3D_API ars3d_void ars3dWindowPollEvents();
 
 
+/**
+ * @brief Clean the window render buffers.
+ */
+ARS3D_API ars3d_void ars3dWindowCleanBuffers();
+
+
 
 /**
  * @brief Get the native window (OS level).

@@ -94,7 +94,7 @@ ars3d_void onRenderTriangleTestLayerUpdate(ars3d_void *p_ctx)
 
     ars3dShaderBind(ctx->m_shader);
     ars3dVertexArrayBind(ctx->m_vao);
-    ars3dRenderTriangles(3);
+    ars3dGLRenderTriangles(3);
 }
 
 ars3d_uchar onRenderTriangleTestLayerEvent(ars3d_void *p_ctx, ars3d_void *p_event, ars3d_int p_event_type)

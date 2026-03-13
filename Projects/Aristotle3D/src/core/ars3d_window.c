@@ -164,6 +164,13 @@ ars3d_void ars3dWindowPollEvents()
 
 
 
+ars3d_void ars3dWindowCleanBuffers()
+{
+    ARS3D_OPENGL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT));
+}
+
+
+
 ars3d_void *ars3dWindowGetNativeWindow(Ars3DWindow *p_window)
 {
     if (!p_window)

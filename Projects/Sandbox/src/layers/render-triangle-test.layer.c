@@ -92,9 +92,11 @@ ars3d_void onRenderTriangleTestLayerUpdate(ars3d_void *p_ctx)
 {
     RenderTriangleTestLayer *ctx = (RenderTriangleTestLayer *)p_ctx;
 
+    ars3dGLEnableDepthTest(1);
     ars3dShaderBind(ctx->m_shader);
     ars3dVertexArrayBind(ctx->m_vao);
     ars3dGLRenderTriangles(3);
+    ars3dGLEnableDepthTest(0);
 }
 
 ars3d_uchar onRenderTriangleTestLayerEvent(ars3d_void *p_ctx, ars3d_void *p_event, ars3d_int p_event_type)
@@ -110,6 +112,32 @@ ars3d_uchar onRenderTriangleTestLayerEvent(ars3d_void *p_ctx, ars3d_void *p_even
             ctx->m_projection = glms_perspective(glm_rad(45.0f), (float)width / (float)height, 0.1f, 100.0f);
             ars3dShaderBind(ctx->m_shader);
             ars3dShaderUniformMat4(ctx->m_shader, "u_proj", &ctx->m_projection);
+            ars3dShaderUnbind();
+            break;
+        }
+
+        case ARS3D_EVENT_TYPE_MOUSE_POSITION:
+        {
+            ars3d_double mouse_x, mouse_y;
+            ars3d_int width, height;
+            ars3dEventGetMousePos(p_event, &mouse_x, &mouse_y);
+            ars3dWindowGetSize(ars3dAppGetWindow(ars3dAppGet()), &width, &height);
+
+            // Convert pixels to Normalized Device Coordinates (-1.0 to 1.0)
+            float ndc_x = (float)(mouse_x / width) * 2.0f - 1.0f;
+            float ndc_y = 1.0f - (float)(mouse_y / height) * 2.0f; // Y is inverted in screen space
+
+            // Scale it so it stays within the camera view 
+            // (At z=0 with 45deg FoV, the visible area is roughly 2.5 units wide)
+            float world_x = ndc_x * 2.5f; 
+            float world_y = ndc_y * 2.5f;
+
+            // Rebuild the matrix.
+            ctx->m_model = glms_translate(glms_mat4_identity(), (vec3s){{world_x, world_y, 0.0f}});
+
+            // Upload the uniform.
+            ars3dShaderBind(ctx->m_shader);
+            ars3dShaderUniformMat4(ctx->m_shader, "u_model", &ctx->m_model);
             ars3dShaderUnbind();
             break;
         }

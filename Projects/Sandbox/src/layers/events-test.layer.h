@@ -14,7 +14,7 @@ ars3d_void onEventsTestLayerDetatch(ars3d_void *p_ctx);
 
 ars3d_void onEventsTestLayerStart(ars3d_void *p_ctx);
 
-ars3d_void onEventsTestLayerUpdate(ars3d_void *p_ctx);
+ars3d_void onEventsTestLayerUpdate(ars3d_void *p_ctx, ars3d_float p_delta_time);
 
 ars3d_uchar onEventsTestLayerEvent(ars3d_void *p_ctx, ars3d_void *p_event, ars3d_int p_event_type);
 

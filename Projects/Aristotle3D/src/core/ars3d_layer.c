@@ -93,11 +93,6 @@ ars3d_void __ars3dLayerCallCB__(Ars3DLayer *p_layer, ars3d_int p_cb_option)
             break;
         }
 
-        // On Update
-        case ARS3D_LAYER_CB_ON_UPDATE:
-            if (p_layer->m_onUpdate) p_layer->m_onUpdate(p_layer->m_user_ctx);
-            break;
-
         default:
             break;
     }
@@ -105,7 +100,7 @@ ars3d_void __ars3dLayerCallCB__(Ars3DLayer *p_layer, ars3d_int p_cb_option)
 
 
 
-ARS3D_API ars3d_uchar __ars3dLayerCallEventCB__(Ars3DLayer *p_layer, ars3d_void *p_event, ars3d_int p_event_type)
+ars3d_uchar __ars3dLayerCallEventCB__(Ars3DLayer *p_layer, ars3d_void *p_event, ars3d_int p_event_type)
 {
     if (!p_layer)
     {
@@ -117,6 +112,18 @@ ARS3D_API ars3d_uchar __ars3dLayerCallEventCB__(Ars3DLayer *p_layer, ars3d_void 
         return p_layer->m_onEvent(p_layer->m_user_ctx, p_event, p_event_type);
 
     return 0;
+}
+
+
+ars3d_void __ars3dLayerCallUpdateCB__(Ars3DLayer *p_layer, ars3d_float p_delta_time)
+{
+    if (!p_layer)
+    {
+        ARS3D_WARN("Required parameters are not provided");
+        return;
+    }
+
+    if (p_layer->m_onUpdate) p_layer->m_onUpdate(p_layer->m_user_ctx, p_delta_time);
 }
 
 

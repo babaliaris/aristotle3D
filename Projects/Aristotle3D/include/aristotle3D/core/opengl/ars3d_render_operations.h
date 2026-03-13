@@ -10,4 +10,6 @@ ARS3D_API ars3d_void ars3dGLEnableBlending(ars3d_uchar p_enable);
 
 ARS3D_API ars3d_void ars3dGLEnableDepthTest(ars3d_uchar p_enable);
 
+ARS3D_API ars3d_void ars3dGLPointSize(ars3d_float p_size);
+
 #endif

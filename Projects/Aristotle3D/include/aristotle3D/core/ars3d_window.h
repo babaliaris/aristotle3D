@@ -64,6 +64,17 @@ ARS3D_API ars3d_void ars3dWindowCleanBuffers();
 ARS3D_API ars3d_void *ars3dWindowGetNativeWindow(Ars3DWindow *p_window);
 
 
+
+/**
+ * @brief Get the time since the window was created.
+ * 
+ * @param p_window The window instance.
+ * 
+ * @returns The time in SECONDS since the window was created
+ */
+ARS3D_API ars3d_float ars3dWindowGetTime();
+
+
 /**
  * @brief Set the graphics viewport (drawing area).
  * 

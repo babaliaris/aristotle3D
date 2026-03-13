@@ -88,8 +88,10 @@ ars3d_void onRenderTriangleTestLayerStart(ars3d_void *p_ctx)
     ars3dShaderUnbind();
 }
 
-ars3d_void onRenderTriangleTestLayerUpdate(ars3d_void *p_ctx)
+ars3d_void onRenderTriangleTestLayerUpdate(ars3d_void *p_ctx, ars3d_float p_delta_time)
 {
+    ARS3D_UNUSED(p_delta_time);
+
     RenderTriangleTestLayer *ctx = (RenderTriangleTestLayer *)p_ctx;
 
     ars3dGLEnableDepthTest(1);

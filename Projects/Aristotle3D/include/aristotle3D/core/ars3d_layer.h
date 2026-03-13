@@ -5,8 +5,6 @@
 #define ARS3D_LAYER_CB_ON_ATTACH 0
 #define ARS3D_LAYER_CB_ON_DETATCH 1
 #define ARS3D_LAYER_CB_ON_START 2
-#define ARS3D_LAYER_CB_ON_UPDATE 3
-#define ARS3D_LAYER_CB_ON_EVENT 4
 
 typedef struct Ars3DApp Ars3DApp;
 typedef struct Ars3DLayer Ars3DLayer;
@@ -49,7 +47,7 @@ typedef ars3d_void (*Ars3DLayerOnStartFN)(ars3d_void *p_user_ctx);
  * 
  * @param p_user_ctx The user's context object.
  */
-typedef ars3d_void (*Ars3DLayerOnUpdateFN)(ars3d_void *p_user_ctx);
+typedef ars3d_void (*Ars3DLayerOnUpdateFN)(ars3d_void *p_user_ctx, ars3d_float p_delta_time);
 
 
 
@@ -129,6 +127,19 @@ ARS3D_API ars3d_void __ars3dLayerCallCB__(Ars3DLayer *p_layer, ars3d_int p_cb_op
  * @returns 0 if the event HAS NOT been handled, true otherwise.
  */
 ARS3D_API ars3d_uchar __ars3dLayerCallEventCB__(Ars3DLayer *p_layer, ars3d_void *p_event, ars3d_int p_event_type);
+
+
+
+/**
+ * @brief Call the layer's update callback function.
+ * 
+ * This is meant to be used by the Aristotle3D engine
+ * and NOT by the user!!!
+ *
+ * @param p_layer The layer instance.
+ * @param p_delta_time The delta time between current and previous frames.
+ */
+ARS3D_API ars3d_void __ars3dLayerCallUpdateCB__(Ars3DLayer *p_layer, ars3d_float p_delta_time);
 
 
 

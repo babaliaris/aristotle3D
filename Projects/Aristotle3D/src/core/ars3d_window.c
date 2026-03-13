@@ -184,6 +184,13 @@ ars3d_void *ars3dWindowGetNativeWindow(Ars3DWindow *p_window)
 
 
 
+ars3d_float ars3dWindowGetTime()
+{
+    return (float)glfwGetTime();
+}
+
+
+
 ars3d_void ars3dWindowSetViewport(ars3d_int p_x, ars3d_int p_y, ars3d_int p_width, ars3d_int p_height)
 {
     ARS3D_OPENGL(glViewport(p_x, p_y, p_width, p_height));

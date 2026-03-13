@@ -21,7 +21,7 @@ ars3d_void onRenderTriangleTestLayerDetatch(ars3d_void *p_ctx);
 
 ars3d_void onRenderTriangleTestLayerStart(ars3d_void *p_ctx);
 
-ars3d_void onRenderTriangleTestLayerUpdate(ars3d_void *p_ctx);
+ars3d_void onRenderTriangleTestLayerUpdate(ars3d_void *p_ctx, ars3d_float p_delta_time);
 
 ars3d_uchar onRenderTriangleTestLayerEvent(ars3d_void *p_ctx, ars3d_void *p_event, ars3d_int p_event_type);
 

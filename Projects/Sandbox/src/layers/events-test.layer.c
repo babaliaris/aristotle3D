@@ -22,9 +22,10 @@ ars3d_void onEventsTestLayerStart(ars3d_void *p_ctx)
     ARS3D_UNUSED(p_ctx);
 }
 
-ars3d_void onEventsTestLayerUpdate(ars3d_void *p_ctx)
+ars3d_void onEventsTestLayerUpdate(ars3d_void *p_ctx, ars3d_float p_delta_time)
 {
     ARS3D_UNUSED(p_ctx);
+    ARS3D_UNUSED(p_delta_time);
 }
 
 

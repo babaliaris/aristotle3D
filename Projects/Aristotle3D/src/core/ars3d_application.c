@@ -139,20 +139,22 @@ ars3d_void __ars3dInitSubSystems__(Ars3DApp *p_app)
 }
 
 
+typedef struct LayerCBContex
+{
+    float m_delta_time;
+} LayerCBContex;
+
 
 static ars3d_uchar loopThroughLayersCB(ars3d_void *p_data, ars3d_void *p_context)
 {
-    ARS3D_UNUSED(p_context);
-    Ars3DLayer *layer = (Ars3DLayer *)p_data;
+    Ars3DLayer *layer   = (Ars3DLayer *)p_data;
+    LayerCBContex *ctx  = (LayerCBContex *)p_context;
 
     __ars3dLayerCallCB__(layer, ARS3D_LAYER_CB_ON_START);
-    __ars3dLayerCallCB__(layer, ARS3D_LAYER_CB_ON_UPDATE);
+    __ars3dLayerCallUpdateCB__(layer, ctx->m_delta_time);
 
     return 0; //Continue looping until the end of the list.
 }
-
-
-
 
 static ars3d_int __ars3dMainLoop__(Ars3DApp *p_app)
 {
@@ -162,19 +164,27 @@ static ars3d_int __ars3dMainLoop__(Ars3DApp *p_app)
         return -1;
     }
 
+    float t_curr_frame = 0.0f, t_prev_frame = 0.0f, delta_time = 0.0f;
 
     while ( !p_app->m_exit )
     {
+        // Calcaulate delta time.
+        t_curr_frame    = ars3dWindowGetTime();
+        delta_time      = t_curr_frame - t_prev_frame;
+        t_prev_frame    = t_curr_frame;
+
         // Render happens inside here!!!
         if (p_app->m_status == APPLICATION_STATUS_RUNNING)
         {
             ars3dWindowCleanBuffers();
 
             // Loop through each layer.
+            LayerCBContex layerCtx;
+            layerCtx.m_delta_time = delta_time;
             ars3dListLoopThrough(
                 p_app->m_layers,
                 loopThroughLayersCB,
-                ARS3D_NULL,
+                (ars3d_void *)&layerCtx,
                 0
             );
 

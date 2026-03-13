@@ -40,3 +40,9 @@ ars3d_void ars3dGLEnableDepthTest(ars3d_uchar p_enable)
         ARS3D_OPENGL(glDisable(GL_DEPTH_TEST));
     }
 }
+
+
+ars3d_void ars3dGLPointSize(ars3d_float p_size)
+{
+    ARS3D_OPENGL(glPointSize(p_size));
+}

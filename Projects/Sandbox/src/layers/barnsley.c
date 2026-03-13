@@ -103,6 +103,9 @@ ars3d_void onBarnsleyLayerStart(ars3d_void *p_ctx)
 {
     BarnsleyLayer *ctx = (BarnsleyLayer *)p_ctx;
 
+    // Set the window title.
+    ars3dWindowSetTitle(ars3dAppGetWindow(ars3dAppGet()) ,"SPACE = toggle size, 1 = 15000, 2 = 20000, 3 = 30000, 4 = 40000");
+
     // Initialize the uniforms.
     ars3dShaderBind(ctx->m_shader);
     ars3dShaderUniformMat4(ctx->m_shader, "u_model", &ctx->m_model);

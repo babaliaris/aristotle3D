@@ -149,7 +149,7 @@ ars3d_void ars3dWindowSwapBuffers(Ars3DWindow *p_window)
 {
     if (!p_window)
     {
-        ARS3D_WARN("You called a fuction with a NULL value on a required parameter");
+        ARS3D_WARN("Required parameters are NULL");
         return;
     }
 
@@ -167,6 +167,37 @@ ars3d_void ars3dWindowPollEvents()
 ars3d_void ars3dWindowCleanBuffers()
 {
     ARS3D_OPENGL(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT));
+}
+
+
+
+ars3d_void ars3dWindowSetTitle(Ars3DWindow *p_window, const char *p_title)
+{
+    if (!p_window)
+    {
+        ARS3D_WARN("Required parameters are NULL");
+        return;
+    }
+
+    glfwSetWindowTitle(p_window->m_glfw_window, p_title);
+
+    if (p_window->m_title)
+        ars3dDestroyDynamicStr(&p_window->m_title);
+
+    p_window->m_title = ars3dCreateDynamicStr(p_title);
+}
+
+
+
+const ars3d_char *ars3dWindowGetTitle(Ars3DWindow *p_window)
+{
+    if (!p_window)
+    {
+        ARS3D_WARN("Required parameters are NULL");
+        return ARS3D_NULL;
+    }
+
+    return ars3dGetCStr(p_window->m_title);
 }
 
 

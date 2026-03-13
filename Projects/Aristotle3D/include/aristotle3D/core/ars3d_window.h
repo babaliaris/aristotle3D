@@ -53,6 +53,26 @@ ARS3D_API ars3d_void ars3dWindowPollEvents();
 ARS3D_API ars3d_void ars3dWindowCleanBuffers();
 
 
+/**
+ * @brief Set a new title for the window.
+ * 
+ * @param p_window The window instance.
+ * @param p_title The new title.
+ */
+ARS3D_API ars3d_void ars3dWindowSetTitle(Ars3DWindow *p_window, const char *p_title);
+
+
+
+/**
+ * @brief Get the window title.
+ * 
+ * @param p_window The window instance.
+ * 
+ * @returns The window title.
+ */
+ARS3D_API const ars3d_char *ars3dWindowGetTitle(Ars3DWindow *p_window);
+
+
 
 /**
  * @brief Get the native window (OS level).

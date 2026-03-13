@@ -32,6 +32,11 @@ git submodule update --init --recursive
 
 ## Building
 
+### Dependencies
+The build system of this project is a combination of [premake5](https://premake.github.io/) and [cmake](https://cmake.org/).
+[premake5](https://premake.github.io/) is provided in this repository, but you MUST install [cmake](https://cmake.org/)
+and make sure it is in the PATH environment variable of your system, since it is used in the background.
+
 ### First, generate the project files.
 ```bash
 premake5 <action>

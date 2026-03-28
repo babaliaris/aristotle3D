@@ -1,9 +1,11 @@
 # Directories
 build/
 obj/
+compile_commands/
 
 # Files
 Makefile
+compile_commands.json
 
 # Visual Studio
 *.sln

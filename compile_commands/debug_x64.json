@@ -1,0 +1,145 @@
+[
+          {
+            "directory": "/home/babaliaris/Development/c/aristotle3D/Projects/Depedencies/GLAD",
+            "file": "/home/babaliaris/Development/c/aristotle3D/Projects/Depedencies/GLAD/src/gl.c",
+            "command": "cc -MD -MP -DARS3D_X64 -DARS3D_DEBUG -DARS3D_LINUX -I/home/babaliaris/Development/c/aristotle3D/Projects/Depedencies/GLAD/src -I/home/babaliaris/Development/c/aristotle3D/Projects/Depedencies/GLAD/include -m64 -fPIC -g -Wall -Wextra -std=c99 -o /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-GLAD/gl.o -MF /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-GLAD/gl.d -c /home/babaliaris/Development/c/aristotle3D/Projects/Depedencies/GLAD/src/gl.c"
+          }
+,
+          {
+            "directory": "/home/babaliaris/Development/c/aristotle3D/Projects/Depedencies/GLFW",
+            "file": "/home/babaliaris/Development/c/aristotle3D/Projects/Depedencies/GLFW/force_cmake_build.c",
+            "command": "cc -MD -MP -DARS3D_X64 -DARS3D_DEBUG -DARS3D_LINUX -m64 -fPIC -g -Wall -Wextra -o /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-GLFW/force_cmake_build.o -MF /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-GLFW/force_cmake_build.d -c /home/babaliaris/Development/c/aristotle3D/Projects/Depedencies/GLFW/force_cmake_build.c"
+          }
+,
+          {
+            "directory": "/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D",
+            "file": "/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/src/core/ars3d_application.c",
+            "command": "cc -MD -MP -DARS3D_X64 -DARS3D_DEBUG -DARS3D_LINUX -I/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/include -I/home/babaliaris/Development/c/aristotle3D/Projects/Depedencies/GLAD/include -I/home/babaliaris/Development/c/aristotle3D/external/glfw/include -I/home/babaliaris/Development/c/aristotle3D/external/cglm/include -m64 -fPIC -g -Wall -Wextra -std=c99 -o /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Aristotle3D/ars3d_application.o -MF /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Aristotle3D/ars3d_application.d -c /home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/src/core/ars3d_application.c"
+          }
+,
+          {
+            "directory": "/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D",
+            "file": "/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/src/core/ars3d_debug.c",
+            "command": "cc -MD -MP -DARS3D_X64 -DARS3D_DEBUG -DARS3D_LINUX -I/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/include -I/home/babaliaris/Development/c/aristotle3D/Projects/Depedencies/GLAD/include -I/home/babaliaris/Development/c/aristotle3D/external/glfw/include -I/home/babaliaris/Development/c/aristotle3D/external/cglm/include -m64 -fPIC -g -Wall -Wextra -std=c99 -o /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Aristotle3D/ars3d_debug.o -MF /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Aristotle3D/ars3d_debug.d -c /home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/src/core/ars3d_debug.c"
+          }
+,
+          {
+            "directory": "/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D",
+            "file": "/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/src/core/ars3d_layer.c",
+            "command": "cc -MD -MP -DARS3D_X64 -DARS3D_DEBUG -DARS3D_LINUX -I/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/include -I/home/babaliaris/Development/c/aristotle3D/Projects/Depedencies/GLAD/include -I/home/babaliaris/Development/c/aristotle3D/external/glfw/include -I/home/babaliaris/Development/c/aristotle3D/external/cglm/include -m64 -fPIC -g -Wall -Wextra -std=c99 -o /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Aristotle3D/ars3d_layer.o -MF /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Aristotle3D/ars3d_layer.d -c /home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/src/core/ars3d_layer.c"
+          }
+,
+          {
+            "directory": "/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D",
+            "file": "/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/src/core/ars3d_stdio.c",
+            "command": "cc -MD -MP -DARS3D_X64 -DARS3D_DEBUG -DARS3D_LINUX -I/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/include -I/home/babaliaris/Development/c/aristotle3D/Projects/Depedencies/GLAD/include -I/home/babaliaris/Development/c/aristotle3D/external/glfw/include -I/home/babaliaris/Development/c/aristotle3D/external/cglm/include -m64 -fPIC -g -Wall -Wextra -std=c99 -o /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Aristotle3D/ars3d_stdio.o -MF /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Aristotle3D/ars3d_stdio.d -c /home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/src/core/ars3d_stdio.c"
+          }
+,
+          {
+            "directory": "/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D",
+            "file": "/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/src/core/ars3d_string.c",
+            "command": "cc -MD -MP -DARS3D_X64 -DARS3D_DEBUG -DARS3D_LINUX -I/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/include -I/home/babaliaris/Development/c/aristotle3D/Projects/Depedencies/GLAD/include -I/home/babaliaris/Development/c/aristotle3D/external/glfw/include -I/home/babaliaris/Development/c/aristotle3D/external/cglm/include -m64 -fPIC -g -Wall -Wextra -std=c99 -o /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Aristotle3D/ars3d_string.o -MF /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Aristotle3D/ars3d_string.d -c /home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/src/core/ars3d_string.c"
+          }
+,
+          {
+            "directory": "/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D",
+            "file": "/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/src/core/ars3d_window.c",
+            "command": "cc -MD -MP -DARS3D_X64 -DARS3D_DEBUG -DARS3D_LINUX -I/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/include -I/home/babaliaris/Development/c/aristotle3D/Projects/Depedencies/GLAD/include -I/home/babaliaris/Development/c/aristotle3D/external/glfw/include -I/home/babaliaris/Development/c/aristotle3D/external/cglm/include -m64 -fPIC -g -Wall -Wextra -std=c99 -o /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Aristotle3D/ars3d_window.o -MF /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Aristotle3D/ars3d_window.d -c /home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/src/core/ars3d_window.c"
+          }
+,
+          {
+            "directory": "/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D",
+            "file": "/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/src/core/data-structures/ars3d_list.c",
+            "command": "cc -MD -MP -DARS3D_X64 -DARS3D_DEBUG -DARS3D_LINUX -I/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/include -I/home/babaliaris/Development/c/aristotle3D/Projects/Depedencies/GLAD/include -I/home/babaliaris/Development/c/aristotle3D/external/glfw/include -I/home/babaliaris/Development/c/aristotle3D/external/cglm/include -m64 -fPIC -g -Wall -Wextra -std=c99 -o /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Aristotle3D/ars3d_list.o -MF /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Aristotle3D/ars3d_list.d -c /home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/src/core/data-structures/ars3d_list.c"
+          }
+,
+          {
+            "directory": "/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D",
+            "file": "/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/src/core/opengl/ars3d_opengl_debugger.c",
+            "command": "cc -MD -MP -DARS3D_X64 -DARS3D_DEBUG -DARS3D_LINUX -I/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/include -I/home/babaliaris/Development/c/aristotle3D/Projects/Depedencies/GLAD/include -I/home/babaliaris/Development/c/aristotle3D/external/glfw/include -I/home/babaliaris/Development/c/aristotle3D/external/cglm/include -m64 -fPIC -g -Wall -Wextra -std=c99 -o /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Aristotle3D/ars3d_opengl_debugger.o -MF /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Aristotle3D/ars3d_opengl_debugger.d -c /home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/src/core/opengl/ars3d_opengl_debugger.c"
+          }
+,
+          {
+            "directory": "/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D",
+            "file": "/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/src/core/opengl/ars3d_render_operations.c",
+            "command": "cc -MD -MP -DARS3D_X64 -DARS3D_DEBUG -DARS3D_LINUX -I/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/include -I/home/babaliaris/Development/c/aristotle3D/Projects/Depedencies/GLAD/include -I/home/babaliaris/Development/c/aristotle3D/external/glfw/include -I/home/babaliaris/Development/c/aristotle3D/external/cglm/include -m64 -fPIC -g -Wall -Wextra -std=c99 -o /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Aristotle3D/ars3d_render_operations.o -MF /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Aristotle3D/ars3d_render_operations.d -c /home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/src/core/opengl/ars3d_render_operations.c"
+          }
+,
+          {
+            "directory": "/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D",
+            "file": "/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/src/core/opengl/ars3d_shader.c",
+            "command": "cc -MD -MP -DARS3D_X64 -DARS3D_DEBUG -DARS3D_LINUX -I/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/include -I/home/babaliaris/Development/c/aristotle3D/Projects/Depedencies/GLAD/include -I/home/babaliaris/Development/c/aristotle3D/external/glfw/include -I/home/babaliaris/Development/c/aristotle3D/external/cglm/include -m64 -fPIC -g -Wall -Wextra -std=c99 -o /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Aristotle3D/ars3d_shader.o -MF /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Aristotle3D/ars3d_shader.d -c /home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/src/core/opengl/ars3d_shader.c"
+          }
+,
+          {
+            "directory": "/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D",
+            "file": "/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/src/core/opengl/ars3d_vertex_array.c",
+            "command": "cc -MD -MP -DARS3D_X64 -DARS3D_DEBUG -DARS3D_LINUX -I/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/include -I/home/babaliaris/Development/c/aristotle3D/Projects/Depedencies/GLAD/include -I/home/babaliaris/Development/c/aristotle3D/external/glfw/include -I/home/babaliaris/Development/c/aristotle3D/external/cglm/include -m64 -fPIC -g -Wall -Wextra -std=c99 -o /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Aristotle3D/ars3d_vertex_array.o -MF /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Aristotle3D/ars3d_vertex_array.d -c /home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/src/core/opengl/ars3d_vertex_array.c"
+          }
+,
+          {
+            "directory": "/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D",
+            "file": "/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/src/core/opengl/ars3d_vertex_attributes.c",
+            "command": "cc -MD -MP -DARS3D_X64 -DARS3D_DEBUG -DARS3D_LINUX -I/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/include -I/home/babaliaris/Development/c/aristotle3D/Projects/Depedencies/GLAD/include -I/home/babaliaris/Development/c/aristotle3D/external/glfw/include -I/home/babaliaris/Development/c/aristotle3D/external/cglm/include -m64 -fPIC -g -Wall -Wextra -std=c99 -o /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Aristotle3D/ars3d_vertex_attributes.o -MF /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Aristotle3D/ars3d_vertex_attributes.d -c /home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/src/core/opengl/ars3d_vertex_attributes.c"
+          }
+,
+          {
+            "directory": "/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D",
+            "file": "/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/src/core/opengl/ars3d_vertex_buffer.c",
+            "command": "cc -MD -MP -DARS3D_X64 -DARS3D_DEBUG -DARS3D_LINUX -I/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/include -I/home/babaliaris/Development/c/aristotle3D/Projects/Depedencies/GLAD/include -I/home/babaliaris/Development/c/aristotle3D/external/glfw/include -I/home/babaliaris/Development/c/aristotle3D/external/cglm/include -m64 -fPIC -g -Wall -Wextra -std=c99 -o /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Aristotle3D/ars3d_vertex_buffer.o -MF /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Aristotle3D/ars3d_vertex_buffer.d -c /home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/src/core/opengl/ars3d_vertex_buffer.c"
+          }
+,
+          {
+            "directory": "/home/babaliaris/Development/c/aristotle3D/Projects/Sandbox",
+            "file": "/home/babaliaris/Development/c/aristotle3D/Projects/Sandbox/src/layers/barnsley.c",
+            "command": "cc -MD -MP -DARS3D_X64 -DARS3D_DEBUG -DARS3D_LINUX -I/home/babaliaris/Development/c/aristotle3D/Projects/Sandbox/src -I/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/include -I/home/babaliaris/Development/c/aristotle3D/external/cglm/include -m64 -g -Wall -Wextra -std=c99 -o /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Sandbox/barnsley.o -MF /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Sandbox/barnsley.d -c /home/babaliaris/Development/c/aristotle3D/Projects/Sandbox/src/layers/barnsley.c"
+          }
+,
+          {
+            "directory": "/home/babaliaris/Development/c/aristotle3D/Projects/Sandbox",
+            "file": "/home/babaliaris/Development/c/aristotle3D/Projects/Sandbox/src/layers/events-test.layer.c",
+            "command": "cc -MD -MP -DARS3D_X64 -DARS3D_DEBUG -DARS3D_LINUX -I/home/babaliaris/Development/c/aristotle3D/Projects/Sandbox/src -I/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/include -I/home/babaliaris/Development/c/aristotle3D/external/cglm/include -m64 -g -Wall -Wextra -std=c99 -o /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Sandbox/events-test.layer.o -MF /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Sandbox/events-test.layer.d -c /home/babaliaris/Development/c/aristotle3D/Projects/Sandbox/src/layers/events-test.layer.c"
+          }
+,
+          {
+            "directory": "/home/babaliaris/Development/c/aristotle3D/Projects/Sandbox",
+            "file": "/home/babaliaris/Development/c/aristotle3D/Projects/Sandbox/src/layers/render-triangle-test.layer.c",
+            "command": "cc -MD -MP -DARS3D_X64 -DARS3D_DEBUG -DARS3D_LINUX -I/home/babaliaris/Development/c/aristotle3D/Projects/Sandbox/src -I/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/include -I/home/babaliaris/Development/c/aristotle3D/external/cglm/include -m64 -g -Wall -Wextra -std=c99 -o /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Sandbox/render-triangle-test.layer.o -MF /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Sandbox/render-triangle-test.layer.d -c /home/babaliaris/Development/c/aristotle3D/Projects/Sandbox/src/layers/render-triangle-test.layer.c"
+          }
+,
+          {
+            "directory": "/home/babaliaris/Development/c/aristotle3D/Projects/Sandbox",
+            "file": "/home/babaliaris/Development/c/aristotle3D/Projects/Sandbox/src/sandbox.c",
+            "command": "cc -MD -MP -DARS3D_X64 -DARS3D_DEBUG -DARS3D_LINUX -I/home/babaliaris/Development/c/aristotle3D/Projects/Sandbox/src -I/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/include -I/home/babaliaris/Development/c/aristotle3D/external/cglm/include -m64 -g -Wall -Wextra -std=c99 -o /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Sandbox/sandbox.o -MF /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-Sandbox/sandbox.d -c /home/babaliaris/Development/c/aristotle3D/Projects/Sandbox/src/sandbox.c"
+          }
+,
+          {
+            "directory": "/home/babaliaris/Development/c/aristotle3D/Projects/UnitTests",
+            "file": "/home/babaliaris/Development/c/aristotle3D/Projects/UnitTests/src/core/unit_testing_framework.c",
+            "command": "cc -MD -MP -DARS3D_X64 -DARS3D_DEBUG -DARS3D_LINUX -I/home/babaliaris/Development/c/aristotle3D/Projects/UnitTests/src -I/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/include -m64 -g -Wall -Wextra -std=c99 -o /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-UnitTests/unit_testing_framework.o -MF /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-UnitTests/unit_testing_framework.d -c /home/babaliaris/Development/c/aristotle3D/Projects/UnitTests/src/core/unit_testing_framework.c"
+          }
+,
+          {
+            "directory": "/home/babaliaris/Development/c/aristotle3D/Projects/UnitTests",
+            "file": "/home/babaliaris/Development/c/aristotle3D/Projects/UnitTests/src/tests/ars3d_list.test.c",
+            "command": "cc -MD -MP -DARS3D_X64 -DARS3D_DEBUG -DARS3D_LINUX -I/home/babaliaris/Development/c/aristotle3D/Projects/UnitTests/src -I/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/include -m64 -g -Wall -Wextra -std=c99 -o /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-UnitTests/ars3d_list.test.o -MF /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-UnitTests/ars3d_list.test.d -c /home/babaliaris/Development/c/aristotle3D/Projects/UnitTests/src/tests/ars3d_list.test.c"
+          }
+,
+          {
+            "directory": "/home/babaliaris/Development/c/aristotle3D/Projects/UnitTests",
+            "file": "/home/babaliaris/Development/c/aristotle3D/Projects/UnitTests/src/tests/ars3d_stdio.test.c",
+            "command": "cc -MD -MP -DARS3D_X64 -DARS3D_DEBUG -DARS3D_LINUX -I/home/babaliaris/Development/c/aristotle3D/Projects/UnitTests/src -I/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/include -m64 -g -Wall -Wextra -std=c99 -o /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-UnitTests/ars3d_stdio.test.o -MF /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-UnitTests/ars3d_stdio.test.d -c /home/babaliaris/Development/c/aristotle3D/Projects/UnitTests/src/tests/ars3d_stdio.test.c"
+          }
+,
+          {
+            "directory": "/home/babaliaris/Development/c/aristotle3D/Projects/UnitTests",
+            "file": "/home/babaliaris/Development/c/aristotle3D/Projects/UnitTests/src/tests/ars3d_string.test.c",
+            "command": "cc -MD -MP -DARS3D_X64 -DARS3D_DEBUG -DARS3D_LINUX -I/home/babaliaris/Development/c/aristotle3D/Projects/UnitTests/src -I/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/include -m64 -g -Wall -Wextra -std=c99 -o /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-UnitTests/ars3d_string.test.o -MF /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-UnitTests/ars3d_string.test.d -c /home/babaliaris/Development/c/aristotle3D/Projects/UnitTests/src/tests/ars3d_string.test.c"
+          }
+,
+          {
+            "directory": "/home/babaliaris/Development/c/aristotle3D/Projects/UnitTests",
+            "file": "/home/babaliaris/Development/c/aristotle3D/Projects/UnitTests/src/unit-tests.c",
+            "command": "cc -MD -MP -DARS3D_X64 -DARS3D_DEBUG -DARS3D_LINUX -I/home/babaliaris/Development/c/aristotle3D/Projects/UnitTests/src -I/home/babaliaris/Development/c/aristotle3D/Projects/Aristotle3D/include -m64 -g -Wall -Wextra -std=c99 -o /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-UnitTests/unit-tests.o -MF /home/babaliaris/Development/c/aristotle3D/obj/debug_x64-UnitTests/unit-tests.d -c /home/babaliaris/Development/c/aristotle3D/Projects/UnitTests/src/unit-tests.c"
+          }
+]

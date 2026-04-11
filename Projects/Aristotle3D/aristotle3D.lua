@@ -13,17 +13,21 @@ project "Aristotle3D"
         "include/",
         "%{wks.location}/Projects/Depedencies/GLAD/include",
         "%{wks.location}/external/glfw/include",
-        "%{wks.location}/external/cglm/include"
+        "%{wks.location}/external/cglm/include",
+        "%{wks.location}/external/microui/src",
+        "%{wks.location}/external"
     }
 
     dependson {
+        "MicroUI",
         "GLAD",
         "GLFW"
     }
 
     links {
         "GLAD",
-        "glfw3" -- NO GLFW (Project name), because this is the fake CMAKE wrapper
+        "glfw3",-- NO GLFW (Project name), because this is the fake CMAKE wrapper
+        "MicroUI"
     }
 
     filter "system:linux"

@@ -47,7 +47,7 @@ ARS3D_API ars3d_void ars3dVertexBufferUnbind();
 
 
 /**
- * @brief Uploads data to the buffer / gpu.
+ * @brief Allocates memory and optionally uploads data to the buffer / gpu.
  * 
  * If p_data is NULL, then the buffer will be
  * created nut NOT be initialized.
@@ -58,5 +58,21 @@ ARS3D_API ars3d_void ars3dVertexBufferUnbind();
  * @param p_draw_hint The draw hint for the GPU.
  */
 ARS3D_API ars3d_void ars3dVertexBufferData(Ars3DVertexBuffer *p_vbo, ars3d_size p_size, ars3d_void *p_data, ars3d_int p_draw_hint);
+
+
+/**
+ * @brief Uploads data to the buffer / gpu by an offset.
+ *
+ * Uploads some data to the buffer at an offset. No need to
+ * bind the buffer, this function does it already and then
+ * it unbinds as well.
+ *
+ * @param p_vbo The buffer instance.
+ * @param p_offset The offset from the start of the buffer.
+ * @param p_size The size of the data.
+ * @param p_data The data.
+ */
+ARS3D_API ars3d_void ars3dVertexBufferSubData(Ars3DVertexBuffer *p_vbo, ars3d_size p_offset, ars3d_size p_size, const void *p_data);
+
 
 #endif

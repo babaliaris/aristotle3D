@@ -81,4 +81,16 @@ ARS3D_API ars3d_void ars3dShaderUniformFloat(Ars3DShader *p_shader, const ars3d_
  */
 ARS3D_API ars3d_void ars3dShaderUniformFloat3(Ars3DShader *p_shader, const ars3d_char *p_name, float p_v1, float p_v2, float p_v3);
 
+
+
+/**
+ * @brief Upload an integer uniform in the GPU.
+ * 
+ * @param p_shader The shader instance.
+ * @param p_name The name of the uniform, as defined in the shader source.
+ * @param p_value The integer value.
+ */
+ARS3D_API ars3d_void ars3dShaderUniformInt(Ars3DShader *p_shader, const ars3d_char *p_name, ars3d_int p_value);
+
+
 #endif

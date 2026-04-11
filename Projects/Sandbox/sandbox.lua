@@ -12,15 +12,18 @@ project "Sandbox"
     includedirs {
         "src/",
         "%{wks.location}/Projects/Aristotle3D/include/",
-        "%{wks.location}/external/cglm/include"
+        "%{wks.location}/external/cglm/include",
+        "%{wks.location}/external/microui/src"
     }
 
     dependson {
+        "MicroUI",
         "Aristotle3D"
     }
 
     links {
-        "Aristotle3D"
+        "Aristotle3D",
+        "MicroUI"
     }
 
     filter "system:linux"

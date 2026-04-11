@@ -1,16 +1,15 @@
-project("MicroUI")
-  language("C")
-  cdialect("C99")
-  kind("StaticLib")
-  pic("On")
+project "MicroUI"
+  language "C"
+  cdialect "C99"
+  kind "StaticLib"
+  pic "On"
 
-  files({
-    "src/**.c",
-    "src/**.h",
-    "include/**.h",
-  })
+  files {
+    "%{wks.location}/external/microui/src/*.c",
+    "%{wks.location}/external/microui/src/*.h"
+  }
 
-  includedirs({
-    "src/",
-    "include/",
-  })
+  includedirs {
+    "%{wks.location}/external/microui/src/"
+  }
+

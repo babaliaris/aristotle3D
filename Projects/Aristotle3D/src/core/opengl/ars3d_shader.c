@@ -1,3 +1,4 @@
+#include "aristotle3D/core/ars3d_stdio.h"
 #include <aristotle3D/core/opengl/ars3d_shader.h>
 #include <aristotle3D/core/ars3d_debug.h>
 #include <aristotle3D/core/opengl/ars3d_opengl_debugger.h>
@@ -290,4 +291,25 @@ ars3d_void ars3dShaderUniformFloat3(Ars3DShader *p_shader, const ars3d_char *p_n
 
     ARS3D_OPENGL(glUniform3f(loc, p_v1, p_v2, p_v3));
 }
+
+
+ars3d_void ars3dShaderUniformInt(Ars3DShader *p_shader, const ars3d_char *p_name, ars3d_int p_value)
+{
+    if (!p_shader)
+    {
+        ARS3D_WARN("Required parameters are NULL");
+        return;
+    }
+
+    ARS3D_OPENGL(GLint loc = glGetUniformLocation(p_shader->m_program, p_name));
+
+    if (loc == -1)
+    {
+        ARS3D_WARN("[SHADER: %s] Uniform %s location was not found.", ars3dGetCStr(p_shader->m_name), p_name);
+        return;
+    }
+
+    ARS3D_OPENGL(glUniform1i(loc, p_value));
+}
+
 

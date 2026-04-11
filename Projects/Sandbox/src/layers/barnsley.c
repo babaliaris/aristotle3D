@@ -124,26 +124,60 @@ ars3d_void onBarnsleyLayerStart(ars3d_void *p_ctx)
 
 ars3d_void onBarnsleyLayerUpdate(ars3d_void *p_ctx, ars3d_float p_delta_time)
 {
-    ARS3D_UNUSED(p_delta_time);
-    BarnsleyLayer *ctx = (BarnsleyLayer *)p_ctx;
+  ARS3D_UNUSED(p_delta_time);
+  BarnsleyLayer *ctx = (BarnsleyLayer *)p_ctx;
 
-    // Calculate the scale vector.
-    ctx->m_scale    = ctx->m_scale_toggler ? (vec3s){{0.5f, 0.5f, 0.5f}} : (vec3s){{1.0f, 1.0f, 1.0f}};
+  // Calculate the scale vector.
+  ctx->m_scale    = ctx->m_scale_toggler ? (vec3s){{0.5f, 0.5f, 0.5f}} : (vec3s){{1.0f, 1.0f, 1.0f}};
 
-    // Calculate the model matrix.
-    ctx->m_model    = glms_translate(glms_mat4_identity(), ctx->m_pos);
-    ctx->m_model    = glms_rotate(ctx->m_model , 0.0f, ctx->m_rotate);
-    ctx->m_model    = glms_scale(ctx->m_model, ctx->m_scale);
+  // Calculate the model matrix.
+  ctx->m_model    = glms_translate(glms_mat4_identity(), ctx->m_pos);
+  ctx->m_model    = glms_rotate(ctx->m_model , 0.0f, ctx->m_rotate);
+  ctx->m_model    = glms_scale(ctx->m_model, ctx->m_scale);
 
-    // Update uniforms.
-    ars3dShaderBind(ctx->m_shader);
-    ars3dShaderUniformMat4(ctx->m_shader, "u_model", &ctx->m_model);
-    ars3dShaderUniformFloat3(ctx->m_shader, "u_color", ctx->m_color.raw[0], ctx->m_color.raw[1], ctx->m_color.raw[2]);
+  // Update uniforms.
+  ars3dShaderBind(ctx->m_shader);
+  ars3dShaderUniformMat4(ctx->m_shader, "u_model", &ctx->m_model);
+  ars3dShaderUniformFloat3(ctx->m_shader, "u_color", ctx->m_color.raw[0], ctx->m_color.raw[1], ctx->m_color.raw[2]);
 
 
-    // Bind the VAO and render the points.
-    ars3dVertexArrayBind(ctx->m_vao);
-    ars3dGLRenderPoints(ctx->m_num_of_points);
+  // Bind the VAO and render the points.
+  ars3dVertexArrayBind(ctx->m_vao);
+  ars3dGLRenderPoints(ctx->m_num_of_points);
+
+  // --- [ UI Logic ] ---
+  mu_Context *mu = ars3dUIGetContext();
+
+  // We increase the height a bit to fit the new buttons (200x240)
+  if (mu_begin_window(mu, "Barnsley Controls", mu_rect(20, 20, 220, 280)))
+  {
+    mu_label(mu, "Point Density:");
+
+    // mu_layout_row(ctx, number_of_columns, widths_array, row_height)
+    // -1 width means "use remaining space"
+    mu_layout_row(mu, 2, (int[]) { 100, -1 }, 0); 
+
+    if (mu_button(mu, "15k (Def)")) calculateBarnsleyBuffer(ctx, BARNSLEY_MODE_DEFAULT);
+    if (mu_button(mu, "20k Points")) calculateBarnsleyBuffer(ctx, BARNSLEY_MODE_20000);
+    if (mu_button(mu, "30k Points")) calculateBarnsleyBuffer(ctx, BARNSLEY_MODE_30000);
+    if (mu_button(mu, "40k Points")) calculateBarnsleyBuffer(ctx, BARNSLEY_MODE_40000);
+
+    mu_layout_row(mu, 1, (int[]) { -1 }, 0); // Reset to full width
+
+    mu_label(mu, "Adjust Green Channel:");
+    // Directly modify the green channel of our color vector
+    mu_slider(mu, &ctx->m_color.raw[1], 0.0f, 1.0f);
+
+    mu_label(mu, "Adjust Red Channel:");
+    mu_slider(mu, &ctx->m_color.raw[0], 0.0f, 1.0f);
+
+    if (mu_button(mu, "Toggle Scale"))
+    {
+        ctx->m_scale_toggler = !ctx->m_scale_toggler;
+    }
+
+    mu_end_window(mu);
+  }
 }
 
 

@@ -1,3 +1,5 @@
+#include "aristotle3D/core/ars3d_layer.h"
+#include "aristotle3D/core/ars3d_stdio.h"
 #include <aristotle3D/core/ars3d_application.h>
 #include <aristotle3D/core/ars3d_debug.h>
 #include <aristotle3D/core/opengl/ars3d_opengl_debugger.h>
@@ -5,6 +7,8 @@
 #include <glad/gl.h>
 #include <aristotle3D/core/ars3d_window.h>
 #include <aristotle3D/core/ars3d_events.h>
+#include <aristotle3D/core/ars3d_ui.h>
+#include <aristotle3D/layers/ars3d_ui_layer.h>
 
 
 #define APPLICATION_STATUS_RUNNING  0
@@ -18,6 +22,8 @@ typedef struct Ars3DApp
 {
     Ars3DUserEntryPointFN   m_userEntry;
     Ars3DWindow *           m_window;
+    Ars3DUILayer *          m_ui_context;
+    Ars3DLayer *            m_ui_layer;
     ars3d_int               m_argc;
     ars3d_char **           m_argv;
     Ars3DList *             m_layers;
@@ -114,6 +120,10 @@ ars3d_void __ars3dAppDestroy__(Ars3DApp *p_app)
     ARS3D_INFO("Destroying the Layers...");
     ars3dListDestroy(&p_app->m_layers, layersDestructorCB);
 
+    // Destroy the UI layer.
+    __ars3dLayerCallCB__(p_app->m_ui_layer, ARS3D_LAYER_CB_ON_DETATCH);
+    __ars3dLayerDestroy__(&p_app->m_ui_layer);
+
     // Destroy the window.
     ars3dWindowDestroy(&p_app->m_window);
 
@@ -136,7 +146,22 @@ ars3d_void __ars3dInitSubSystems__(Ars3DApp *p_app)
 
     ARS3D_INFO("Initializing Subsystems...");
     ars3dInitDebugConsole();
+    ars3dUIInit();
 }
+
+
+ars3d_void __ars3dTerminateSubSystems__(Ars3DApp *p_app)
+{
+    if (!p_app)
+    {
+        ARS3D_WARN("You are trying to terminate the subsystems without providing an app instance!");
+        return;
+    }
+
+    ARS3D_INFO("Terminating Subsystems...");
+    ars3dUITerminate();
+}
+
 
 
 typedef struct LayerCBContex
@@ -150,7 +175,11 @@ static ars3d_uchar loopThroughLayersCB(ars3d_void *p_data, ars3d_void *p_context
     Ars3DLayer *layer   = (Ars3DLayer *)p_data;
     LayerCBContex *ctx  = (LayerCBContex *)p_context;
 
+    // This handles the ONCE only callback automatically.
+    // It won't be called again even if it looks like it.
     __ars3dLayerCallCB__(layer, ARS3D_LAYER_CB_ON_START);
+
+    // Call the update callback.
     __ars3dLayerCallUpdateCB__(layer, ctx->m_delta_time);
 
     return 0; //Continue looping until the end of the list.
@@ -178,6 +207,9 @@ static ars3d_int __ars3dMainLoop__(Ars3DApp *p_app)
         {
             ars3dWindowCleanBuffers();
 
+            // Begin UI.
+            ars3dUIBegin();
+
             // Loop through each layer.
             LayerCBContex layerCtx;
             layerCtx.m_delta_time = delta_time;
@@ -188,6 +220,12 @@ static ars3d_int __ars3dMainLoop__(Ars3DApp *p_app)
                 0
             );
 
+            // End UI.
+            ars3dUIEnd();
+
+            // Now call the UI update callback.
+            __ars3dLayerCallUpdateCB__(p_app->m_ui_layer, delta_time);
+
             ars3dWindowSwapBuffers(p_app->m_window);
         }
 
@@ -196,6 +234,26 @@ static ars3d_int __ars3dMainLoop__(Ars3DApp *p_app)
     }
 
     return 0;
+}
+
+
+ars3d_void __ars3dLayersAfterUser__(Ars3DApp *p_app)
+{
+  // ----------|Initialize the UI layer|---------- //
+  p_app->m_ui_context = ars3dUILayerCreate();
+
+  p_app->m_ui_layer = __ars3dLayerCreate__(
+    p_app->m_ui_context,
+    ars3dUiLayerOnAttach,
+    ars3dUiLayerOnDetach,
+    ARS3D_NULL,
+    ars3dUiLayerOnUpdate,
+    ARS3D_NULL
+  );
+
+  __ars3dLayerCallCB__(p_app->m_ui_layer, ARS3D_LAYER_CB_ON_ATTACH);
+  // ----------|Initialize the UI layer|---------- //
+
 }
 
 
@@ -219,8 +277,14 @@ ars3d_int __ars3dAppBootUp__(Ars3DApp *p_app, ars3d_int argc, ars3d_char **argv)
     // Call the user's entry point.
     p_app->m_userEntry(p_app);
 
+    // Prepare the layers that must be appended after the user's layers.
+    __ars3dLayersAfterUser__(p_app);
+
     // Start the main Loop.
     ars3d_int exit_value = __ars3dMainLoop__(p_app);
+
+    // Terminate the Subsystems.
+    __ars3dTerminateSubSystems__(p_app);
 
     // Destroy the APP.
     __ars3dAppDestroy__(p_app);
@@ -399,6 +463,24 @@ ars3d_void __ars3dAppFireEvent__(Ars3DApp *p_app, ars3d_void *p_event, ars3d_int
     {
         ARS3D_WARN("Required params are not provided");
         return;
+    }
+
+    // Send the event to the UI first.
+    ars3dUIProcessEvent(p_event, p_event_type);
+
+    // If we are over a window or dragging a widget, we stop propagation.
+    if (ars3dUIWantCaptureMouse())
+    {
+        switch (p_event_type)
+        {
+            case ARS3D_EVENT_TYPE_MOUSE_BUTTON_PRESS:
+            case ARS3D_EVENT_TYPE_MOUSE_BUTTON_RELEASE:
+            case ARS3D_EVENT_TYPE_MOUSE_POSITION:
+                return; // STOP HERE. Do not loop through layers.
+
+            default:
+                break;
+        }
     }
 
     EventContext ctx;

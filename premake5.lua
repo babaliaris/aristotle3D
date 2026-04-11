@@ -105,6 +105,7 @@ filter({}) -- Clear all filters
 group("Depedencies")
 include("Projects/Depedencies/GLAD/glad.lua")
 include("Projects/Depedencies/GLFW/glfw.lua")
+include("Projects/Depedencies/MicroUI/microui.lua")
 group("")
 
 include("Projects/Aristotle3D/aristotle3D.lua")

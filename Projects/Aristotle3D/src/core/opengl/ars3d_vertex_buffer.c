@@ -1,3 +1,4 @@
+#include "aristotle3D/core/ars3d_stdio.h"
 #include <aristotle3D/core/opengl/ars3d_vertex_buffer.h>
 #include <aristotle3D/core/ars3d_debug.h>
 #include <aristotle3D/core/opengl/ars3d_opengl_debugger.h>
@@ -114,3 +115,17 @@ ars3d_void ars3dVertexBufferData(Ars3DVertexBuffer *p_vbo, ars3d_size p_size, ar
 
     ARS3D_OPENGL(glBufferData(GL_ARRAY_BUFFER, p_size, p_data, draw_hint));
 }
+
+
+
+ars3d_void ars3dVertexBufferSubData(Ars3DVertexBuffer *p_vbo, ars3d_size p_offset, ars3d_size p_size, const void *p_data)
+{
+  ARS3D_ASSERT(p_data != ARS3D_NULL, "There is no point to pass NULL for subdata.");
+
+  ars3dVertexBufferBind(p_vbo);
+
+  ARS3D_OPENGL( glBufferSubData(GL_ARRAY_BUFFER, p_offset, p_size, p_data) );
+
+  ars3dVertexBufferUnbind();
+}
+

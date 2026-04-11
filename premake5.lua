@@ -34,6 +34,11 @@ warnings("Extra") -- -Wall & -Wextra (GCC/Clang) or /W4 (MSVC)
 -- Good to have options.
 startproject("Sandbox")
 
+-- Disable typedef redefinitions for clang.
+filter "toolset:clang"
+   buildoptions { "-Wno-typedef-redefinition" }
+filter {}
+
 -- --------|All Systems & Configurations|------- --
 filter("platforms:x64")
 defines({

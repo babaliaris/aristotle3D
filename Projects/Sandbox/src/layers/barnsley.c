@@ -1,4 +1,5 @@
 #include "barnsley.h"
+#include "aristotle3D/core/ars3d_stdio.h"
 
 
 ars3d_void calculateBarnsleyBuffer(ars3d_void *p_context, ars3d_int p_mode);
@@ -201,9 +202,9 @@ ars3d_uchar onBarnsleyLayerEvent(ars3d_void *p_ctx, ars3d_void *p_event, ars3d_i
                     // which prevents the colors from washing out into white.
                     int dominant_channel = rand() % 3;
 
-                    float nr = ((float)rand() / RAND_MAX);
-                    float ng = ((float)rand() / RAND_MAX);
-                    float nb = ((float)rand() / RAND_MAX);
+                    float nr = (float)rand() / (float)RAND_MAX;
+                    float ng = (float)rand() / (float)RAND_MAX;
+                    float nb = (float)rand() / (float)RAND_MAX;
 
                     if (dominant_channel == 0) nr = 1.0f; // Force high Red
                     if (dominant_channel == 1) ng = 1.0f; // Force high Green
@@ -339,7 +340,7 @@ ars3d_void calculateBarnsleyBuffer(ars3d_void *p_context, ars3d_int p_mode)
     ars3d_float x = 0, y = 0;
     for(ars3d_int i = 0; i < ctx->m_num_of_points; i++)
     {
-        ars3d_float r = (ars3d_float)rand() / RAND_MAX;
+        ars3d_float r = (ars3d_float)rand() / (ars3d_float)RAND_MAX;
         ars3d_float xn, yn;
 
         if (r < 0.01f)      { xn = 0; yn = 0.16f * y; }

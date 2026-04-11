@@ -1,0 +1,18 @@
+{
+  "diagnostics": {
+    "globals": [
+      "includedirs", "project", "workspace",
+      "language", "cdialect", "kind", "pic",
+      "files", "dependson", "links", "filter",
+      "defines", "platforms", "configurations",
+      "toolset", "targetdir", "objdir", "libdirs",
+      "warnings", "startproject", "symbols",
+      "systemversion", "staticruntime", "runtime",
+      "group", "include", "targetname", "enablepch",
+      "buildcommands", "buildoutputs", "linkoptions",
+      "premake", "result", "path", "_OPTIONS",
+      "newaction", "buildoptions"
+    ],
+    "disable": ["undefined-field"]
+  }
+}

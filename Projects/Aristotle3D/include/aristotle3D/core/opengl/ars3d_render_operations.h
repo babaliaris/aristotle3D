@@ -42,6 +42,15 @@ ARS3D_API ars3d_void ars3dGLEnableDepthTest(ars3d_uchar p_enable);
 
 
 /**
+ * @brief Enable face culling.
+ * 
+ * @param p_enable 0 = disable, true = enable
+ */
+ARS3D_API ars3d_void ars3dGLEnableFaceCulling(ars3d_uchar p_enable);
+
+
+
+/**
  * @brief Set point size.
  * 
  * This tells the GPU how big to draw points.

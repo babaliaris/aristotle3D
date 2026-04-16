@@ -42,6 +42,21 @@ ars3d_void ars3dGLEnableDepthTest(ars3d_uchar p_enable)
 }
 
 
+ars3d_void ars3dGLEnableFaceCulling(ars3d_uchar p_enable)
+{
+  if (p_enable)
+  {
+    ARS3D_OPENGL(glEnable(GL_CULL_FACE));
+  }
+
+  else
+  {
+    ARS3D_OPENGL(glDisable(GL_CULL_FACE));
+  }
+}
+
+
+
 ars3d_void ars3dGLPointSize(ars3d_float p_size)
 {
     ARS3D_OPENGL(glPointSize(p_size));

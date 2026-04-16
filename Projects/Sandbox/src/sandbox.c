@@ -1,9 +1,12 @@
+#include "aristotle3D/core/ars3d_application.h"
 #define ARS3D_ENTRY_POINT
 #include <aristotle3D/aristotle3D.h>
 
 #include "layers/events-test.layer.h"
 #include "layers/render-triangle-test.layer.h"
 #include "layers/barnsley.h"
+#include "layers/cube.h"
+
 
 ars3d_void ars3dUserEntryPoint(Ars3DApp *p_app)
 {
@@ -14,6 +17,7 @@ ars3d_void ars3dUserEntryPoint(Ars3DApp *p_app)
     printf("1. Test Events Layer\n");
     printf("2. Render Triangle Test\n");
     printf("3. Barnsley Fern Fractal\n");
+    printf("4. Cube\n");
     printf("0. Exit\n");
     printf("Select a layer to run: ");
     
@@ -58,6 +62,18 @@ ars3d_void ars3dUserEntryPoint(Ars3DApp *p_app)
                 onBarnsleyLayerStart, onBarnsleyLayerUpdate, onBarnsleyLayerEvent
             );
             break;
+        }
+
+        case 4:
+        {
+          ARS3D_INFO("Starting up: Cube");
+          CubeLayerCtx *layer = cubeLayerCreate();
+          ars3dAppAttachLayer(
+              p_app, layer, cubeLayerOnAttach,
+              cubeLayerOnDetatch, cubeLayerOnStart,
+              cubeLayerOnUpdate, cubeLayerOnEvent
+          );
+          break;
         }
 
         case 0:

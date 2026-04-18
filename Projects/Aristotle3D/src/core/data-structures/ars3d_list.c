@@ -200,12 +200,14 @@ ars3d_void ars3dListLoopThrough(Ars3DList *p_list, Ars3DListUserLoopThroughFN p_
         return;
     }
 
-    Ars3DListNode *current  = p_reversed == 0 ? p_list->m_head : p_list->m_tail;
+    Ars3DListNode *current    = p_reversed == 0 ? p_list->m_head : p_list->m_tail;
+    Ars3DListNode *next_node  = ARS3D_NULL;
 
     while (current)
     {
+        next_node = p_reversed == 0 ? current->m_next : current->m_prev;
         if ( p_userCB(current->m_data, p_context) ) break;
-        current = p_reversed == 0 ? current->m_next : current->m_prev;
+        current   = next_node;
     }
 }
 

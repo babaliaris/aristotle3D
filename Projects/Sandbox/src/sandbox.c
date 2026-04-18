@@ -1,95 +1,19 @@
-#include "aristotle3D/core/ars3d_application.h"
 #define ARS3D_ENTRY_POINT
 #include <aristotle3D/aristotle3D.h>
-
-#include "layers/events-test.layer.h"
-#include "layers/render-triangle-test.layer.h"
-#include "layers/barnsley.h"
-#include "layers/cube.h"
-
+#include "layers/launcher.h"
 
 ars3d_void ars3dUserEntryPoint(Ars3DApp *p_app)
 {
-    int choice = -1;
-
-    // 1. Display the CLI Menu
-    printf("\n--- Aristotle3D Engine Sandbox ---\n");
-    printf("1. Test Events Layer\n");
-    printf("2. Render Triangle Test\n");
-    printf("3. Barnsley Fern Fractal\n");
-    printf("4. Cube\n");
-    printf("0. Exit\n");
-    printf("Select a layer to run: ");
-    
-    // Get the user's input.
-    if (scanf("%d", &choice) != 1) {
-        ARS3D_ERROR("Invalid input. Please enter a number.");
-        ars3dExit(-1);
-    }
-
-    // Attach the chosen layer
-    switch (choice)
-    {
-        case 1:
-        {
-            ARS3D_INFO("Starting up: Events Test");
-            EventsTestLayer *layer = (EventsTestLayer *)ars3dMalloc(sizeof(EventsTestLayer));
-            layer->m_counter = 0;
-            ars3dAppAttachLayer(
-                p_app, layer, onEventsTestLayerAttach, onEventsTestLayerDetatch, 
-                onEventsTestLayerStart, onEventsTestLayerUpdate, onEventsTestLayerEvent
-            );
-            break;
-        }
-
-        case 2:
-        {
-            ARS3D_INFO("Starting up: Triangle Render");
-            RenderTriangleTestLayer *layer = (RenderTriangleTestLayer *)ars3dMalloc(sizeof(RenderTriangleTestLayer));
-            ars3dAppAttachLayer(
-                p_app, layer, onRenderTriangleTestLayerAttach, onRenderTriangleTestLayerDetatch, 
-                onRenderTriangleTestLayerStart, onRenderTriangleTestLayerUpdate, onRenderTriangleTestLayerEvent
-            );
-            break;
-        }
-
-        case 3:
-        {
-            ARS3D_INFO("Starting up: Barnsley Fern");
-            BarnsleyLayer *layer = (BarnsleyLayer *)ars3dMalloc(sizeof(BarnsleyLayer));
-            ars3dAppAttachLayer(
-                p_app, layer, onBarnsleyLayerAttach, onBarnsleyLayerDetatch, 
-                onBarnsleyLayerStart, onBarnsleyLayerUpdate, onBarnsleyLayerEvent
-            );
-            break;
-        }
-
-        case 4:
-        {
-          ARS3D_INFO("Starting up: Cube");
-          CubeLayerCtx *layer = cubeLayerCreate();
-          ars3dAppAttachLayer(
-              p_app, layer, cubeLayerOnAttach,
-              cubeLayerOnDetatch, cubeLayerOnStart,
-              cubeLayerOnUpdate, cubeLayerOnEvent
-          );
-          break;
-        }
-
-        case 0:
-            ARS3D_INFO("Exiting...");
-            __ars3dAppDestroy__(p_app);
-            ars3dExit(0);
-            return;
-
-        default:
-            ARS3D_ERROR("Unknown choice. Exiting.");
-            __ars3dAppDestroy__(p_app);
-            ars3dExit(-1);
-            return;
-    }
+  ars3dAppAttachLayer(
+      p_app,
+      launcherLayerCreate(),
+      launcherLayerOnAttach,
+      launcherLayerOnDetatch,
+      ARS3D_NULL,
+      launcherLayerOnUpdate,
+      ARS3D_NULL
+  );
 }
-
 
 
 Ars3DApp * ars3dUserAppProvider()

@@ -6,13 +6,19 @@
 
 typedef struct
 {
+  vec3s m_position;
+  vec3s m_rotation;
+  vec3s m_scale;
+} PhongCube;
+
+typedef struct
+{
     Ars3DVertexArray *      m_vao;
     Ars3DVertexBuffer *     m_vbo;
     Ars3DVertexAttributes * m_attribs;
     Ars3DShader *           m_shader;
-    mat4s                   m_model;
-    mat4s                   m_view;
     mat4s                   m_projection;
+    PhongCube               m_cube;
 } PhongLightingTestingGroundLayer;
 
 ars3d_void onPhongLightingTestingGroundLayerAttach(ars3d_void *p_ctx);

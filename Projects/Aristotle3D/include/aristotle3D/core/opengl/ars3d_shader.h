@@ -27,6 +27,23 @@ ARS3D_API Ars3DShader *ars3dShaderCreateFromStrings(
 
 
 /**
+ * @brief Creates a new shader program by reading files.
+ *
+ * Store your shader source code in a text file and then
+ * feed this function with the filepaths required.
+ *
+ * @param p_vertex_path The path of the vertex source file.
+ * @param p_fragment_path The path of the fragment source file.
+ *
+ * @returns The newly created instance.
+ */
+ARS3D_API Ars3DShader *ars3dShaderCreateFromFile(
+  const char *p_vertex_path,
+  const char *p_fragment_path
+);
+
+
+/**
  * @brief Destroys a shader program object.
  * 
  * @param p_shader The user's placeholder that holds the mem address of the instance.

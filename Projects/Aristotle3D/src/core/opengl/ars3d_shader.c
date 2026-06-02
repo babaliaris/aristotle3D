@@ -10,6 +10,8 @@
 
 
 ars3d_uchar compileShader(GLuint p_shader, const char *p_type_name, const GLchar *p_src, const char *p_shader_name);
+static char* loadFileToNewString(const char* p_filepath);
+
 
 Ars3DShader *createShaderProgram(
     const char *p_name,
@@ -45,6 +47,55 @@ ARS3D_API Ars3DShader *ars3dShaderCreateFromStrings(
         p_geometry_src,
         p_fragment_src
     );
+}
+
+
+ARS3D_API Ars3DShader *ars3dShaderCreateFromFile(
+  const char *p_vertex_path,
+  const char *p_fragment_path
+)
+{
+    if (!p_vertex_path || !p_fragment_path)
+    {
+        ARS3D_WARN("Required filepaths are NULL");
+        return ARS3D_NULL;
+    }
+
+    // Load both shader source files into heap strings
+    char* vertex_src    = loadFileToNewString(p_vertex_path);
+    char* fragment_src  = loadFileToNewString(p_fragment_path);
+
+    // Ensure both files loaded properly before passing to compiler
+    if (!vertex_src || !fragment_src)
+    {
+        ARS3D_ERROR("Aborting shader program creation due to file loading failure.");
+        if (vertex_src)   ars3dFree(vertex_src);
+        if (fragment_src) ars3dFree(fragment_src);
+        return ARS3D_NULL;
+    }
+
+    // Extract a friendly program name from the vertex filename string
+    // e.g., "assets/shaders/cube.vert" -> "cube.vert"
+    const char* program_name    = p_vertex_path;
+    const char* last_slash      = strrchr(p_vertex_path, '/');
+    const char* last_backslash  = strrchr(p_vertex_path, '\\');
+    
+    if (last_slash)      program_name = last_slash + 1;
+    if (last_backslash)  program_name = last_backslash + 1;
+
+    // Build the shader program.
+    Ars3DShader* shader_program = createShaderProgram(
+        program_name,
+        vertex_src,
+        ARS3D_NULL,
+        fragment_src
+    );
+
+    // Clean up the shader source strings.
+    ars3dFree(vertex_src);
+    ars3dFree(fragment_src);
+
+    return shader_program;
 }
 
 
@@ -229,6 +280,56 @@ Ars3DShader *createShaderProgram(
         );
 
     return new_shader;
+}
+
+
+/**
+ * @brief Helper function to read an entire file into a dynamically allocated string.
+ * @note The caller is responsible for freeing the returned memory using ars3dFree().
+ */
+static char* loadFileToNewString(const char* p_filepath)
+{
+    if (!p_filepath)
+    {
+        ARS3D_WARN("Filepath parameter is NULL");
+        return ARS3D_NULL;
+    }
+
+    FILE* file = fopen(p_filepath, "rb");
+    if (!file)
+    {
+        ARS3D_ERROR("Failed to open shader file at path: %s", p_filepath);
+        return ARS3D_NULL;
+    }
+
+    // Seek to the end of the file to determine the file size
+    fseek(file, 0, SEEK_END);
+    long file_size = ftell(file);
+    if (file_size < 0)
+    {
+        ARS3D_ERROR("Failed to determine size of file: %s", p_filepath);
+        fclose(file);
+        return ARS3D_NULL;
+    }
+
+    // Go back at the start of the file.
+    rewind(file);
+
+    // Allocate buffer with an extra byte for the null terminator
+    ars3d_char* buffer = (ars3d_char *)ars3dMalloc(file_size + 1);
+    if (!buffer)
+    {
+        ARS3D_ERROR("Not enough memory to load file: %s", p_filepath);
+        fclose(file);
+        return ARS3D_NULL;
+    }
+
+    // Read the file contents into the buffer
+    ars3d_size bytes_read = fread(buffer, 1, file_size, file);
+    buffer[bytes_read] = '\0'; // Append null terminator safely
+
+    fclose(file);
+    return buffer;
 }
 
 

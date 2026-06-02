@@ -3,6 +3,7 @@
 #include "render-triangle-test.layer.h"
 #include "barnsley.h"
 #include "cube.h"
+#include "phong_lighting_testing_ground.h"
 
 ars3d_void uiRun(LauncherLayerCtx *ctx)
 {
@@ -14,24 +15,29 @@ ars3d_void uiRun(LauncherLayerCtx *ctx)
 
     mu_label(mu, "Available Demos:");
 
-    if (mu_button(mu, "Events Test")) 
+    if (mu_button(mu, "Events Test"))
     {
       ctx->m_layer = LAUNCHER_LAUNCH_EVENTS_TEST;
     }
 
-    if (mu_button(mu, "Triangle Test")) 
+    if (mu_button(mu, "Triangle Test"))
     {
       ctx->m_layer =LAUNCHER_LAUNCH_RENDER_TRIANGLE_TEST;
     }
 
-    if (mu_button(mu, "Barnsley Fractal")) 
+    if (mu_button(mu, "Barnsley Fractal"))
     {
       ctx->m_layer = LAUNCHER_LAUNCH_BARNSLEY_FRACTAL;
     }
 
-    if (mu_button(mu, "3D Animated Cube")) 
+    if (mu_button(mu, "3D Animated Cube"))
     {
       ctx->m_layer = LAUNCHER_LAUNCH_CUBE;
+    }
+
+    if (mu_button(mu, "Phong Lighting Testing Ground"))
+    {
+      ctx->m_layer = LAUNCHER_LAUNCH_PHONG_LIGHTING_TESTING_GROUND;
     }
 
     if (mu_button(mu, "EXIT"))
@@ -112,6 +118,22 @@ ars3d_void launcherLayerOnUpdate(ars3d_void *p_ctx, ars3d_float p_delta_time)
             cubeLayerOnDetatch, cubeLayerOnStart,
             cubeLayerOnUpdate, cubeLayerOnEvent
         );
+        break;
+      }
+
+      case LAUNCHER_LAUNCH_PHONG_LIGHTING_TESTING_GROUND:
+      {
+        ARS3D_INFO("Starting up: Phong Lighting Testing Ground");
+        PhongLightingTestingGroundLayer *layer = phongLightingTestingGroundLayerCreate();
+          ars3dAppAttachLayer(
+            ars3dAppGet(),
+            layer,
+            onPhongLightingTestingGroundLayerAttach,
+            onPhongLightingTestingGroundLayerDetatch,
+            onPhongLightingTestingGroundLayerStart,
+            onPhongLightingTestingGroundLayerUpdate,
+            onPhongLightingTestingGroundLayerEvent
+          );
         break;
       }
 

@@ -3,12 +3,13 @@
 
 #include <aristotle3D/aristotle3D.h>
 
-#define LAUNCHER_LAUNCH_NONE                 -2
-#define LAUNCHER_LAUNCH_EXIT                 -1
-#define LAUNCHER_LAUNCH_EVENTS_TEST           0
-#define LAUNCHER_LAUNCH_RENDER_TRIANGLE_TEST  1
-#define LAUNCHER_LAUNCH_BARNSLEY_FRACTAL      2
-#define LAUNCHER_LAUNCH_CUBE                  3
+#define LAUNCHER_LAUNCH_NONE                         -2
+#define LAUNCHER_LAUNCH_EXIT                         -1
+#define LAUNCHER_LAUNCH_EVENTS_TEST                   0
+#define LAUNCHER_LAUNCH_RENDER_TRIANGLE_TEST          1
+#define LAUNCHER_LAUNCH_BARNSLEY_FRACTAL              2
+#define LAUNCHER_LAUNCH_CUBE                          3
+#define LAUNCHER_LAUNCH_PHONG_LIGHTING_TESTING_GROUND 4
 
 typedef struct
 {

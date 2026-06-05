@@ -63,6 +63,12 @@ ars3d_void onPhongLightingTestingGroundLayerAttach(ars3d_void *p_ctx)
   ctx->m_vao        = ars3dVertexArrayCreate();
   ctx->m_vbo        = ars3dVertexBufferCreate();
   ctx->m_attribs    = ars3dVertexAttributesCreate();
+  ctx->m_camera     = cameraSystemCreate((vec3s){{0.0f, 0.0f, 1.0f}});
+  ctx->m_cam_controller.m_delta_pos   = (vec3s){{0.0f, 0.0f, 0.0f}};
+  ctx->m_cam_controller.m_delta_yaw   = 0.0f;
+  ctx->m_cam_controller.m_delta_pitch = 0.0f;
+  ctx->m_cam_controller.m_move_speed  = 10.0f;
+  ctx->m_cam_controller.m_turn_speed  = 80.0f;
   ctx->m_projection = glms_perspective(glm_rad(45.0f), (float)screen_width / (float)screen_height, 0.1f, 100.0f);
   ctx->m_cube.m_position  = (vec3s){{0.0f, 0.0f, -4.0f}};
   ctx->m_cube.m_rotation  = (vec3s){{0.0f, 0.0f, 0.0f}};
@@ -97,6 +103,7 @@ ars3d_void onPhongLightingTestingGroundLayerDetatch(ars3d_void *p_ctx)
   ars3dVertexBufferDestroy(&ctx->m_vbo);
   ars3dVertexAttributesDestroy(&ctx->m_attribs);
   ars3dShaderDestroy(&ctx->m_shader);
+  cameraSystemDestroy(&ctx->m_camera);
 
   // Destroy the context itself.
   ars3dFree(ctx);
@@ -116,8 +123,15 @@ ars3d_void onPhongLightingTestingGroundLayerUpdate(ars3d_void *p_ctx, ars3d_floa
   ctx->m_cube.m_rotation.raw[0] += p_delta_time * 50.0f;
   ctx->m_cube.m_rotation.raw[1] += p_delta_time * 50.0f;
 
+  cameraSystemFly(
+      ctx->m_camera,
+      glms_vec3_scale(ctx->m_cam_controller.m_delta_pos, ctx->m_cam_controller.m_move_speed * p_delta_time),
+      ctx->m_cam_controller.m_delta_yaw * ctx->m_cam_controller.m_turn_speed * p_delta_time,
+      ctx->m_cam_controller.m_delta_pitch * ctx->m_cam_controller.m_turn_speed * p_delta_time
+  );
+
   mat4s model = glms_mat4_identity();
-  mat4s view  = glms_mat4_identity();
+  mat4s view  = cameraSystemGetViewMatrix(ctx->m_camera);
 
   // Calculate the full model matrix.
   model = glms_translate(model, ctx->m_cube.m_position);
@@ -158,6 +172,42 @@ ars3d_uchar onPhongLightingTestingGroundLayerEvent(ars3d_void *p_ctx, ars3d_void
       ars3d_int width, height;
       ars3dEventGetWindowSize(p_event, &width, &height);
       ctx->m_projection = glms_perspective(glm_rad(45.0f), (float)width/(float)height, 0.1f, 100.0f);
+      break;
+    }
+
+    case ARS3D_EVENT_TYPE_KEYBOARD_PRESS:
+    {
+      ars3d_int key = ars3dEventGetKeyboardKey(p_event);
+      switch (key)
+      {
+        case ARS3D_EVENT_KEY_W    : ctx->m_cam_controller.m_delta_pos.raw[2] -= 1; break;
+        case ARS3D_EVENT_KEY_S    : ctx->m_cam_controller.m_delta_pos.raw[2] += 1; break;
+        case ARS3D_EVENT_KEY_A    : ctx->m_cam_controller.m_delta_pos.raw[0] -= 1; break;
+        case ARS3D_EVENT_KEY_D    : ctx->m_cam_controller.m_delta_pos.raw[0] += 1; break;
+        case ARS3D_EVENT_KEY_LEFT : ctx->m_cam_controller.m_delta_yaw -= 1; break;
+        case ARS3D_EVENT_KEY_RIGHT: ctx->m_cam_controller.m_delta_yaw += 1; break;
+        case ARS3D_EVENT_KEY_UP   : ctx->m_cam_controller.m_delta_pitch += 1; break;
+        case ARS3D_EVENT_KEY_DOWN : ctx->m_cam_controller.m_delta_pitch -= 1; break;
+        default: break;
+      }
+      break;
+    }
+
+    case ARS3D_EVENT_TYPE_KEYBOARD_RELEASE:
+    {
+      ars3d_int key = ars3dEventGetKeyboardKey(p_event);
+      switch (key)
+      {
+        case ARS3D_EVENT_KEY_W: ctx->m_cam_controller.m_delta_pos.raw[2] += 1; break;
+        case ARS3D_EVENT_KEY_S: ctx->m_cam_controller.m_delta_pos.raw[2] -= 1; break;
+        case ARS3D_EVENT_KEY_A: ctx->m_cam_controller.m_delta_pos.raw[0] += 1; break;
+        case ARS3D_EVENT_KEY_D: ctx->m_cam_controller.m_delta_pos.raw[0] -= 1; break;
+        case ARS3D_EVENT_KEY_LEFT : ctx->m_cam_controller.m_delta_yaw += 1; break;
+        case ARS3D_EVENT_KEY_RIGHT: ctx->m_cam_controller.m_delta_yaw -= 1; break;
+        case ARS3D_EVENT_KEY_UP   : ctx->m_cam_controller.m_delta_pitch -= 1; break;
+        case ARS3D_EVENT_KEY_DOWN : ctx->m_cam_controller.m_delta_pitch += 1; break;
+        default: break;
+      }
       break;
     }
 

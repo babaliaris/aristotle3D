@@ -4,6 +4,7 @@
 #include <cglm/cglm.h>
 #include <cglm/struct.h>
 #include "../camera/camera.h"
+#include "../camera/camera-controller.h"
 
 typedef struct
 {
@@ -14,23 +15,16 @@ typedef struct
 
 typedef struct
 {
-  vec3s m_delta_pos;
-  float m_delta_yaw;
-  float m_delta_pitch;
-  float m_move_speed;
-  float m_turn_speed;
-} CameraController;
-
-typedef struct
-{
     Ars3DVertexArray *      m_vao;
     Ars3DVertexBuffer *     m_vbo;
     Ars3DVertexAttributes * m_attribs;
     Ars3DShader *           m_shader;
+    Ars3DShader *           m_light_shader;
     CameraSystem *          m_camera;
     CameraController        m_cam_controller;
     mat4s                   m_projection;
     PhongCube               m_cube;
+    PhongCube               m_light;
 } PhongLightingTestingGroundLayer;
 
 ars3d_void onPhongLightingTestingGroundLayerAttach(ars3d_void *p_ctx);

@@ -13,7 +13,7 @@
  */
 
 
-typedef struct
+typedef struct CameraSystem
 {
   float m_yaw, m_pitch;
 

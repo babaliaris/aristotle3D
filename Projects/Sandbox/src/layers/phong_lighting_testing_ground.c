@@ -64,15 +64,13 @@ ars3d_void onPhongLightingTestingGroundLayerAttach(ars3d_void *p_ctx)
   ctx->m_vbo        = ars3dVertexBufferCreate();
   ctx->m_attribs    = ars3dVertexAttributesCreate();
   ctx->m_camera     = cameraSystemCreate((vec3s){{0.0f, 0.0f, 1.0f}});
-  ctx->m_cam_controller.m_delta_pos   = (vec3s){{0.0f, 0.0f, 0.0f}};
-  ctx->m_cam_controller.m_delta_yaw   = 0.0f;
-  ctx->m_cam_controller.m_delta_pitch = 0.0f;
-  ctx->m_cam_controller.m_move_speed  = 10.0f;
-  ctx->m_cam_controller.m_turn_speed  = 80.0f;
   ctx->m_projection = glms_perspective(glm_rad(45.0f), (float)screen_width / (float)screen_height, 0.1f, 100.0f);
   ctx->m_cube.m_position  = (vec3s){{0.0f, 0.0f, -4.0f}};
   ctx->m_cube.m_rotation  = (vec3s){{0.0f, 0.0f, 0.0f}};
   ctx->m_cube.m_scale     = (vec3s){{1.0f, 1.0f, 1.0f}};
+  ctx->m_light.m_position  = (vec3s){{0.0f, 4.0f, -4.0f}};
+  ctx->m_light.m_rotation  = (vec3s){{0.0f, 0.0f, 0.0f}};
+  ctx->m_light.m_scale     = (vec3s){{0.5f, 0.5f, 0.5f}};
 
   // TODO: Replace these hardcoded paths with a custom path system to dynamically
   // generate the correct file paths, based on project scope based or standalone
@@ -81,6 +79,14 @@ ars3d_void onPhongLightingTestingGroundLayerAttach(ars3d_void *p_ctx)
       "Projects/Sandbox/src/shaders/phong.vertex.glsl",
       "Projects/Sandbox/src/shaders/phong.fragment.glsl"
   );
+
+  ctx->m_light_shader = ars3dShaderCreateFromFile(
+      "Projects/Sandbox/src/shaders/light.vertex.glsl",
+      "Projects/Sandbox/src/shaders/light.fragment.glsl"
+  );
+
+  // Initialize the camera controller.
+  cameraControllerStackInit(&ctx->m_cam_controller, ctx->m_camera);
 
   ars3dVertexArrayBind(ctx->m_vao);
   ars3dVertexBufferBind(ctx->m_vbo);
@@ -103,6 +109,7 @@ ars3d_void onPhongLightingTestingGroundLayerDetatch(ars3d_void *p_ctx)
   ars3dVertexBufferDestroy(&ctx->m_vbo);
   ars3dVertexAttributesDestroy(&ctx->m_attribs);
   ars3dShaderDestroy(&ctx->m_shader);
+  ars3dShaderDestroy(&ctx->m_light_shader);
   cameraSystemDestroy(&ctx->m_camera);
 
   // Destroy the context itself.
@@ -111,29 +118,53 @@ ars3d_void onPhongLightingTestingGroundLayerDetatch(ars3d_void *p_ctx)
 
 ars3d_void onPhongLightingTestingGroundLayerStart(ars3d_void *p_ctx)
 {
-  ARS3D_UNUSED(p_ctx);
-  ARS3D_INFO("[PhongLightingTestingGroundLayer]: onStart()");
+  PhongLightingTestingGroundLayer * const ctx = (PhongLightingTestingGroundLayer *)p_ctx;
+
+  ars3dShaderBind(ctx->m_shader);
+
+  // Material.
+  ars3dShaderUniformFloat3(ctx->m_shader, "u_material.m_ambient", 1.0f, 0.0f, 0.0f);
+  ars3dShaderUniformFloat3(ctx->m_shader, "u_material.m_diffuse", 1.0f, 0.0f, 0.0f);
+  ars3dShaderUniformFloat3(ctx->m_shader, "u_material.m_specular", 1.0f, 0.0f, 0.0f);
+  ars3dShaderUniformFloat(ctx->m_shader, "u_material.m_shininess", 64.0f);
+
+  // Ambient Light.
+  ars3dShaderUniformFloat(ctx->m_shader, "u_ambient.m_strength", 0.2f);
+  ars3dShaderUniformFloat3(ctx->m_shader, "u_ambient.m_position", 0.0f, 0.0f, 0.0f);
+  ars3dShaderUniformFloat3(ctx->m_shader, "u_ambient.m_ambient", 1.0f, 1.0f, 1.0f);
+  ars3dShaderUniformFloat3(ctx->m_shader, "u_ambient.m_diffuse", 1.0f, 1.0f, 1.0f);
+  ars3dShaderUniformFloat3(ctx->m_shader, "u_ambient.m_specular", 1.0f, 1.0f, 1.0f);
+  ars3dShaderUniformFloat(ctx->m_shader, "u_ambient.m_attenuation.m_constant", 0.0f);
+  ars3dShaderUniformFloat(ctx->m_shader, "u_ambient.m_attenuation.m_linear", 0.0f);
+  ars3dShaderUniformFloat(ctx->m_shader, "u_ambient.m_attenuation.m_quadratic", 0.0f);
+
+  // Spot Light.
+  ars3dShaderUniformFloat(ctx->m_shader, "u_point_light.m_strength", 1.0f);
+  ars3dShaderUniformFloat3(ctx->m_shader, "u_point_light.m_position", ctx->m_light.m_position.raw[0], ctx->m_light.m_position.raw[1], ctx->m_light.m_position.raw[2]);
+  ars3dShaderUniformFloat3(ctx->m_shader, "u_point_light.m_ambient", 1.0f, 1.0f, 1.0f);
+  ars3dShaderUniformFloat3(ctx->m_shader, "u_point_light.m_diffuse", 1.0f, 1.0f, 1.0f);
+  ars3dShaderUniformFloat3(ctx->m_shader, "u_point_light.m_specular", 1.0f, 1.0f, 1.0f);
+  ars3dShaderUniformFloat(ctx->m_shader, "u_point_light.m_attenuation.m_constant", 1.0f);
+  ars3dShaderUniformFloat(ctx->m_shader, "u_point_light.m_attenuation.m_linear", 0.045f);
+  ars3dShaderUniformFloat(ctx->m_shader, "u_point_light.m_attenuation.m_quadratic", 0.0075f);
+
+  ars3dShaderUnbind();
 }
 
 ars3d_void onPhongLightingTestingGroundLayerUpdate(ars3d_void *p_ctx, ars3d_float p_delta_time)
 {
-  ARS3D_UNUSED(p_delta_time);
   PhongLightingTestingGroundLayer * const ctx = (PhongLightingTestingGroundLayer *)p_ctx;
 
   ctx->m_cube.m_rotation.raw[0] += p_delta_time * 50.0f;
   ctx->m_cube.m_rotation.raw[1] += p_delta_time * 50.0f;
 
-  cameraSystemFly(
-      ctx->m_camera,
-      glms_vec3_scale(ctx->m_cam_controller.m_delta_pos, ctx->m_cam_controller.m_move_speed * p_delta_time),
-      ctx->m_cam_controller.m_delta_yaw * ctx->m_cam_controller.m_turn_speed * p_delta_time,
-      ctx->m_cam_controller.m_delta_pitch * ctx->m_cam_controller.m_turn_speed * p_delta_time
-  );
+  // Update Camera Movement.
+  cameraControllerFly(&ctx->m_cam_controller, p_delta_time);
 
-  mat4s model = glms_mat4_identity();
   mat4s view  = cameraSystemGetViewMatrix(ctx->m_camera);
 
   // Calculate the full model matrix.
+  mat4s model = glms_mat4_identity();
   model = glms_translate(model, ctx->m_cube.m_position);
   model = glms_rotate_x(model, glm_rad(ctx->m_cube.m_rotation.raw[0]));
   model = glms_rotate_y(model, glm_rad(ctx->m_cube.m_rotation.raw[1]));
@@ -144,12 +175,31 @@ ars3d_void onPhongLightingTestingGroundLayerUpdate(ars3d_void *p_ctx, ars3d_floa
   mat4s u_mvp = glms_mul(ctx->m_projection, view);
   u_mvp       = glms_mul(u_mvp, model);
 
+  // u_normal_mat     = [ model^{-1} ]^{T}
+  mat4s u_normal_mat  = glms_mat4_inv(model);
+  u_normal_mat        = glms_mat4_transpose(u_normal_mat);
+
+
+  mat4s model_light = glms_mat4_identity();
+
+  // Calculate the light model matrix.
+  model_light = glms_translate(model_light, ctx->m_light.m_position);
+  model_light = glms_scale(model_light, ctx->m_light.m_scale);
+
+  // Calculate the ligth full model view projection matrix.
+  mat4s u_mvp_light = glms_mul(ctx->m_projection, view);
+  u_mvp_light       = glms_mul(u_mvp_light, model_light);
+
+
+  // ------------------------Draw The Material Cube------------------------ //
   // Bind the required GL data states.
   ars3dVertexArrayBind(ctx->m_vao);
   ars3dShaderBind(ctx->m_shader);
 
   // Upload uniforms.
   ars3dShaderUniformMat4(ctx->m_shader, "u_mvp", &u_mvp);
+  ars3dShaderUniformMat4(ctx->m_shader, "u_model", &model);
+  ars3dShaderUniformMat4(ctx->m_shader, "u_normal_mat", &u_normal_mat);
 
   // Enable GL specific functionality and render the triangles.
   ars3dGLEnableDepthTest(1);
@@ -158,6 +208,26 @@ ars3d_void onPhongLightingTestingGroundLayerUpdate(ars3d_void *p_ctx, ars3d_floa
   // Unbind GL state.
   ars3dVertexArrayUnbind();
   ars3dShaderUnbind();
+  // ------------------------Draw The Material Cube------------------------ //
+
+  // ------------------------Draw The Light Cube------------------------ //
+
+  // Bind the required GL data states.
+  ars3dVertexArrayBind(ctx->m_vao);
+  ars3dShaderBind(ctx->m_light_shader);
+
+  // Upload uniforms.
+  ars3dShaderUniformMat4(ctx->m_light_shader, "u_mvp", &u_mvp_light);
+  ars3dShaderUniformFloat3(ctx->m_light_shader, "u_light_color", 1.0f, 1.0f, 1.0f);
+
+  // Enable GL specific functionality and render the triangles.
+  ars3dGLEnableDepthTest(1);
+  ars3dGLRenderTriangles(36);
+
+  // Unbind GL state.
+  ars3dVertexArrayUnbind();
+  ars3dShaderUnbind();
+  // ------------------------Draw The Light Cube------------------------ //
 }
 
 ars3d_uchar onPhongLightingTestingGroundLayerEvent(ars3d_void *p_ctx, ars3d_void *p_event, ars3d_int p_event_type)
@@ -175,45 +245,12 @@ ars3d_uchar onPhongLightingTestingGroundLayerEvent(ars3d_void *p_ctx, ars3d_void
       break;
     }
 
-    case ARS3D_EVENT_TYPE_KEYBOARD_PRESS:
-    {
-      ars3d_int key = ars3dEventGetKeyboardKey(p_event);
-      switch (key)
-      {
-        case ARS3D_EVENT_KEY_W    : ctx->m_cam_controller.m_delta_pos.raw[2] -= 1; break;
-        case ARS3D_EVENT_KEY_S    : ctx->m_cam_controller.m_delta_pos.raw[2] += 1; break;
-        case ARS3D_EVENT_KEY_A    : ctx->m_cam_controller.m_delta_pos.raw[0] -= 1; break;
-        case ARS3D_EVENT_KEY_D    : ctx->m_cam_controller.m_delta_pos.raw[0] += 1; break;
-        case ARS3D_EVENT_KEY_LEFT : ctx->m_cam_controller.m_delta_yaw -= 1; break;
-        case ARS3D_EVENT_KEY_RIGHT: ctx->m_cam_controller.m_delta_yaw += 1; break;
-        case ARS3D_EVENT_KEY_UP   : ctx->m_cam_controller.m_delta_pitch += 1; break;
-        case ARS3D_EVENT_KEY_DOWN : ctx->m_cam_controller.m_delta_pitch -= 1; break;
-        default: break;
-      }
-      break;
-    }
-
-    case ARS3D_EVENT_TYPE_KEYBOARD_RELEASE:
-    {
-      ars3d_int key = ars3dEventGetKeyboardKey(p_event);
-      switch (key)
-      {
-        case ARS3D_EVENT_KEY_W: ctx->m_cam_controller.m_delta_pos.raw[2] += 1; break;
-        case ARS3D_EVENT_KEY_S: ctx->m_cam_controller.m_delta_pos.raw[2] -= 1; break;
-        case ARS3D_EVENT_KEY_A: ctx->m_cam_controller.m_delta_pos.raw[0] += 1; break;
-        case ARS3D_EVENT_KEY_D: ctx->m_cam_controller.m_delta_pos.raw[0] -= 1; break;
-        case ARS3D_EVENT_KEY_LEFT : ctx->m_cam_controller.m_delta_yaw += 1; break;
-        case ARS3D_EVENT_KEY_RIGHT: ctx->m_cam_controller.m_delta_yaw -= 1; break;
-        case ARS3D_EVENT_KEY_UP   : ctx->m_cam_controller.m_delta_pitch -= 1; break;
-        case ARS3D_EVENT_KEY_DOWN : ctx->m_cam_controller.m_delta_pitch += 1; break;
-        default: break;
-      }
-      break;
-    }
-
     default:
       break;
   }
+
+  // Call the camera controller event handler.
+  cameraControllerEventHandler(&ctx->m_cam_controller, p_event, p_event_type);
 
   return 0;
 }

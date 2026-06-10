@@ -66,4 +66,24 @@ void cameraSystemFly(CameraSystem *p_cam, vec3s p_dpos, float p_dyaw, float p_dp
  */
 mat4s cameraSystemGetViewMatrix(CameraSystem *p_cam);
 
+
+/**
+ * @brief Get the projection matric of the camera.
+ *
+ * @param p_cam The camera object.
+ *
+ * @returns The world position of the camera.
+ */
+vec3s cameraSystemGetPosition(CameraSystem *p_cam);
+
+
+/**
+ * @brief Get the front direction of the camera.
+ *
+ * @param p_cam The camera object.
+ *
+ * @returns The direction that the camera is looking at.
+ */
+vec3s cameraSystemGetFront(CameraSystem *p_cam);
+
 #endif

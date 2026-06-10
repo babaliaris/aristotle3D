@@ -40,19 +40,21 @@ uniform Material    u_material;    // Different draw calls for each material.
 uniform Light       u_ambient;     // General ambient lighting settings.
 uniform Light       u_point_light; // Sun or Moon.
 //uniform SpotLight   u_spot_light;  // Camera flashlight.
-//uniform vec3        u_cam_pos;     // Camera (eye) position.
+uniform vec3        u_cam_pos;     // Camera (eye) position.
 
 out vec4 pipe_color;
 
 vec3 calculateAmbientLighting(vec3 p_light_ambient, vec3 p_material_ambient, float p_light_strength);
 vec3 calculateDiffusePointLighting(Light p_light, Material p_mat);
+vec3 calculateSpecularPointLighting(Light p_light, Material p_mat);
 
 void main()
 {
   vec3 ambient        = calculateAmbientLighting(u_ambient.m_ambient, u_material.m_ambient, u_ambient.m_strength);
   vec3 point_diffuse  = calculateDiffusePointLighting(u_point_light, u_material);
+  vec3 point_specular = calculateSpecularPointLighting(u_point_light, u_material);
 
-  vec3 final_color = ambient + point_diffuse;
+  vec3 final_color = ambient + point_diffuse + point_specular;
 
   pipe_color = vec4(final_color, 1.0);
 }
@@ -127,8 +129,37 @@ vec3 calculateAmbientLighting(vec3 p_light_ambient, vec3 p_material_ambient, flo
  */
 vec3 calculateDiffusePointLighting(Light p_light, Material p_mat)
 {
-  vec3 light_frag_v = p_light.m_position - pipe_frag_pos;
-  float absorption  = calculateLightAbsorptionFactor(light_frag_v, pipe_normal);
+  vec3 frag_light_v = p_light.m_position - pipe_frag_pos;
+  float absorption  = calculateLightAbsorptionFactor(frag_light_v, pipe_normal);
+  float attenuation = calculateLightAttenuation(
+      p_light.m_attenuation.m_constant,
+      p_light.m_attenuation.m_linear,
+      p_light.m_attenuation.m_quadratic,
+      length(frag_light_v)
+  );
+
+  return p_light.m_diffuse * p_mat.m_diffuse * p_light.m_strength * absorption * attenuation;
+}
+
+
+/**
+ * @brief Calculate the specular lighting of a point light.
+ *
+ * @param p_light The point light source.
+ * @param p_mat The material object.
+ *
+ * @returns The final color of the specular point lighting.
+ */
+vec3 calculateSpecularPointLighting(Light p_light, Material p_mat)
+{
+  vec3 normalized_normal  = normalize(pipe_normal);
+  vec3 light_frag_v       = pipe_frag_pos - p_light.m_position;
+  vec3 reflect_v          = reflect(light_frag_v, normalized_normal);
+  vec3 frag_to_cam_v      = u_cam_pos - pipe_frag_pos;
+
+  float absorption  = calculateLightAbsorptionFactor(reflect_v, frag_to_cam_v);
+  float specular    = pow(absorption, p_mat.m_shininess);
+
   float attenuation = calculateLightAttenuation(
       p_light.m_attenuation.m_constant,
       p_light.m_attenuation.m_linear,
@@ -136,9 +167,8 @@ vec3 calculateDiffusePointLighting(Light p_light, Material p_mat)
       length(light_frag_v)
   );
 
-  return p_light.m_diffuse * p_mat.m_diffuse * p_light.m_strength * absorption * attenuation;
+  return p_light.m_specular * p_mat.m_specular * p_light.m_strength * specular * attenuation;
 }
-
 
 
 

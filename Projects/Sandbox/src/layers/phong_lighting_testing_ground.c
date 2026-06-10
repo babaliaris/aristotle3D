@@ -191,6 +191,9 @@ ars3d_void onPhongLightingTestingGroundLayerUpdate(ars3d_void *p_ctx, ars3d_floa
   u_mvp_light       = glms_mul(u_mvp_light, model_light);
 
 
+  vec3s cam_pos = cameraSystemGetPosition(ctx->m_camera);
+
+
   // ------------------------Draw The Material Cube------------------------ //
   // Bind the required GL data states.
   ars3dVertexArrayBind(ctx->m_vao);
@@ -200,6 +203,7 @@ ars3d_void onPhongLightingTestingGroundLayerUpdate(ars3d_void *p_ctx, ars3d_floa
   ars3dShaderUniformMat4(ctx->m_shader, "u_mvp", &u_mvp);
   ars3dShaderUniformMat4(ctx->m_shader, "u_model", &model);
   ars3dShaderUniformMat4(ctx->m_shader, "u_normal_mat", &u_normal_mat);
+  ars3dShaderUniformFloat3(ctx->m_shader, "u_cam_pos", cam_pos.raw[0], cam_pos.raw[1], cam_pos.raw[2]);
 
   // Enable GL specific functionality and render the triangles.
   ars3dGLEnableDepthTest(1);

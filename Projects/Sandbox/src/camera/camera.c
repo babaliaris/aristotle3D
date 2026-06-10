@@ -97,6 +97,33 @@ mat4s cameraSystemGetViewMatrix(CameraSystem *p_cam)
 }
 
 
+
+vec3s cameraSystemGetPosition(CameraSystem *p_cam)
+{
+
+  if (!p_cam)
+  {
+    ARS3D_WARN("Function call is missing required parameters.");
+    return (vec3s){{0.0f, 0.0f, 0.0f}};
+  }
+
+  return p_cam->m_position;
+}
+
+
+vec3s cameraSystemGetFront(CameraSystem *p_cam)
+{
+
+  if (!p_cam)
+  {
+    ARS3D_WARN("Function call is missing required parameters.");
+    return (vec3s){{0.0f, 0.0f, 0.0f}};
+  }
+
+  return p_cam->m_front;
+}
+
+
 static void cameraSystemCalculateAxis(CameraSystem *p_cam)
 {
   if (!p_cam)

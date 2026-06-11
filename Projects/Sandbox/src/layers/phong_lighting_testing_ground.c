@@ -130,23 +130,29 @@ ars3d_void onPhongLightingTestingGroundLayerStart(ars3d_void *p_ctx)
 
   // Ambient Light.
   ars3dShaderUniformFloat(ctx->m_shader, "u_ambient.m_strength", 0.2f);
-  ars3dShaderUniformFloat3(ctx->m_shader, "u_ambient.m_position", 0.0f, 0.0f, 0.0f);
   ars3dShaderUniformFloat3(ctx->m_shader, "u_ambient.m_ambient", 1.0f, 1.0f, 1.0f);
-  ars3dShaderUniformFloat3(ctx->m_shader, "u_ambient.m_diffuse", 1.0f, 1.0f, 1.0f);
-  ars3dShaderUniformFloat3(ctx->m_shader, "u_ambient.m_specular", 1.0f, 1.0f, 1.0f);
-  ars3dShaderUniformFloat(ctx->m_shader, "u_ambient.m_attenuation.m_constant", 0.0f);
-  ars3dShaderUniformFloat(ctx->m_shader, "u_ambient.m_attenuation.m_linear", 0.0f);
-  ars3dShaderUniformFloat(ctx->m_shader, "u_ambient.m_attenuation.m_quadratic", 0.0f);
 
-  // Spot Light.
+  // Point Light.
   ars3dShaderUniformFloat(ctx->m_shader, "u_point_light.m_strength", 1.0f);
   ars3dShaderUniformFloat3(ctx->m_shader, "u_point_light.m_position", ctx->m_light.m_position.raw[0], ctx->m_light.m_position.raw[1], ctx->m_light.m_position.raw[2]);
-  ars3dShaderUniformFloat3(ctx->m_shader, "u_point_light.m_ambient", 1.0f, 1.0f, 1.0f);
   ars3dShaderUniformFloat3(ctx->m_shader, "u_point_light.m_diffuse", 1.0f, 1.0f, 1.0f);
   ars3dShaderUniformFloat3(ctx->m_shader, "u_point_light.m_specular", 1.0f, 1.0f, 1.0f);
   ars3dShaderUniformFloat(ctx->m_shader, "u_point_light.m_attenuation.m_constant", 1.0f);
   ars3dShaderUniformFloat(ctx->m_shader, "u_point_light.m_attenuation.m_linear", 0.045f);
   ars3dShaderUniformFloat(ctx->m_shader, "u_point_light.m_attenuation.m_quadratic", 0.0075f);
+
+  // Spot Light.
+  ars3dShaderUniformFloat(ctx->m_shader, "u_spot_light.m_inner_cutoff_cos", cosf(glm_rad(12.5f)));
+  ars3dShaderUniformFloat(ctx->m_shader, "u_spot_light.m_outer_cutoff_cos", cosf(glm_rad(17.5f)));
+  ars3dShaderUniformFloat3(ctx->m_shader, "u_spot_light.m_direction", 0.0f, 0.0f, 0.0f);
+  ars3dShaderUniformFloat(ctx->m_shader, "u_spot_light.m_light.m_strength", 0.5f);
+  ars3dShaderUniformFloat3(ctx->m_shader, "u_spot_light.m_light.m_position", ctx->m_light.m_position.raw[0], ctx->m_light.m_position.raw[1], ctx->m_light.m_position.raw[2]);
+  ars3dShaderUniformFloat3(ctx->m_shader, "u_spot_light.m_light.m_diffuse", 1.0f, 1.0f, 1.0f);
+  ars3dShaderUniformFloat3(ctx->m_shader, "u_spot_light.m_light.m_specular", 1.0f, 1.0f, 1.0f);
+  ars3dShaderUniformFloat(ctx->m_shader, "u_spot_light.m_light.m_attenuation.m_constant", 1.0f);
+  ars3dShaderUniformFloat(ctx->m_shader, "u_spot_light.m_light.m_attenuation.m_linear", 0.045f);
+  ars3dShaderUniformFloat(ctx->m_shader, "u_spot_light.m_light.m_attenuation.m_quadratic", 0.0075f);
+
 
   ars3dShaderUnbind();
 }
@@ -191,7 +197,8 @@ ars3d_void onPhongLightingTestingGroundLayerUpdate(ars3d_void *p_ctx, ars3d_floa
   u_mvp_light       = glms_mul(u_mvp_light, model_light);
 
 
-  vec3s cam_pos = cameraSystemGetPosition(ctx->m_camera);
+  vec3s cam_pos   = cameraSystemGetPosition(ctx->m_camera);
+  vec3s cam_front = cameraSystemGetFront(ctx->m_camera);
 
 
   // ------------------------Draw The Material Cube------------------------ //
@@ -204,6 +211,8 @@ ars3d_void onPhongLightingTestingGroundLayerUpdate(ars3d_void *p_ctx, ars3d_floa
   ars3dShaderUniformMat4(ctx->m_shader, "u_model", &model);
   ars3dShaderUniformMat4(ctx->m_shader, "u_normal_mat", &u_normal_mat);
   ars3dShaderUniformFloat3(ctx->m_shader, "u_cam_pos", cam_pos.raw[0], cam_pos.raw[1], cam_pos.raw[2]);
+  ars3dShaderUniformFloat3(ctx->m_shader, "u_spot_light.m_direction", cam_front.raw[0], cam_front.raw[1], cam_front.raw[2]);
+  ars3dShaderUniformFloat3(ctx->m_shader, "u_spot_light.m_light.m_position", cam_pos.raw[0], cam_pos.raw[1], cam_pos.raw[2]);
 
   // Enable GL specific functionality and render the triangles.
   ars3dGLEnableDepthTest(1);

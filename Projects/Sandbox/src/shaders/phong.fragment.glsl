@@ -11,6 +11,12 @@ struct Material
   float m_shininess;
 };
 
+struct AmbientLight
+{
+  float m_strength;
+  vec3  m_ambient;
+};
+
 struct LightAttenuation
 {
   float m_constant;
@@ -22,7 +28,6 @@ struct Light
 {
   float             m_strength;
   vec3              m_position;
-  vec3              m_ambient;
   vec3              m_diffuse;
   vec3              m_specular;
   LightAttenuation  m_attenuation;
@@ -30,31 +35,35 @@ struct Light
 
 struct SpotLight
 {
-  float m_inner_cutoff_angle;
-  float m_outer_cutoff_angle;
+  float m_inner_cutoff_cos;
+  float m_outer_cutoff_cos;
   vec3  m_direction;
   Light m_light;
 };
 
-uniform Material    u_material;    // Different draw calls for each material.
-uniform Light       u_ambient;     // General ambient lighting settings.
-uniform Light       u_point_light; // Sun or Moon.
-//uniform SpotLight   u_spot_light;  // Camera flashlight.
-uniform vec3        u_cam_pos;     // Camera (eye) position.
+uniform Material      u_material;    // Different draw calls for each material.
+uniform AmbientLight  u_ambient;     // Global ambient lighting settings.
+uniform Light         u_point_light; // Sun or Moon.
+uniform SpotLight     u_spot_light;  // Camera flashlight.
+uniform vec3          u_cam_pos;     // Camera (eye) position.
 
 out vec4 pipe_color;
 
-vec3 calculateAmbientLighting(vec3 p_light_ambient, vec3 p_material_ambient, float p_light_strength);
+vec3 calculateAmbientLighting(AmbientLight p_light, Material p_mat);
 vec3 calculateDiffusePointLighting(Light p_light, Material p_mat);
 vec3 calculateSpecularPointLighting(Light p_light, Material p_mat);
+vec3 calculateDiffuseSpotLighting(SpotLight p_spot, Material p_mat);
+vec3 calculateSpecularSpotLighting(SpotLight p_spot, Material p_mat);
 
 void main()
 {
-  vec3 ambient        = calculateAmbientLighting(u_ambient.m_ambient, u_material.m_ambient, u_ambient.m_strength);
+  vec3 ambient        = calculateAmbientLighting(u_ambient, u_material);
   vec3 point_diffuse  = calculateDiffusePointLighting(u_point_light, u_material);
   vec3 point_specular = calculateSpecularPointLighting(u_point_light, u_material);
+  vec3 spot_diffuse   = calculateDiffuseSpotLighting(u_spot_light, u_material);
+  vec3 spot_specular  = calculateSpecularSpotLighting(u_spot_light, u_material);
 
-  vec3 final_color = ambient + point_diffuse + point_specular;
+  vec3 final_color = ambient + point_diffuse + point_specular + spot_diffuse + spot_specular;
 
   pipe_color = vec4(final_color, 1.0);
 }
@@ -107,15 +116,14 @@ float calculateLightAbsorptionFactor(vec3 p_light_direction, vec3 p_compare_dire
  * This is just a constant color contribution that stays
  * the same no matter what.
  *
- * @param p_light_ambient The ambient lighting source.
- * @param p_material_ambient The material ambient color.
- * @param p_light_strength The strength of the light.
+ * @param p_light The ambient lighting source.
+ * @param p_mat The material object.
  *
  * @returns The final color of the ambient lighting.
  */
-vec3 calculateAmbientLighting(vec3 p_light_ambient, vec3 p_material_ambient, float p_light_strength)
+vec3 calculateAmbientLighting(AmbientLight p_light, Material p_mat)
 {
-  return p_light_ambient * p_material_ambient * p_light_strength;
+  return p_light.m_ambient * p_mat.m_ambient * p_light.m_strength;
 }
 
 
@@ -173,3 +181,61 @@ vec3 calculateSpecularPointLighting(Light p_light, Material p_mat)
 
 
 
+/**
+ * @brief Calculate the diffuse lighting of a spot light.
+ *
+ * @param p_light The spot light source.
+ * @param p_mat The material object.
+ *
+ * @returns The final color of the diffuse spot lighting.
+ */
+vec3 calculateDiffuseSpotLighting(SpotLight p_spot, Material p_mat)
+{
+  vec3 light_frag_v = pipe_frag_pos - p_spot.m_light.m_position;
+
+  float absorption = calculateLightAbsorptionFactor(-light_frag_v, pipe_normal);
+
+  float attenuation = calculateLightAttenuation(
+      p_spot.m_light.m_attenuation.m_constant,
+      p_spot.m_light.m_attenuation.m_linear,
+      p_spot.m_light.m_attenuation.m_quadratic,
+      length(light_frag_v)
+  );
+
+  float theta                 = dot(normalize(light_frag_v), normalize(p_spot.m_direction));
+  float outer_inner_distance  = p_spot.m_inner_cutoff_cos - p_spot.m_outer_cutoff_cos;
+  float spot_itensity         = clamp((theta - p_spot.m_outer_cutoff_cos) / outer_inner_distance, 0.0, 1.0);
+
+  return p_spot.m_light.m_diffuse * p_mat.m_diffuse * p_spot.m_light.m_strength * absorption * spot_itensity * attenuation;
+}
+
+
+/**
+ * @brief Calculate the specular lighting of a spot light.
+ *
+ * @param p_light The spot light source.
+ * @param p_mat The material object.
+ *
+ * @returns The final color of the specular spot lighting.
+ */
+vec3 calculateSpecularSpotLighting(SpotLight p_spot, Material p_mat)
+{
+  vec3 light_frag_v   = pipe_frag_pos - p_spot.m_light.m_position;
+  vec3 reflect_v      = reflect(light_frag_v, normalize(pipe_normal));
+  vec3 frag_to_cam_v  = u_cam_pos - pipe_frag_pos;
+  float absorption    = calculateLightAbsorptionFactor(reflect_v, frag_to_cam_v);
+  float specular      = pow(absorption, p_mat.m_shininess);
+
+  float attenuation = calculateLightAttenuation(
+      p_spot.m_light.m_attenuation.m_constant,
+      p_spot.m_light.m_attenuation.m_linear,
+      p_spot.m_light.m_attenuation.m_quadratic,
+      length(light_frag_v)
+  );
+
+  float theta                 = dot(normalize(light_frag_v), normalize(p_spot.m_direction));
+  float outer_inner_distance  = p_spot.m_inner_cutoff_cos - p_spot.m_outer_cutoff_cos;
+  float spot_itensity         = clamp((theta - p_spot.m_outer_cutoff_cos) / outer_inner_distance, 0.0, 1.0);
+
+  return p_spot.m_light.m_specular * p_mat.m_specular * p_spot.m_light.m_strength * specular * spot_itensity * attenuation;
+}

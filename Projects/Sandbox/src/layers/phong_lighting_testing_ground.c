@@ -60,9 +60,6 @@ ars3d_void onPhongLightingTestingGroundLayerAttach(ars3d_void *p_ctx)
       &screen_height
   );
 
-  ctx->m_vao        = ars3dVertexArrayCreate();
-  ctx->m_vbo        = ars3dVertexBufferCreate();
-  ctx->m_attribs    = ars3dVertexAttributesCreate();
   ctx->m_camera     = cameraSystemCreate((vec3s){{0.0f, 0.0f, 1.0f}});
   ctx->m_projection = glms_perspective(glm_rad(45.0f), (float)screen_width / (float)screen_height, 0.1f, 100.0f);
   ctx->m_cube       = ars3dGameObjectCreate(
@@ -91,17 +88,6 @@ ars3d_void onPhongLightingTestingGroundLayerAttach(ars3d_void *p_ctx)
 
   // Initialize the camera controller.
   cameraControllerStackInit(&ctx->m_cam_controller, ctx->m_camera);
-
-  ars3dVertexArrayBind(ctx->m_vao);
-  ars3dVertexBufferBind(ctx->m_vbo);
-  ars3dVertexBufferData(ctx->m_vbo, ARS3D_SIZEOF(cube_data), cube_data, ARS3D_VBO_STATIC_DRAW);
-
-  ars3dVertexAttributesPush(ctx->m_attribs, "Positions", ARS3D_VERTEX_ATTRIBUTE_FLOAT, 3);
-  ars3dVertexAttributesPush(ctx->m_attribs, "Normals", ARS3D_VERTEX_ATTRIBUTE_FLOAT, 3);
-  ars3dVertexAttributesBind(ctx->m_attribs);
-
-  ars3dVertexBufferUnbind();
-  ars3dVertexArrayUnbind();
 }
 
 ars3d_void onPhongLightingTestingGroundLayerDetatch(ars3d_void *p_ctx)
@@ -109,15 +95,11 @@ ars3d_void onPhongLightingTestingGroundLayerDetatch(ars3d_void *p_ctx)
   PhongLightingTestingGroundLayer *ctx = (PhongLightingTestingGroundLayer *)p_ctx;
 
   // Destroy the context data.
-  ars3dVertexArrayDestroy(&ctx->m_vao);
-  ars3dVertexBufferDestroy(&ctx->m_vbo);
-  ars3dVertexAttributesDestroy(&ctx->m_attribs);
   ars3dShaderDestroy(&ctx->m_shader);
   ars3dShaderDestroy(&ctx->m_light_shader);
   ars3dGameObjectDestroy(&ctx->m_cube);
   ars3dGameObjectDestroy(&ctx->m_light);
   cameraSystemDestroy(&ctx->m_camera);
-
 
   // Destroy the context itself.
   ars3dFree(ctx);
@@ -126,6 +108,38 @@ ars3d_void onPhongLightingTestingGroundLayerDetatch(ars3d_void *p_ctx)
 ars3d_void onPhongLightingTestingGroundLayerStart(ars3d_void *p_ctx)
 {
   PhongLightingTestingGroundLayer * const ctx = (PhongLightingTestingGroundLayer *)p_ctx;
+
+
+  // Create the mesh for the cube.
+  ars3dGameObjectSetMesh(
+      ctx->m_cube,
+      ars3dMeshCreate(
+        cube_data,
+        ARS3D_SIZEOF(cube_data),
+        (Ars3DMeshAttribute[])
+        {
+          {"Positions", ARS3D_VERTEX_ATTRIBUTE_FLOAT, 3},
+          {"Normals", ARS3D_VERTEX_ATTRIBUTE_FLOAT, 3}
+        },
+        2
+      )
+  );
+
+
+  // Create the mesh for the light.
+  ars3dGameObjectSetMesh(
+      ctx->m_light,
+      ars3dMeshCreate(
+        cube_data,
+        ARS3D_SIZEOF(cube_data),
+        (Ars3DMeshAttribute[])
+        {
+          {"Positions", ARS3D_VERTEX_ATTRIBUTE_FLOAT, 3},
+          {"Normals", ARS3D_VERTEX_ATTRIBUTE_FLOAT, 3},
+        },
+        2
+      )
+  );
 
   vec3s light_pos = ars3dGameObjectGetPosition(ctx->m_light);
 
@@ -206,7 +220,7 @@ ars3d_void onPhongLightingTestingGroundLayerUpdate(ars3d_void *p_ctx, ars3d_floa
 
   // ------------------------Draw The Material Cube------------------------ //
   // Bind the required GL data states.
-  ars3dVertexArrayBind(ctx->m_vao);
+  ars3dVertexArrayBind(ars3dMeshGetVertexArray(ars3dGameObjectGetMesh(ctx->m_cube)));
   ars3dShaderBind(ctx->m_shader);
 
   // Upload uniforms.
@@ -229,7 +243,7 @@ ars3d_void onPhongLightingTestingGroundLayerUpdate(ars3d_void *p_ctx, ars3d_floa
   // ------------------------Draw The Light Cube------------------------ //
 
   // Bind the required GL data states.
-  ars3dVertexArrayBind(ctx->m_vao);
+  ars3dVertexArrayBind(ars3dMeshGetVertexArray(ars3dGameObjectGetMesh(ctx->m_light)));
   ars3dShaderBind(ctx->m_light_shader);
 
   // Upload uniforms.

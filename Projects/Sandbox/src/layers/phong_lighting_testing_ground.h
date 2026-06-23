@@ -9,9 +9,6 @@
 
 typedef struct
 {
-    Ars3DVertexArray *      m_vao;
-    Ars3DVertexBuffer *     m_vbo;
-    Ars3DVertexAttributes * m_attribs;
     Ars3DShader *           m_shader;
     Ars3DShader *           m_light_shader;
     CameraSystem *          m_camera;

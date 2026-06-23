@@ -6,12 +6,6 @@
 #include "../camera/camera.h"
 #include "../camera/camera-controller.h"
 
-typedef struct
-{
-  vec3s m_position;
-  vec3s m_rotation;
-  vec3s m_scale;
-} PhongCube;
 
 typedef struct
 {
@@ -23,8 +17,8 @@ typedef struct
     CameraSystem *          m_camera;
     CameraController        m_cam_controller;
     mat4s                   m_projection;
-    PhongCube               m_cube;
-    PhongCube               m_light;
+    Ars3DGameObject        *m_cube;
+    Ars3DGameObject        *m_light;
 } PhongLightingTestingGroundLayer;
 
 ars3d_void onPhongLightingTestingGroundLayerAttach(ars3d_void *p_ctx);

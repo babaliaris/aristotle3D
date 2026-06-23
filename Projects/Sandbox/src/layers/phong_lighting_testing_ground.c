@@ -65,12 +65,16 @@ ars3d_void onPhongLightingTestingGroundLayerAttach(ars3d_void *p_ctx)
   ctx->m_attribs    = ars3dVertexAttributesCreate();
   ctx->m_camera     = cameraSystemCreate((vec3s){{0.0f, 0.0f, 1.0f}});
   ctx->m_projection = glms_perspective(glm_rad(45.0f), (float)screen_width / (float)screen_height, 0.1f, 100.0f);
-  ctx->m_cube.m_position  = (vec3s){{0.0f, 0.0f, -4.0f}};
-  ctx->m_cube.m_rotation  = (vec3s){{0.0f, 0.0f, 0.0f}};
-  ctx->m_cube.m_scale     = (vec3s){{1.0f, 1.0f, 1.0f}};
-  ctx->m_light.m_position  = (vec3s){{0.0f, 4.0f, -4.0f}};
-  ctx->m_light.m_rotation  = (vec3s){{0.0f, 0.0f, 0.0f}};
-  ctx->m_light.m_scale     = (vec3s){{0.5f, 0.5f, 0.5f}};
+  ctx->m_cube       = ars3dGameObjectCreate(
+    (vec3s){{0.0f, 0.0f, -4.0f}},
+    (vec3s){{0.0f, 0.0f, 0.0f}},
+    (vec3s){{1.0f, 1.0f, 1.0f}}
+  );
+  ctx->m_light      = ars3dGameObjectCreate(
+    (vec3s){{0.0f, 4.0f, -4.0f}},
+    (vec3s){{0.0f, 0.0f, 0.0f}},
+    (vec3s){{0.5f, 0.5f, 0.5f}}
+  );
 
   // TODO: Replace these hardcoded paths with a custom path system to dynamically
   // generate the correct file paths, based on project scope based or standalone
@@ -110,7 +114,10 @@ ars3d_void onPhongLightingTestingGroundLayerDetatch(ars3d_void *p_ctx)
   ars3dVertexAttributesDestroy(&ctx->m_attribs);
   ars3dShaderDestroy(&ctx->m_shader);
   ars3dShaderDestroy(&ctx->m_light_shader);
+  ars3dGameObjectDestroy(&ctx->m_cube);
+  ars3dGameObjectDestroy(&ctx->m_light);
   cameraSystemDestroy(&ctx->m_camera);
+
 
   // Destroy the context itself.
   ars3dFree(ctx);
@@ -119,6 +126,8 @@ ars3d_void onPhongLightingTestingGroundLayerDetatch(ars3d_void *p_ctx)
 ars3d_void onPhongLightingTestingGroundLayerStart(ars3d_void *p_ctx)
 {
   PhongLightingTestingGroundLayer * const ctx = (PhongLightingTestingGroundLayer *)p_ctx;
+
+  vec3s light_pos = ars3dGameObjectGetPosition(ctx->m_light);
 
   ars3dShaderBind(ctx->m_shader);
 
@@ -134,7 +143,7 @@ ars3d_void onPhongLightingTestingGroundLayerStart(ars3d_void *p_ctx)
 
   // Point Light.
   ars3dShaderUniformFloat(ctx->m_shader, "u_point_light.m_strength", 1.0f);
-  ars3dShaderUniformFloat3(ctx->m_shader, "u_point_light.m_position", ctx->m_light.m_position.raw[0], ctx->m_light.m_position.raw[1], ctx->m_light.m_position.raw[2]);
+  ars3dShaderUniformFloat3(ctx->m_shader, "u_point_light.m_position", light_pos.raw[0], light_pos.raw[1], light_pos.raw[2]);
   ars3dShaderUniformFloat3(ctx->m_shader, "u_point_light.m_diffuse", 1.0f, 1.0f, 1.0f);
   ars3dShaderUniformFloat3(ctx->m_shader, "u_point_light.m_specular", 1.0f, 1.0f, 1.0f);
   ars3dShaderUniformFloat(ctx->m_shader, "u_point_light.m_attenuation.m_constant", 1.0f);
@@ -146,7 +155,7 @@ ars3d_void onPhongLightingTestingGroundLayerStart(ars3d_void *p_ctx)
   ars3dShaderUniformFloat(ctx->m_shader, "u_spot_light.m_outer_cutoff_cos", cosf(glm_rad(17.5f)));
   ars3dShaderUniformFloat3(ctx->m_shader, "u_spot_light.m_direction", 0.0f, 0.0f, 0.0f);
   ars3dShaderUniformFloat(ctx->m_shader, "u_spot_light.m_light.m_strength", 0.5f);
-  ars3dShaderUniformFloat3(ctx->m_shader, "u_spot_light.m_light.m_position", ctx->m_light.m_position.raw[0], ctx->m_light.m_position.raw[1], ctx->m_light.m_position.raw[2]);
+  ars3dShaderUniformFloat3(ctx->m_shader, "u_spot_light.m_light.m_position", light_pos.raw[0], light_pos.raw[1], light_pos.raw[2]);
   ars3dShaderUniformFloat3(ctx->m_shader, "u_spot_light.m_light.m_diffuse", 1.0f, 1.0f, 1.0f);
   ars3dShaderUniformFloat3(ctx->m_shader, "u_spot_light.m_light.m_specular", 1.0f, 1.0f, 1.0f);
   ars3dShaderUniformFloat(ctx->m_shader, "u_spot_light.m_light.m_attenuation.m_constant", 1.0f);
@@ -161,8 +170,10 @@ ars3d_void onPhongLightingTestingGroundLayerUpdate(ars3d_void *p_ctx, ars3d_floa
 {
   PhongLightingTestingGroundLayer * const ctx = (PhongLightingTestingGroundLayer *)p_ctx;
 
-  ctx->m_cube.m_rotation.raw[0] += p_delta_time * 50.0f;
-  ctx->m_cube.m_rotation.raw[1] += p_delta_time * 50.0f;
+  ars3dGameObjectUpdateRotation(
+      ctx->m_cube,
+      (vec3s){{p_delta_time * 50.0f, p_delta_time * 50.0f, 0.0f}}
+  );
 
   // Update Camera Movement.
   cameraControllerFly(&ctx->m_cam_controller, p_delta_time);
@@ -170,12 +181,7 @@ ars3d_void onPhongLightingTestingGroundLayerUpdate(ars3d_void *p_ctx, ars3d_floa
   mat4s view  = cameraSystemGetViewMatrix(ctx->m_camera);
 
   // Calculate the full model matrix.
-  mat4s model = glms_mat4_identity();
-  model = glms_translate(model, ctx->m_cube.m_position);
-  model = glms_rotate_x(model, glm_rad(ctx->m_cube.m_rotation.raw[0]));
-  model = glms_rotate_y(model, glm_rad(ctx->m_cube.m_rotation.raw[1]));
-  model = glms_rotate_z(model, glm_rad(ctx->m_cube.m_rotation.raw[2]));
-  model = glms_scale(model, ctx->m_cube.m_scale);
+  mat4s model = ars3dGameObjectGetModelMatrix(ctx->m_cube);
 
   // Calculate the model view projection matrix.
   mat4s u_mvp = glms_mul(ctx->m_projection, view);
@@ -186,11 +192,8 @@ ars3d_void onPhongLightingTestingGroundLayerUpdate(ars3d_void *p_ctx, ars3d_floa
   u_normal_mat        = glms_mat4_transpose(u_normal_mat);
 
 
-  mat4s model_light = glms_mat4_identity();
+  mat4s model_light = ars3dGameObjectGetModelMatrix(ctx->m_light);
 
-  // Calculate the light model matrix.
-  model_light = glms_translate(model_light, ctx->m_light.m_position);
-  model_light = glms_scale(model_light, ctx->m_light.m_scale);
 
   // Calculate the ligth full model view projection matrix.
   mat4s u_mvp_light = glms_mul(ctx->m_projection, view);

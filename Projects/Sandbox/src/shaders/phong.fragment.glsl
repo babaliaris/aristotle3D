@@ -165,8 +165,13 @@ vec3 calculateSpecularPointLighting(Light p_light, Material p_mat)
   vec3 reflect_v          = reflect(light_frag_v, normalized_normal);
   vec3 frag_to_cam_v      = u_cam_pos - pipe_frag_pos;
 
-  float absorption  = calculateLightAbsorptionFactor(reflect_v, frag_to_cam_v);
-  float specular    = pow(absorption, p_mat.m_shininess);
+  float absorption = calculateLightAbsorptionFactor(reflect_v, frag_to_cam_v);
+  float specular   = 0.0;
+
+  if (absorption > 0.0 && p_mat.m_shininess > 0.0)
+  {
+    specular = pow(absorption, p_mat.m_shininess);
+  }
 
   float attenuation = calculateLightAttenuation(
       p_light.m_attenuation.m_constant,
@@ -224,7 +229,12 @@ vec3 calculateSpecularSpotLighting(SpotLight p_spot, Material p_mat)
   vec3 reflect_v      = reflect(light_frag_v, normalize(pipe_normal));
   vec3 frag_to_cam_v  = u_cam_pos - pipe_frag_pos;
   float absorption    = calculateLightAbsorptionFactor(reflect_v, frag_to_cam_v);
-  float specular      = pow(absorption, p_mat.m_shininess);
+  float specular      = 0.0;
+
+  if (absorption > 0.0 && p_mat.m_shininess > 0.0)
+  {
+    specular = pow(absorption, p_mat.m_shininess);
+  }
 
   float attenuation = calculateLightAttenuation(
       p_spot.m_light.m_attenuation.m_constant,

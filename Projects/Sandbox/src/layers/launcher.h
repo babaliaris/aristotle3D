@@ -10,6 +10,7 @@
 #define LAUNCHER_LAUNCH_BARNSLEY_FRACTAL              2
 #define LAUNCHER_LAUNCH_CUBE                          3
 #define LAUNCHER_LAUNCH_PHONG_LIGHTING_TESTING_GROUND 4
+#define LAUNCHER_LAUNCH_PROJECT_3                     5
 
 typedef struct
 {

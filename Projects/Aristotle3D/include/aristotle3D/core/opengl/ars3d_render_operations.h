@@ -42,6 +42,14 @@ ARS3D_API ars3d_void ars3dGLEnableDepthTest(ars3d_uchar p_enable);
 
 
 /**
+ * @brief Enable Dither.
+ * 
+ * @param p_enable 0 = disable, true = enable
+ */
+ARS3D_API ars3d_void ars3dGLEnableDither(ars3d_uchar p_enable);
+
+
+/**
  * @brief Enable face culling.
  * 
  * @param p_enable 0 = disable, true = enable

@@ -60,7 +60,7 @@ ars3d_void onPhongLightingTestingGroundLayerAttach(ars3d_void *p_ctx)
       &screen_height
   );
 
-  ctx->m_camera     = cameraSystemCreate((vec3s){{0.0f, 0.0f, 1.0f}});
+  ctx->m_camera     = cameraSystemCreate((vec3s){{0.0f, 0.0f, 1.0f}}, 0.0f, -90.0f);
   ctx->m_projection = glms_perspective(glm_rad(45.0f), (float)screen_width / (float)screen_height, 0.1f, 100.0f);
   ctx->m_cube       = ars3dGameObjectCreate(
     (vec3s){{0.0f, 0.0f, -4.0f}},

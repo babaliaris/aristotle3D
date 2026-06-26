@@ -128,6 +128,34 @@ void cameraControllerFly(CameraController *p_controller, float p_delta_time)
 
 
 
+void cameraControllerOrbit(CameraController *p_controller, float p_delta_time, float *p_radius)
+{
+  if (!p_controller)
+  {
+    ARS3D_WARN("Required parameters are not provided");
+    return;
+  }
+
+  float zoom_speed = 30.0f;
+  *p_radius += p_controller->m_direction_z * zoom_speed * p_delta_time;
+
+  if (*p_radius < 5.0f)   *p_radius = 5.0f;
+  if (*p_radius > 250.0f) *p_radius = 250.0f;
+
+  // Calculate the yaw and pitch deltas.
+  float dyaw   = p_controller->m_direction_yaw * p_controller->m_yaw_speed * p_delta_time;
+  float dpitch = p_controller->m_direction_pitch * p_controller->m_pitch_speed * p_delta_time;
+
+  // Call the camera system orbit function.
+  cameraSystemOrbit(
+      p_controller->m_camera_system,
+      dyaw,
+      dpitch,
+      *p_radius
+  );
+}
+
+
 void cameraControllerSetMovementSpeed(CameraController *p_controller, float p_speed)
 {
   if (!p_controller)

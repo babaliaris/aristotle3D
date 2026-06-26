@@ -5,7 +5,7 @@
 static void cameraSystemCalculateAxis(CameraSystem *p_cam);
 
 
-CameraSystem *cameraSystemCreate(vec3s p_start_position)
+CameraSystem *cameraSystemCreate(vec3s p_start_position, float p_pitch, float p_yaw)
 {
   if (glms_vec3_norm(p_start_position) == 0 || glms_vec3_norm(p_start_position) < 0.001f)
   {
@@ -24,8 +24,8 @@ CameraSystem *cameraSystemCreate(vec3s p_start_position)
   // Initialize basic stuff.
   new_camera->m_position    = p_start_position;
   new_camera->m_front       = glms_vec3_negate(glms_normalize(p_start_position));
-  new_camera->m_yaw         = glm_deg(atan2(new_camera->m_front.raw[2], new_camera->m_front.raw[0]));
-  new_camera->m_pitch       = glm_deg(asin(new_camera->m_front.raw[1]));
+  new_camera->m_yaw         = p_yaw;
+  new_camera->m_pitch       = p_pitch;
   new_camera->m_helper_up   = (vec3s){{0.0f, 1.0f, 0.0f}};
 
   // Calculate the camera coordinate space.
@@ -78,6 +78,35 @@ void cameraSystemFly(CameraSystem *p_cam, vec3s p_dpos, float p_dyaw, float p_dp
   {
     p_cam->m_position = (vec3s){{0.0f, 0.0f, 0.001f}};
   }
+}
+
+
+void cameraSystemOrbit(CameraSystem *p_cam, float p_dyaw, float p_dpitch, float p_radius)
+{
+    if (!p_cam)
+    {
+        ARS3D_WARN("Function call is missing required parameters.");
+        return;
+    }
+
+    p_cam->m_yaw   += p_dyaw;
+    p_cam->m_pitch += p_dpitch;
+
+    if (p_cam->m_pitch > 89.0f)  p_cam->m_pitch = 89.0f;
+    if (p_cam->m_pitch < -89.0f) p_cam->m_pitch = -89.0f;
+
+    float rad_yaw   = glm_rad(p_cam->m_yaw);
+    float rad_pitch = glm_rad(p_cam->m_pitch);
+
+    p_cam->m_position.raw[0] = -p_radius * cosf(rad_yaw) * cosf(rad_pitch);
+    p_cam->m_position.raw[1] = p_radius * sinf(rad_pitch);
+    p_cam->m_position.raw[2] = -p_radius * sinf(rad_yaw) * cosf(rad_pitch);
+
+    p_cam->m_front = glms_normalize(glms_vec3_negate(p_cam->m_position));
+
+    p_cam->m_z_axis = glms_normalize(glms_vec3_negate(p_cam->m_front));
+    p_cam->m_x_axis = glms_normalize(glms_cross(p_cam->m_helper_up, p_cam->m_z_axis));
+    p_cam->m_y_axis = glms_normalize(glms_cross(p_cam->m_z_axis, p_cam->m_x_axis));
 }
 
 
@@ -141,4 +170,28 @@ static void cameraSystemCalculateAxis(CameraSystem *p_cam)
   p_cam->m_z_axis   = glms_normalize(glms_vec3_negate(p_cam->m_front));
   p_cam->m_x_axis   = glms_normalize(glms_cross(p_cam->m_helper_up, p_cam->m_z_axis));
   p_cam->m_y_axis   = glms_normalize(glms_cross(p_cam->m_z_axis, p_cam->m_x_axis));
+}
+
+
+void cameraSystemSetPitch(CameraSystem *p_cam, float p_pitch)
+{
+  if (!p_cam)
+  {
+    ARS3D_WARN("Function call is missing required parameters.");
+    return;
+  }
+
+  p_cam->m_pitch = p_pitch;
+}
+
+
+void cameraSystemSetYaw(CameraSystem *p_cam, float p_yaw)
+{
+  if (!p_cam)
+  {
+    ARS3D_WARN("Function call is missing required parameters.");
+    return;
+  }
+
+  p_cam->m_yaw = p_yaw;
 }

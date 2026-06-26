@@ -4,6 +4,7 @@
 #include "barnsley.h"
 #include "cube.h"
 #include "phong_lighting_testing_ground.h"
+#include "project3.h"
 
 ars3d_void uiRun(LauncherLayerCtx *ctx)
 {
@@ -38,6 +39,12 @@ ars3d_void uiRun(LauncherLayerCtx *ctx)
     if (mu_button(mu, "Phong Lighting Testing Ground"))
     {
       ctx->m_layer = LAUNCHER_LAUNCH_PHONG_LIGHTING_TESTING_GROUND;
+    }
+
+
+    if (mu_button(mu, "Project 3"))
+    {
+      ctx->m_layer = LAUNCHER_LAUNCH_PROJECT_3;
     }
 
     if (mu_button(mu, "EXIT"))
@@ -125,15 +132,32 @@ ars3d_void launcherLayerOnUpdate(ars3d_void *p_ctx, ars3d_float p_delta_time)
       {
         ARS3D_INFO("Starting up: Phong Lighting Testing Ground");
         PhongLightingTestingGroundLayer *layer = phongLightingTestingGroundLayerCreate();
-          ars3dAppAttachLayer(
-            ars3dAppGet(),
-            layer,
-            onPhongLightingTestingGroundLayerAttach,
-            onPhongLightingTestingGroundLayerDetatch,
-            onPhongLightingTestingGroundLayerStart,
-            onPhongLightingTestingGroundLayerUpdate,
-            onPhongLightingTestingGroundLayerEvent
-          );
+        ars3dAppAttachLayer(
+          ars3dAppGet(),
+          layer,
+          onPhongLightingTestingGroundLayerAttach,
+          onPhongLightingTestingGroundLayerDetatch,
+          onPhongLightingTestingGroundLayerStart,
+          onPhongLightingTestingGroundLayerUpdate,
+          onPhongLightingTestingGroundLayerEvent
+        );
+        break;
+      }
+
+
+      case LAUNCHER_LAUNCH_PROJECT_3:
+      {
+        ARS3D_INFO("Starting up: Project 3!");
+        SandboxProject3Layer *layer = project3LayerCreateContext();
+        ars3dAppAttachLayer(
+          ars3dAppGet(),
+          layer,
+          onProject3LayerAttach,
+          onProject3LayerDetatch,
+          onProject3LayerStart,
+          onProject3LayerUpdate,
+          onProject3LayerEvent
+        );
         break;
       }
 

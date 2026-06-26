@@ -42,6 +42,21 @@ ars3d_void ars3dGLEnableDepthTest(ars3d_uchar p_enable)
 }
 
 
+ars3d_void ars3dGLEnableDither(ars3d_uchar p_enable)
+{
+    if (p_enable)
+    {
+        ARS3D_OPENGL(glEnable(GL_DITHER));
+    }
+
+    else
+    {
+        ARS3D_OPENGL(glDisable(GL_DITHER));
+    }
+}
+
+
+
 ars3d_void ars3dGLEnableFaceCulling(ars3d_uchar p_enable)
 {
   if (p_enable)

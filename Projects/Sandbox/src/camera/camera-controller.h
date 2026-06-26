@@ -76,6 +76,20 @@ void cameraControllerFly(CameraController *p_controller, float p_delta_time);
 
 
 /**
+ * @brief Updates the camera orientation and position to orbit around the origin.
+ *
+ * It utilizes the active directional states mapped to arrow keys (yaw and pitch)
+ * to manipulate the camera dynamically over a spherical shell.
+ *
+ * @param p_controller The controller object.
+ * @param p_delta_time The time between two frames.
+ * @param p_radius The distance from the center (0,0,0).
+ */
+void cameraControllerOrbit(CameraController *p_controller, float p_delta_time, float *p_radius);
+
+
+
+/**
  * @brief Sets the movement speed.
  *
  * @param p_controller The controller object.

@@ -31,10 +31,12 @@ typedef struct CameraSystem
  * @brief Create a new camera object.
  *
  * @param p_start_position The starting world position of the camera.
+ * @param p_pitch The pitch angle in degrees.
+ * @param p_yaw The yaw angle in degrees.
  *
  * @returns The newly created object.
  */
-CameraSystem *cameraSystemCreate(vec3s p_start_position);
+CameraSystem *cameraSystemCreate(vec3s p_start_position, float p_pitch, float p_yaw);
 
 /**
  * @brief Destroy a camera object.
@@ -55,6 +57,20 @@ void cameraSystemDestroy(CameraSystem **p_cam);
  * @param p_dpitch The change in the pitch angle in degrees.
  */
 void cameraSystemFly(CameraSystem *p_cam, vec3s p_dpos, float p_dyaw, float p_dpitch);
+
+
+/**
+ * @brief Orbit the camera around the world origin (0,0,0).
+ *
+ * Controls the spherical coordinates (yaw for left/right, pitch for up/down)
+ * and recalculates the position and axis so the camera points to the origin.
+ *
+ * @param p_cam The camera object.
+ * @param p_dyaw The change in the horizontal angle (left/right) in degrees.
+ * @param p_dpitch The change in the vertical angle (up/down) in degrees.
+ * @param p_radius The distance from the center (0,0,0).
+ */
+void cameraSystemOrbit(CameraSystem *p_cam, float p_dyaw, float p_dpitch, float p_radius);
 
 
 /**
@@ -85,5 +101,27 @@ vec3s cameraSystemGetPosition(CameraSystem *p_cam);
  * @returns The direction that the camera is looking at.
  */
 vec3s cameraSystemGetFront(CameraSystem *p_cam);
+
+
+/**
+ * @brief Set the pitch of the camera.
+ *
+ * @param p_cam The camera object.
+ * @param p_pitch The pitch in degrees.
+ *
+ */
+void cameraSystemSetPitch(CameraSystem *p_cam, float p_pitch);
+
+
+/**
+ * @brief Set the yaw of the camera.
+ *
+ * @param p_cam The camera object.
+ * @param p_yaw The yaw in degrees.
+ *
+ */
+void cameraSystemSetYaw(CameraSystem *p_cam, float p_yaw);
+
+
 
 #endif

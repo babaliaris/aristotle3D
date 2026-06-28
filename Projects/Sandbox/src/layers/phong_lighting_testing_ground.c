@@ -145,6 +145,10 @@ ars3d_void onPhongLightingTestingGroundLayerStart(ars3d_void *p_ctx)
 
   ars3dShaderBind(ctx->m_shader);
 
+  // Set to smooth shading.
+  ars3dShaderUniformInt(ctx->m_shader, "u_use_flat_shading", 0);
+
+
   // Material.
   ars3dShaderUniformFloat3(ctx->m_shader, "u_material.m_ambient", 1.0f, 0.0f, 0.0f);
   ars3dShaderUniformFloat3(ctx->m_shader, "u_material.m_diffuse", 1.0f, 0.0f, 0.0f);

@@ -8,6 +8,7 @@ void renderGameObject(SandboxProject3Layer *ctx, GameObject *obj);
 void generateGridTerrain(float *grid_vertices);
 void updateCelestialTrajectory(SandboxProject3Layer *ctx, float p_delta_time);
 void uiProject3Run(SandboxProject3Layer *ctx);
+void generateSubdividedSphere(float *out_buffer, int *p_vertex_count);
 
 
 
@@ -85,6 +86,13 @@ ars3d_void onProject3LayerDetatch(ars3d_void *p_ctx)
   ars3dVertexBufferDestroy(&ctx->m_grid_mesh->m_vbo);
   ars3dVertexAttributesDestroy(&ctx->m_grid_mesh->m_attributes);
   ars3dFree(ctx->m_grid_mesh);
+
+  // Destroy the sphere mesh.
+  ars3dVertexArrayDestroy(&ctx->m_sphere_mesh->m_vao);
+  ars3dVertexBufferDestroy(&ctx->m_sphere_mesh->m_vbo);
+  ars3dVertexAttributesDestroy(&ctx->m_sphere_mesh->m_attributes);
+  ars3dFree(ctx->m_sphere_mesh);
+
 
   // Destroy the Materials.
   ars3dFree(ctx->m_brown_mat);
@@ -320,6 +328,15 @@ void initializeGeometry(SandboxProject3Layer *ctx)
   float grid_data[GRID_DIVISIONS * GRID_DIVISIONS * VERTICES_PER_QUAD * FLOATS_PER_VERTEX];
   generateGridTerrain(grid_data);
 
+  // We start with 4 triangles.
+  // For depth=4 we have 4*4*4*4*4=4^5=1024 triangles
+  // 3 vertices * 1024 = 3072 vertices.
+  // 3 floats * 3072   = 9216 floats.
+  float sphere_vertices[9216];
+  int sphere_count = 0;
+  generateSubdividedSphere(sphere_vertices, &sphere_count);
+
+
 
   // --------------------------------|Create And Initialize The Cube Mesh|-------------------------------- //
   // Create the mesh and initialize it.
@@ -424,6 +441,31 @@ void initializeGeometry(SandboxProject3Layer *ctx)
   ars3dVertexBufferUnbind();
   // -----------------------------|Create And Initialize The Grid Plane Mesh|----------------------------- //
 
+
+  // -------------------------------|Create And Initialize The Sphere Mesh|------------------------------- //
+  // Create the mesh and initialize it.
+  ctx->m_sphere_mesh                    = (Mesh *)ars3dMalloc(ARS3D_SIZEOF(Mesh));
+  ctx->m_sphere_mesh->m_vao             = ars3dVertexArrayCreate();
+  ctx->m_sphere_mesh->m_vbo             = ars3dVertexBufferCreate();
+  ctx->m_sphere_mesh->m_attributes      = ars3dVertexAttributesCreate();
+  ctx->m_sphere_mesh->m_num_of_vertices = sphere_count;
+
+  // Bind the buffers.
+  ars3dVertexArrayBind(ctx->m_sphere_mesh->m_vao);
+  ars3dVertexBufferBind(ctx->m_sphere_mesh->m_vbo);
+
+  // Transfer the data to the GPU.
+  ars3dVertexBufferData(ctx->m_sphere_mesh->m_vbo, ARS3D_SIZEOF(sphere_vertices), sphere_vertices, ARS3D_VBO_STATIC_DRAW);
+
+  // Create and Bind the vertex attributes.
+  ars3dVertexAttributesPush(ctx->m_sphere_mesh->m_attributes, "Positions", ARS3D_VERTEX_ATTRIBUTE_FLOAT, 3);
+  ars3dVertexAttributesBind(ctx->m_sphere_mesh->m_attributes);
+
+  // Unbind the buffers for safety.
+  ars3dVertexArrayUnbind();
+  ars3dVertexBufferUnbind();
+  // -------------------------------|Create And Initialize The Sphere Mesh|------------------------------- //
+
 }
 
 
@@ -527,7 +569,7 @@ void initializeGameObjects(SandboxProject3Layer *ctx)
   ctx->m_sun_or_moon.m_transform.m_model          = glms_mat4_identity();
   ctx->m_sun_or_moon.m_transform.m_normal         = glms_mat4_identity();
   ctx->m_sun_or_moon.m_transform.m_is_dirty       = 1;
-  ctx->m_sun_or_moon.m_mesh                       = ctx->m_cube_mesh;
+  ctx->m_sun_or_moon.m_mesh                       = ctx->m_sphere_mesh;
   ctx->m_sun_or_moon.m_material                   = ctx->m_sun_mat;
   ctx->m_sun_or_moon.m_light.m_point.m_diffuse    = (vec3s){{1.0f, 1.0f, 1.0f}};
   ctx->m_sun_or_moon.m_light.m_point.m_specular   = (vec3s){{1.0f, 1.0f, 1.0f}};
@@ -1028,5 +1070,87 @@ void uiProject3Run(SandboxProject3Layer *ctx)
 
     mu_end_window(mu);
   }
+}
+
+
+// Normalize the point to "sit" directly into a spherical surface.
+point3 normalizePoint(point3 p)
+{
+  float len = sqrtf(p.x * p.x + p.y * p.y + p.z * p.z);
+  if (len > 0.0f)
+  {
+    p.x /= len;
+    p.y /= len;
+    p.z /= len;
+  }
+  return p;
+}
+
+
+
+// Triangle Subdivizion.
+void subdivide(point3 v1, point3 v2, point3 v3, int depth, float *out_buffer, int *p_index)
+{
+  if (depth == 0)
+  {
+      // Base case: Φτάσαμε στο βάθος 4, αποθηκεύουμε το τελικό τρίγωνο στο buffer μας
+      // Vertex 1
+      out_buffer[(*p_index)++] = v1.x;
+      out_buffer[(*p_index)++] = v1.y;
+      out_buffer[(*p_index)++] = v1.z;
+
+      // Vertex 2
+      out_buffer[(*p_index)++] = v2.x;
+      out_buffer[(*p_index)++] = v2.y;
+      out_buffer[(*p_index)++] = v2.z;
+
+      // Vertex 3
+      out_buffer[(*p_index)++] = v3.x;
+      out_buffer[(*p_index)++] = v3.y;
+      out_buffer[(*p_index)++] = v3.z;
+      return;
+  }
+
+  // Calculate the new edges.
+  point3 v12 = { (v1.x + v2.x) * 0.5f, (v1.y + v2.y) * 0.5f, (v1.z + v2.z) * 0.5f };
+  point3 v23 = { (v2.x + v3.x) * 0.5f, (v2.y + v3.y) * 0.5f, (v2.z + v3.z) * 0.5f };
+  point3 v31 = { (v3.x + v1.x) * 0.5f, (v3.y + v1.y) * 0.5f, (v3.z + v1.z) * 0.5f };
+
+  // Normalize the new vertices to sit on the surface of a sphere.
+  v12 = normalizePoint(v12);
+  v23 = normalizePoint(v23);
+  v31 = normalizePoint(v31);
+
+  // Recurse on the new 4 triangles.
+  subdivide(v1,  v12, v31, depth - 1, out_buffer, p_index);
+  subdivide(v12, v2,  v23, depth - 1, out_buffer, p_index);
+  subdivide(v31, v23, v3,  depth - 1, out_buffer, p_index);
+  subdivide(v12, v23, v31, depth - 1, out_buffer, p_index);
+}
+
+
+// Generates a sphere by subdividing triangles.
+void generateSubdividedSphere(float *out_buffer, int *p_vertex_count)
+{
+  // Project 3 DATA.
+  point3 v[4] =
+  {
+    { 0.0f,       0.0f,       1.0f },
+    { 0.0f,       0.942809f, -0.333333f },
+    {-0.816497f, -0.471405f, -0.333333f },
+    { 0.816497f, -0.471405f, -0.333333f }
+  };
+
+  int float_index = 0;
+  int depth = 4;
+
+  // Subdivide each triangle recursivly.
+  subdivide(v[0], v[1], v[2], depth, out_buffer, &float_index);
+  subdivide(v[0], v[2], v[3], depth, out_buffer, &float_index);
+  subdivide(v[0], v[3], v[1], depth, out_buffer, &float_index);
+  subdivide(v[3], v[2], v[1], depth, out_buffer, &float_index);
+
+  // Store the number of vertices.
+  *p_vertex_count = float_index / 3;
 }
 

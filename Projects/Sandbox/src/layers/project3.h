@@ -20,6 +20,12 @@
 #define VERTICES_PER_QUAD 6
 
 
+typedef struct
+{
+    float x, y, z;
+} point3;
+
+
 typedef struct Mesh
 {
   Ars3DVertexArray      *m_vao;
@@ -84,7 +90,7 @@ typedef struct SandboxProject3Layer
     CameraSystem *    m_camera;       // Live for the entire app duration.
     CameraController  m_cam_controller;
     mat4s             m_projection;
-    Mesh             *m_cube_mesh, *m_roof_mesh, *m_single_plane_mesh, *m_grid_mesh;
+    Mesh             *m_cube_mesh, *m_roof_mesh, *m_single_plane_mesh, *m_grid_mesh, *m_sphere_mesh;
     Material         *m_brown_mat, *m_blue_mat, *m_pink_mat, *m_roof_mat, *m_sun_mat, *m_moon_mat, *m_spot_mat;
     Material         *m_floor_mat;
     GameObject        m_ambient, m_sun_or_moon, m_flashlight;

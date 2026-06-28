@@ -18,9 +18,6 @@ configurations({
 	"Release",
 })
 
--- Use clang
-toolset("clang")
-
 -- Set build and object directories.
 targetdir(_ARS3D_TARGET_DIR)
 objdir(_ARS3D_OBJECT_DIR)
@@ -79,6 +76,7 @@ filter("system:linux")
 defines({
 	"ARS3D_LINUX",
 })
+toolset("clang") -- On linux, use clang
 
 -- WINDOWS (Global Configurations)
 filter("system:windows")

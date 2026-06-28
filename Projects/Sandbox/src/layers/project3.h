@@ -100,7 +100,7 @@ typedef struct SandboxProject3Layer
     GameObject        m_floor;
 
     float             m_sun_theta, m_orbit_radius; // In radians.
-    int               m_is_day, m_is_camera_orbiting;
+    int               m_is_day, m_is_camera_orbiting, m_flat_shading;
 
 } SandboxProject3Layer;
 

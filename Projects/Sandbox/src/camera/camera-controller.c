@@ -143,8 +143,8 @@ void cameraControllerOrbit(CameraController *p_controller, float p_delta_time, f
   if (*p_radius > 250.0f) *p_radius = 250.0f;
 
   // Calculate the yaw and pitch deltas.
-  float dyaw   = p_controller->m_direction_yaw * p_controller->m_yaw_speed * p_delta_time;
-  float dpitch = p_controller->m_direction_pitch * p_controller->m_pitch_speed * p_delta_time;
+  float dyaw   = -p_controller->m_direction_yaw * p_controller->m_yaw_speed * p_delta_time;
+  float dpitch =  p_controller->m_direction_pitch * p_controller->m_pitch_speed * p_delta_time;
 
   // Call the camera system orbit function.
   cameraSystemOrbit(

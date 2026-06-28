@@ -39,6 +39,7 @@ ars3d_void onProject3LayerAttach(ars3d_void *p_ctx)
   ctx->m_orbit_radius       = 120.0f;
   ctx->m_is_day             = 1;
   ctx->m_is_camera_orbiting = 1;
+  ctx->m_flat_shading       = 0;
 
   // Initialize the camera controller.
   cameraControllerStackInit(&ctx->m_cam_controller, ctx->m_camera);
@@ -764,6 +765,9 @@ void renderGameObject(SandboxProject3Layer *ctx, GameObject *obj)
   // Bind the phong shader.
   ars3dShaderBind(ctx->m_phong_shader);
 
+  // Set the flag to use or not to use flat shading.
+  ars3dShaderUniformInt(ctx->m_phong_shader, "u_use_flat_shading", ctx->m_flat_shading);
+
   // Ambient Light.
   ars3dShaderUniformFloat(ctx->m_phong_shader, "u_ambient.m_strength", ambient_strength);
   ars3dShaderUniformFloat3(ctx->m_phong_shader, "u_ambient.m_ambient", ambient.raw[0], ambient.raw[1], ambient.raw[2]);
@@ -952,7 +956,7 @@ void uiProject3Run(SandboxProject3Layer *ctx)
   mu_Context *mu = ars3dUIGetContext();
 
   // Create a new UI window.
-  if (mu_begin_window(mu, "Project 3 Controls", mu_rect(50, 50, 300, 260)))
+  if (mu_begin_window(mu, "Project 3 Controls", mu_rect(50, 50, 300, 300)))
   {
     mu_layout_row(mu, 1, (int[]) { -1 }, 0);
 
@@ -966,7 +970,6 @@ void uiProject3Run(SandboxProject3Layer *ctx)
     {
       ctx->m_is_camera_orbiting = !ctx->m_is_camera_orbiting;
 
-      // 1. Clean up του controller input για να μην έχουμε ghost κινήσεις
       ctx->m_cam_controller.m_direction_x = 0.0f;
       ctx->m_cam_controller.m_direction_y = 0.0f;
       ctx->m_cam_controller.m_direction_z = 0.0f;
@@ -975,17 +978,10 @@ void uiProject3Run(SandboxProject3Layer *ctx)
 
       if (ctx->m_is_camera_orbiting)
       {
-        // -------------------------------------------------------------------------
-        // ΜΕΤΑΒΑΣΗ: FLY -> ORBIT
-        // Η νέα ακτίνα πρέπει να είναι η τρέχουσα απόσταση της κάμερας από το κέντρο (0,0,0)
-        // -------------------------------------------------------------------------
         ctx->m_orbit_radius = glms_vec3_norm(ctx->m_camera->m_position);
         
-        // Ασφάλεια για να μην μηδενιστεί η ακτίνα αν είμαστε στο (0,0,0)
         if (ctx->m_orbit_radius < 1.0f) ctx->m_orbit_radius = 5.0f;
 
-        // Υπολογίζουμε τη γωνία (yaw/pitch) με βάση τη θέση που βρισκόταν η Fly κάμερα
-        // ώστε να μην κάνει "πήδημα" (snap) σε άσχετο σημείο της σφαίρας
         float x = ctx->m_camera->m_position.raw[0];
         float y = ctx->m_camera->m_position.raw[1];
         float z = ctx->m_camera->m_position.raw[2];
@@ -998,18 +994,11 @@ void uiProject3Run(SandboxProject3Layer *ctx)
       }
       else
       {
-        // -------------------------------------------------------------------------
-        // ΜΕΤΑΒΑΣΗ: ORBIT -> FLY
-        // Πρέπει να μετατρέψουμε το m_front της Orbit (που κοιτάζει το κέντρο)
-        // σε σωστά yaw και pitch που καταλαβαίνει το Fly Mode.
-        // -------------------------------------------------------------------------
         vec3s front = ctx->m_camera->m_front;
 
         ctx->m_camera->m_pitch = glm_deg(asinf(front.raw[1]));
         ctx->m_camera->m_yaw   = glm_deg(atan2f(front.raw[2], front.raw[0]));
 
-        // Επαναϋπολογισμός των αξόνων της Fly κάμερας με βάση τα νέα yaw/pitch
-        // Χρησιμοποιούμε δέλτα 0 για να μην κουνηθεί, απλά να γίνουν calibrate οι άξονες
         cameraSystemFly(ctx->m_camera, (vec3s){{0.0f, 0.0f, 0.0f}}, 0.0f, 0.0f);
       }
     }
@@ -1042,8 +1031,28 @@ void uiProject3Run(SandboxProject3Layer *ctx)
       {
         ctx->m_floor.m_mesh = ctx->m_grid_mesh;
       }
-      // Επειδή αλλάξαμε mesh, "βρωμίζουμε" το transform για σιγουριά (re-render/re-calculate αν χρειαστεί)
       ctx->m_floor.m_transform.m_is_dirty = 1;
+    }
+
+
+
+    // Select flat or smooth shading.
+    mu_label(mu, "Shading Type Selection:");
+
+    char shading_text[40];
+    int is_flat = ctx->m_flat_shading == 1;
+    sprintf(shading_text, "Current Shading: %s", is_flat ? "FLAT" : "SMOOTH");
+
+    if (mu_button(mu, shading_text))
+    {
+      if (is_flat)
+      {
+        ctx->m_flat_shading = 0;
+      }
+      else
+      {
+        ctx->m_flat_shading = 1;
+      }
     }
 
 
